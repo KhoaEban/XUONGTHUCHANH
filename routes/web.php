@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\CourseController;
 use App\Http\Controllers\User\HomeController;
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\Dashboard;
 use App\Http\Controllers\User\ProfileController;
 
 Route::get('/', function () {
@@ -18,7 +18,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth.admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
 });
 
 Route::middleware(['auth.user'])->group(function () {
