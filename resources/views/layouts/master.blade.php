@@ -225,7 +225,7 @@
         <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand m-0" href="{{ route('home') }}">
-                <img src="{{ asset('image/images.png') }}" alt="Logo">
+                <img class="img-fluid rounded" src="{{ asset('image/images.png') }}" alt="Logo">
             </a>
 
             <!-- Thanh tìm kiếm -->
@@ -245,6 +245,9 @@
             </div>
         </div>
     </nav>
+
+    {{-- sidebar --}}
+    @include('layouts.sidebar')
 
 
     <div class="relative">

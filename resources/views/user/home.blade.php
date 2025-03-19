@@ -5,6 +5,11 @@
         box-sizing: border-box;
     }
 
+    /* Side bar */
+    body {
+        font-family: Arial, sans-serif;
+    }
+
     .slideshow-container {
         width: 1500px;
         margin: 0 auto;
