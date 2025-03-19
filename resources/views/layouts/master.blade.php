@@ -361,7 +361,9 @@
             </div>
         </div>
     </div>
-
+    <br>
+    <br>
+    <br>
     {{-- Footer --}}
     <footer>
         <div class="footer-container">
@@ -374,8 +376,6 @@
 
             <div class="footer-section">
                 <img src="{{ asset('image/logo-khong-nen---color.png') }}" alt="Logo 2" class="footer-logo">
-                <h3>BÁCH KHOA</h3>
-                <p>TECHNOLOGY IS POWER</p>
                 <p>TẬP ĐOÀN KHOA HỌC CÔNG NGHỆ BÁCH KHOA</p>
                 <p>Địa chỉ: Số 3 Công Trường Quốc Tế, Quận 3, TPHCM</p>
                 <p>Điện thoại: (0287)102 0246 - 090 303 0246</p>
