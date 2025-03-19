@@ -16,7 +16,7 @@
         /* Định dạng màu gradient nền */
         .navbar-custom {
             background: linear-gradient(to right, #008040, #0099cc);
-            padding: 10px 80px;
+            padding: 10px 0;
         }
 
         /* Định dạng logo */
@@ -81,6 +81,8 @@
             color: #333;
         }
 
+        /* Navbar bên phải */
+
         /* Nút đăng nhập */
         .login-btn {
             display: flex;
@@ -96,18 +98,11 @@
             margin-right: 5px;
         }
 
-        .relative {
-            width: 1500px;
-            margin: 0 auto;
-        }
-
         /* Nút điều hướng slider */
         .tag-slider-prev,
         .tag-slider-next {
             position: absolute;
-            /* Canh giữa theo chiều dọc */
             transform: translateY(-200%);
-            /* Đẩy lên đúng vị trí giữa */
             width: 40px;
             height: 40px;
             background: #ddd;
@@ -119,12 +114,12 @@
         }
 
         .tag-slider-prev {
-            left: 200px;
+            left: 170px;
             /* Điều chỉnh vị trí bên trái */
         }
 
         .tag-slider-next {
-            right: 200px;
+            right: 13px;
             /* Điều chỉnh vị trí bên phải */
         }
 
@@ -139,6 +134,9 @@
             overflow-x: auto;
             white-space: nowrap;
             padding: 10px;
+            width: 1700px;
+            margin: 0 auto;
+            margin-bottom: 16px;
         }
 
         .tag-slider li {
@@ -238,49 +236,54 @@
             </div>
 
             <!-- Icon bên phải -->
-            <div class="icon-container">
-                <div class="icon"><i class="fas fa-th"></i></div>
-                <div class="icon"><i class="fas fa-bell"></i></div>
-                <a href="#" class="login-btn"><i class="fas fa-user"></i> Đăng nhập</a>
+            <div class="d-flex align-items-center ms-3">
+                <div class="icon me-3"><i class="fas fa-th"></i></div>
+                <div class="icon me-3"><i class="fas fa-bell"></i></div>
+
+                @if (Auth::check())
+                    <div class="dropdown">
+                        <a class="btn btn-light dropdown-toggle" href="#" role="button" id="userDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Xin chào, {{ Auth::user()->name }}
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="#"
+                                    onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline-light me-2">Đăng nhập</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary">Đăng ký</a>
+                @endif
             </div>
+
         </div>
     </nav>
 
     {{-- sidebar --}}
-    @include('layouts.sidebar')
 
-
-    <div class="relative">
-        <ul class="tag-slider slick-slider">
-            <div class="slick-list draggable">
-                <div class="slick-track" style="opacity: 1; width: auto; transform: translate3d(0px, 0px, 0px);">
-                    <li><a href="/ket-qua?c=0&s=28&t=">Hoạt động trải nghiệm</a></li>
-                    <li><a href="/ket-qua?c=0&s=29&t=">Giáo dục thể chất</a></li>
-                    <li><a href="/ket-qua?c=0&s=30&t=">Khoa học tự nhiên</a></li>
-                    <li><a href="/ket-qua?c=0&s=31&t=">Giáo dục quốc phòng</a></li>
-                    <li><a href="/ket-qua?c=0&s=32&t=">Kinh tế và pháp luật</a></li>
-                    <li><a href="/ket-qua?c=0&s=35&t=">Lịch sử và Địa lí</a></li>
-                    <li><a href="/ket-qua?c=0&s=36&t=">Âm nhạc và Mĩ thuật</a></li>
-                    <li><a href="/ket-qua?c=0&s=37&t=">Tiếng Việt</a></li>
-                    <li><a href="/ket-qua?c=0&s=38&t=">Giáo dục địa phương</a></li>
-                    <li><a href="/ket-qua?c=0&s=39&t=">Hướng nghiệp</a></li>
-                    <li><a href="/ket-qua?c=0&s=40&t=">Thể dục</a></li>
-                    <li><a href="/ket-qua?c=0&s=33&t=">Môn khác</a></li>
-                </div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar bên trái -->
+            <div class="col-md-1 col-lg-1 p-0 bg-light sidebar">
+                @extends('layouts.sidebar')
             </div>
-        </ul>
 
-        <!-- Nút điều hướng slider -->
-        <div class="tag-slider-prev">
-            <div class="slider-btn"><i class="fas fa-angle-left"></i></div>
+            <!-- Nội dung chính -->
+            <div class="col-md-7 col-lg-11 main-content">
+                @yield('content')
+            </div>
         </div>
-        <div class="tag-slider-next">
-            <div class="slider-btn"><i class="fas fa-angle-right"></i></div>
-        </div>
-    </div>
-
-    <div class="py-5">
-        @yield('content')
     </div>
 
     <!-- Bootstrap JS -->

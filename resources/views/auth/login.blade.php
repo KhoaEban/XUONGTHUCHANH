@@ -87,7 +87,7 @@
                         </form>
 
                         <div class="mt-3 text-center">
-                            <p>Chưa có tài khoản? <a href="{{ route('register.form') }}">Đăng ký ngay</a></p>
+                            <p>Chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký ngay</a></p>
                         </div>
                     </div>
                 </div>

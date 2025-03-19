@@ -15,7 +15,7 @@
 
 <style>
     .video-sidebar {
-        width: 130px;
+        width: 156px;
         position: absolute;
         /* Mặc định nằm dưới navbar */
         top: 70px;

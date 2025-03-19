@@ -11,11 +11,10 @@
     }
 
     .slideshow-container {
-        width: 1500px;
         margin: 0 auto;
         position: relative;
         overflow: hidden;
-        height: 438px;
+        /* height: 438px; */
     }
 
     .slides-wrapper {
@@ -81,9 +80,47 @@
     .dot:hover {
         background-color: #717171;
     }
+
+    .custom-header {
+        width: fit-content;
+        /* Để phần nền xanh chỉ bọc quanh chữ */
+        clip-path: polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%);
+        /* Tạo góc cắt */
+    }
 </style>
 
 @section('content')
+    <ul class="tag-slider slick-slider">
+        <div class="slick-list draggable">
+            <div class="slick-track" style="opacity: 1; width: auto; transform: translate3d(0px, 0px, 0px);">
+                <li><a href="/ket-qua?c=0&s=28&t=">Hoạt động trải nghiệm</a></li>
+                <li><a href="/ket-qua?c=0&s=29&t=">Giáo dục thể chất</a></li>
+                <li><a href="/ket-qua?c=0&s=30&t=">Khoa học tự nhiên</a></li>
+                <li><a href="/ket-qua?c=0&s=31&t=">Giáo dục quốc phòng</a></li>
+                <li><a href="/ket-qua?c=0&s=32&t=">Kinh tế và pháp luật</a></li>
+                <li><a href="/ket-qua?c=0&s=35&t=">Lịch sử và Địa lí</a></li>
+                <li><a href="/ket-qua?c=0&s=36&t=">Âm nhạc và Mĩ thuật</a></li>
+                <li><a href="/ket-qua?c=0&s=37&t=">Tiếng Việt</a></li>
+                <li><a href="/ket-qua?c=0&s=38&t=">Giáo dục địa phương</a></li>
+                <li><a href="/ket-qua?c=0&s=39&t=">Hướng nghiệp</a></li>
+                <li><a href="/ket-qua?c=0&s=40&t=">Thể dục</a></li>
+                <li><a href="/ket-qua?c=0&s=33&t=">Môn khác</a></li>
+                <li><a href="/ket-qua?c=0&s=37&t=">Tiếng Việt</a></li>
+                <li><a href="/ket-qua?c=0&s=38&t=">Giáo dục địa phương</a></li>
+                <li><a href="/ket-qua?c=0&s=39&t=">Hướng nghiệp</a></li>
+                <li><a href="/ket-qua?c=0&s=40&t=">Thể dục</a></li>
+                <li><a href="/ket-qua?c=0&s=33&t=">Môn khác</a></li>
+            </div>
+        </div>
+    </ul>
+    <!-- Nút điều hướng slider -->
+    <div class="tag-slider-prev">
+        <div class="slider-btn"><i class="fas fa-angle-left"></i></div>
+    </div>
+    <div class="tag-slider-next">
+        <div class="slider-btn"><i class="fas fa-angle-right"></i></div>
+    </div>
+
     <div class="slideshow-container">
         <div class="slides-wrapper">
             <div class="mySlides">
@@ -101,14 +138,70 @@
 
         <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
         <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        {{-- <div style="text-align:center">
+            <span class="dot" onclick="currentSlide(0)"></span>
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+        </div> --}}
     </div>
-
     <br>
-
-    <div style="text-align:center">
-        <span class="dot" onclick="currentSlide(0)"></span>
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
+    {{-- Hiện thị các khóa học mới --}}
+    <div class="">
+        <div class="row">
+            <div class="col-12">
+                <div class="card-header d-flex align-items-center" style="background-color: #E7E7E7">
+                    <h1 class="text-white h5 bg-success px-3 py-2 m-0 custom-header">
+                        Khóa Học Được Tạo Mới Nhất
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="card shadow">
+                            <img class="card-img-top"
+                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
+                                alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                                    of the card's content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card shadow">
+                            <img class="card-img-top"
+                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
+                                alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                                    of the card's content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card shadow">
+                            <img class="card-img-top"
+                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
+                                alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                                    of the card's content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -136,11 +229,11 @@
             };
 
 
-            function autoplay() {
-                setInterval(() => {
-                    showSlides(slideIndex + 1);
-                }, 10000);
-            }
+            // function autoplay() {
+            //     setInterval(() => {
+            //         showSlides(slideIndex + 1);
+            //     }, 8000);
+            // }
 
             slidesWrapper.addEventListener("mouseenter", () => {
                 clearInterval();
