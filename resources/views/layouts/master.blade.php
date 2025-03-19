@@ -60,13 +60,7 @@
             border-radius: 20px;
         }
 
-        .icon-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .icon-container .icon {
+        .icon {
             width: 40px;
             height: 40px;
             background-color: white;
@@ -76,7 +70,7 @@
             justify-content: center;
         }
 
-        .icon-container .icon i {
+        .icon i {
             font-size: 18px;
             color: #333;
         }
@@ -214,6 +208,85 @@
                 font-size: 12px;
             }
         }
+
+        /* footer */
+        footer {
+            background-image: url(image/footer-background.png);
+            padding: 40px 10%;
+            color: #1a1a1a;
+            font-family: Arial, sans-serif;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .footer-section {
+            width: 30%;
+        }
+
+        .footer-logo {
+            max-width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+
+        .footer-column {
+            width: 30%;
+        }
+
+        .footer-column h4 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin: 5px 0;
+        }
+
+        .footer-column ul li a {
+            text-decoration: none;
+            color: #1a1a1a;
+            transition: 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: #0056b3;
+        }
+
+        .app-links img {
+            width: 120px;
+            margin-top: 10px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .social-icons img {
+            width: 30px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 
@@ -221,6 +294,11 @@
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
+            {{-- Menu responsive bên trái --}}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <!-- Logo -->
             <a class="navbar-brand m-0" href="{{ route('home') }}">
                 <img class="img-fluid rounded" src="{{ asset('image/images.png') }}" alt="Logo">
@@ -232,7 +310,7 @@
                     <input type="text" placeholder="Tìm kiếm">
                     <button class="search-btn" type="submit"><i class="fas fa-search"></i> Tìm kiếm</button>
                 </div>
-                <button class="search-adv btn btn-light" type="submit">Tìm kiếm nâng cao</button>
+                {{-- <button class="search-adv btn btn-light" type="submit">Tìm kiếm nâng cao</button> --}}
             </div>
 
             <!-- Icon bên phải -->
@@ -270,8 +348,6 @@
         </div>
     </nav>
 
-    {{-- sidebar --}}
-
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar bên trái -->
@@ -285,6 +361,89 @@
             </div>
         </div>
     </div>
+
+    {{-- Footer --}}
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <img src="{{ asset('image/logo-trung-tam-giao-duc-setdc.png') }}" alt="Logo 1" class="footer-logo">
+                <h3>TRUNG TÂM PHÁT TRIỂN GDĐT PHÍA NAM</h3>
+                <p>BỘ GIÁO DỤC VÀ ĐÀO TẠO</p>
+                <p>ĐỐI TÁC NGHIÊN CỨU, ỨNG DỤNG KHCN VÀ CHUYỂN ĐỔI SỐ</p>
+            </div>
+
+            <div class="footer-section">
+                <img src="{{ asset('image/logo-khong-nen---color.png') }}" alt="Logo 2" class="footer-logo">
+                <h3>BÁCH KHOA</h3>
+                <p>TECHNOLOGY IS POWER</p>
+                <p>TẬP ĐOÀN KHOA HỌC CÔNG NGHỆ BÁCH KHOA</p>
+                <p>Địa chỉ: Số 3 Công Trường Quốc Tế, Quận 3, TPHCM</p>
+                <p>Điện thoại: (0287)102 0246 - 090 303 0246</p>
+            </div>
+
+            <div class="footer-section">
+                <img src="{{ asset('image/logo-stb.png') }}" alt="Logo 3" class="footer-logo">
+                <h3>CÔNG TY CỔ PHẦN SÁCH VÀ THIẾT BỊ TRƯỜNG HỌC TPHCM</h3>
+                <p>ĐƠN VỊ CUNG CẤP HỌC LIỆU SỐ BẢN QUYỀN</p>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <div class="footer-column">
+                <h4>BACH KHOA TECH GROUP</h4>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Tầm nhìn - Sứ mệnh</a></li>
+                    <li><a href="#">Khách hàng tiêu biểu</a></li>
+                    <li><a href="#">Tin tức</a></li>
+                    <li><a href="#">Tuyển dụng</a></li>
+                    <li><a href="#">Phân phối sản phẩm</a></li>
+                    <li><a href="#">Liên hệ hỗ trợ</a></li>
+                </ul>
+                <div class="app-links">
+                    <img src="appstore.png" alt="App Store">
+                    <img src="googleplay.png" alt="Google Play">
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>CHUYỂN ĐỔI SỐ TRONG DẠY VÀ HỌC</h4>
+                <ul>
+                    <li><a href="#">Hệ thống Quản lý học tập LMS 360 e-Learning</a></li>
+                    <li><a href="#">Hệ thống Ngân hàng học liệu số dùng chung</a></li>
+                    <li><a href="#">Học liệu số bản quyền</a></li>
+                    <li><a href="#">Phòng thí nghiệm mô phỏng</a></li>
+                    <li><a href="#">Chatbot BKTech ứng dụng trí tuệ nhân tạo</a></li>
+                    <li><a href="#">Hệ thống Kiểm tra đánh giá trực tuyến</a></li>
+                    <li><a href="#">Phần mềm tạo học liệu số bảng trí tuệ nhân tạo</a></li>
+                    <li><a href="#">Đào tạo nhân lực số</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>CHUYỂN ĐỔI SỐ TRONG QUẢN LÝ</h4>
+                <ul>
+                    <li><a href="#">Hệ thống Quản lý trường học</a></li>
+                    <li><a href="#">Ứng dụng truyền thông nội bộ</a></li>
+                    <li><a href="#">Học bạ số</a></li>
+                    <li><a href="#">Sắp xếp Thời khóa biểu tự động</a></li>
+                    <li><a href="#">Điểm danh thông minh với camera AI</a></li>
+                    <li><a href="#">Hệ thống Kiểm định chất lượng Giáo dục</a></li>
+                    <li><a href="#">Hệ thống Thi đua khen thưởng</a></li>
+                    <li><a href="#">Hệ thống đánh giá và tự đánh giá</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>Copyright ©2021 - Bản quyền thuộc Công Ty Cổ Phần Tập Đoàn Khoa Học Công Nghệ Bách Khoa</p>
+            <div class="social-icons">
+                <a href="#"><img src="facebook.png" alt="Facebook"></a>
+                <a href="#"><img src="zalo.png" alt="Zalo"></a>
+            </div>
+        </div>
+    </footer>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
