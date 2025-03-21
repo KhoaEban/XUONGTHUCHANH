@@ -326,10 +326,32 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            @if (Auth::user()->role == 'admin')
+                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i
+                                            class="fas fa-tachometer-alt"></i> Quản lý</a></li>
+                            @else
+                                @if (Auth::user()->role == 'teacher')
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fas fa-tachometer-alt"></i> Quản lý
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            {{-- icon hồ sơ --}}
+                                            <i class="fas fa-user"></i> Hồ sơ
+                                        </a>
+                                    </li>
+                                @else
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            {{-- icon hồ sơ --}}
+                                            <i class="fas fa-user"></i> Hồ sơ
+                                        </a>
+                                    </li>
+                                @endif
+                            @endif
                             <li>
                                 <a class="dropdown-item" href="#"
-                                    onclick="event.preventDefault();
-                        document.getElementById('logout-form').submit();">
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="fas fa-sign-out-alt"></i> Đăng xuất
                                 </a>
                             </li>
@@ -344,9 +366,10 @@
                     <a href="{{ route('register') }}" class="btn btn-primary">Đăng ký</a>
                 @endif
             </div>
-
         </div>
     </nav>
+
+    
 
     <div class="container-fluid">
         <div class="row">
@@ -364,7 +387,13 @@
     <br>
     <br>
     <br>
+
+
+
+
+
     {{-- Footer --}}
+    <hr class="my-4" style="border: 1px dashed #000000; ">
     <footer>
         <div class="footer-container">
             <div class="footer-section">

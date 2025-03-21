@@ -26,8 +26,18 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
+        // if (Auth::attempt($credentials)) {
+        //     return redirect()->route('home'); // Điều hướng đến trang user
+        // }
+
+        // Kiểm tra quyền đăng nhập
         if (Auth::attempt($credentials)) {
-            return redirect()->route('home'); // Điều hướng đến trang user
+            $user = Auth::user();
+            if ($user->role == 'admin') {
+                return redirect()->route('admin.dashboard'); // Điều hướng đến trang admin
+            } else {
+                return redirect()->route('user.home'); // Điều hướng đến trang user
+            }
         }
 
         return back()->withErrors(['email' => 'Email hoặc mật khẩu không chính xác']);
