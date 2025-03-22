@@ -32,11 +32,16 @@ class AuthController extends Controller
 
         // Kiểm tra quyền đăng nhập
         if (Auth::attempt($credentials)) {
+            return redirect()->route('home'); // Điều hướng đến trang user
             $user = Auth::user();
             if ($user->role == 'admin') {
                 return redirect()->route('admin.dashboard'); // Điều hướng đến trang admin
+            } else if ($user->role == 'teacher') {
+                return redirect()->route('user.home'); // Điều hướng đến trang teacher
             } else {
-                return redirect()->route('user.home'); // Điều hướng đến trang user
+                if ($user->role == 'student') {
+                return redirect()->route('user.home'); // Điều hướng đến trang student
+            }
             }
         }
 
