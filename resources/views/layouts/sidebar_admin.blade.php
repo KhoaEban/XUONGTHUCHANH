@@ -6,7 +6,7 @@
         <a class="title item">Dashboard <i class="dropdown icon"></i>
         </a>
         <div class="content">
-            <a class="item" href="dashboard.html">Dashboard
+            <a class="item" href="{{ route('admin.dashboard') }}">Dashboard
             </a>
         </div>
 
@@ -14,7 +14,7 @@
             <i class="dropdown icon"></i> Khóa học
         </div>
         <div class="content">
-            <a class="item" href="inbox.html">Danh sách khóa học
+            <a class="item" href="{{ route('course.list') }}">Danh sách khóa học
             </a>
             {{-- <a class="item" href="mail.html">Mailbox
             </a>
