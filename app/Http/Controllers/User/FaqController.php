@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class FaqController extends Controller
 {
@@ -10,4 +10,5 @@ class FaqController extends Controller
     {
         return view('user.faq');
     }
+
 }

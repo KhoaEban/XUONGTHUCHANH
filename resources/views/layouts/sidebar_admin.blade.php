@@ -22,8 +22,11 @@
                         <a class="item" href="{{ route('admin.course.index') }}">Danh sách khóa học
                         </a>
                     </div>
+                    <a class="item" href="{{ route('admin.category.index') }}">
+                        <p>Quản lý Danh mục</p>
+                    </a>
                     <a class="item" href="{{ route('admin.user.index') }}">
-                        <p>Quản lý người dùng</p>
+                        <p>Quản lý Người dùng</p>
                     </a>
                     {{-- <div class="title item">
                         <i class="dropdown icon"></i> Layouts

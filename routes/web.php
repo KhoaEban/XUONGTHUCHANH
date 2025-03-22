@@ -1,14 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+// Admin
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\User\CourseController;
-use App\Http\Controllers\Admin\CourseControllerAdmin;
-use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Admin\Dashboard;
+use App\Http\Controllers\Admin\CourseControllerAdmin;
+
+// User
+use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\CourseController;
+use App\Http\Controllers\User\FaqController;
 use App\Http\Controllers\User\SupportController;
-use App\Http\Controllers\FaqController;
 use App\Http\Controllers\User\SimulationController;
+
 
 Route::get('/', function () {
     return view('user.home');
@@ -29,6 +33,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/course', [CourseControllerAdmin::class, 'index'])->name('admin.course.index');
     Route::get('/admin/course/create', [CourseControllerAdmin::class, 'create'])->name('admin.course.create');
     Route::post('/admin/course', [CourseControllerAdmin::class, 'store'])->name('admin.course.store');
+    // Quản lý danh mục
+    Route::get('/admin/category', [CategoryController::class, 'index'])->name('admin.category.index');
 });
 
 Route::middleware(['auth'])->group(function () {

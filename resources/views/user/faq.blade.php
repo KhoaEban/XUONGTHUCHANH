@@ -4,7 +4,7 @@
     <div class="faq-container">
         <div class="faq-header">
             <h1>Câu hỏi thường gặp</h1>
-            <div class="search-box">
+            <div class="search_box">
                 <input type="text" placeholder="Tìm câu hỏi thường gặp">
                 <button>Tìm kiếm</button>
             </div>
@@ -99,20 +99,20 @@
     color: #333;
 }
 
-.search-box {
+.search_box {
     display: flex;
     justify-content: center;
     margin-top: 10px;
 }
 
-.search-box input[type="text"] {
+.search_box input[type="text"] {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 300px;
 }
 
-.search-box button {
+.search_box button {
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
