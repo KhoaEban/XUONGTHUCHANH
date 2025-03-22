@@ -20,15 +20,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($courses as $course)
+                    {{-- @foreach ($courses as $course) --}}
                         <tr>
-                            <td>{{ $course->id }}</td>
-                            <td>{{ $course->name }}</td>
-                            <td>{{ $course->created_at }}</td>
-                            <td>{{ $course->updated_at }}</td>
+                            <td>1</td>
+                            <td>abv</td>
+                            <td>ngay tạo</td>
+                            <td>ngày cap nhat</td>
                             <td>
-                                <a href="{{ route('admin.course.edit', $course->id) }}" class="btn btn-primary">Sửa</a>
-                                <form action="{{ route('admin.course.destroy', $course->id) }}" method="POST"
+                                <a href="#" class="btn btn-primary">Sửa</a>
+                                <form action="#" method="POST"
                                     style="display: inline">
                                     @csrf
                                     @method('DELETE')
@@ -36,6 +36,11 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    {{-- @endforeach --}}
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    {{-- {{ $courses->links() }} --}}
+@endsection

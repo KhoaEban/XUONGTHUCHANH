@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Middleware;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\CourseController;
+use App\Http\Controllers\Admin\CourseControllerAdmin;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Admin\Dashboard;
 use App\Http\Controllers\User\SupportController;
@@ -20,9 +21,11 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Admin
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
-    Route::get('/course', [CourseController::class, 'index'])->name('course');
+    Route::get('/admin/course', [CourseControllerAdmin::class, 'index'])->name('admin.course.index');
+    Route::get('/admin/course/create', [CourseControllerAdmin::class, 'create'])->name('admin.course.create');
 });
 
 Route::middleware(['auth'])->group(function () {
