@@ -27,9 +27,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-<<<<<<< Updated upstream
             return redirect()->route('home'); // Điều hướng đến trang user
-=======
             $user = Auth::user();
             if ($user->role == 'admin') {
                 return redirect()->route('admin.dashboard'); // Điều hướng đến trang admin
@@ -37,10 +35,9 @@ class AuthController extends Controller
                 return redirect()->route('user.home'); // Điều hướng đến trang teacher
             } else {
                 if ($user->role == 'student') {
-                return redirect()->route('user.home'); // Điều hướng đến trang student
+                    return redirect()->route('user.home'); // Điều hướng đến trang student
+                }
             }
-            }
->>>>>>> Stashed changes
         }
 
         return back()->withErrors(['email' => 'Email hoặc mật khẩu không chính xác']);
