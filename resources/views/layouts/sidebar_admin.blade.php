@@ -11,12 +11,12 @@
         </div>
 
         <div class="title item">
-            <i class="dropdown icon"></i> Apps
+            <i class="dropdown icon"></i> Khóa học
         </div>
         <div class="content">
-            <a class="item" href="inbox.html">Inbox
+            <a class="item" href="inbox.html">Danh sách khóa học
             </a>
-            <a class="item" href="mail.html">Mailbox
+            {{-- <a class="item" href="mail.html">Mailbox
             </a>
             <a class="item" href="chat.html">Chat
             </a>
@@ -29,9 +29,9 @@
             <a class="item" href="filter.html">Filter
             </a>
             <a class="item" href="todo.html">Todo
-            </a>
+            </a> --}}
         </div>
-        <div class="title item">
+        {{-- <div class="title item">
             <i class="dropdown icon"></i> Layouts
         </div>
         <div class="content">
@@ -266,7 +266,7 @@
             <a class="item" href="price.html">Price
             </a>
         </div>
-    </div>
+    </div> --}}
 </div>
 <script>
     $(".openbtn").on("click", function() {

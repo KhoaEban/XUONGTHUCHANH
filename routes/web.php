@@ -21,6 +21,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
+    Route::get('/course', [CourseController::class, 'index'])->name('course');
 });
 
 Route::middleware(['auth'])->group(function () {
