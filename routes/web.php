@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\Middleware;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\CourseController;
 use App\Http\Controllers\User\HomeController;
