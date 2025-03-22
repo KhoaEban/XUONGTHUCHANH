@@ -1,71 +1,42 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <div class="col-md-2 sidebar">
-            <div class="ui sidebar vertical left menu overlay visible"
-                style="-webkit-transition-duration: 0.1s; overflow: visible !important;">
-                <div class="item logo">
-                    <img src="{{ asset('image/images.png') }}" />
+        <div class="col-md-2 sidebar bg-light border-end">
+            <div class="d-flex flex-column vh-100">
+                <div class="p-3 text-center border-bottom">
+                    <img src="{{ asset('image/images.png') }}" class="img-fluid" />
                 </div>
-                <div class="ui accordion">
-                    <a class="title item">Dashboard <i class="dropdown icon"></i>
-                    </a>
-                    <div class="content">
-                        <a class="item" href="dashboard.html">Dashboard
-                        </a>
-                    </div>
 
-                    <div class="title item">
-                        <i class="dropdown icon"></i> Khóa học
-                    </div>
-                    <div class="content">
-                        <a class="item" href="{{ route('admin.course.index') }}">Danh sách khóa học
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('admin.dashboard') }}">
+                            <i class="fas fa-home"></i> Dashboard
                         </a>
-                    </div>
-                    <a class="item" href="{{ route('admin.category.index') }}">
-                        <p>Quản lý Danh mục</p>
-                    </a>
-                    <a class="item" href="{{ route('admin.user.index') }}">
-                        <p>Quản lý Người dùng</p>
-                    </a>
-                    {{-- <div class="title item">
-                        <i class="dropdown icon"></i> Layouts
-                    </div>
-                    <div class="content">
-                        <a class="item" href="sidebar.html">Sidebar
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu">
+                            <i class="fas fa-book"></i> Khóa học <i class="fas fa-chevron-down float-end"></i>
                         </a>
-                        <a class="item" href="menu.html">Nav
+                        <div class="collapse" id="courseMenu">
+                            <ul class="nav flex-column ps-3">
+                                <li><a class="nav-link text-dark" href="{{ route('admin.course.index') }}">Danh sách khóa học</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('admin.category.index') }}">
+                            <i class="fas fa-folder"></i> Quản lý Danh mục
                         </a>
-                        <a class="item" href="animatedicon.html">Animated Icon
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('admin.user.index') }}">
+                            <i class="fas fa-users"></i> Quản lý Người dùng
                         </a>
-                        <a class="item" href="box.html">Box
-                        </a>
-                        <a class="item" href="cards.html">Cards
-                        </a>
-                        <a class="item" href="color.html">Colors
-                        </a>
-                        <a class="item" href="comment.html">Comment
-                        </a>
-                        <a class="item" href="embed.html">Embed
-                        </a>
-                        <a class="item" href="faq.html">Faq
-                        </a>
-                        <a class="item" href="feed.html">Feed
-                        </a>
-                        <a class="item" href="gallery.html">Gallery
-                        </a>
-                        <a class="item" href="grid.html">Grid
-                        </a>
-                        <a class="item" href="header.html">Header
-                        </a>
-                        <a class="item" href="timeline.html">Timeline
-                        </a>
-                        <a class="item" href="message.html">Message
-                        </a>
-                        <a class="item" href="price.html">Price
-                        </a>
-                    </div> --}}
-                </div>
+                    </li>
+                </ul>
             </div>
         </div>
 
@@ -77,29 +48,15 @@
 </div>
 
 <script>
-    $(".openbtn").on("click", function() {
-        $(".ui.sidebar").toggleClass("very thin icon");
-        $(".asd").toggleClass("marginlefting");
-        $(".sidebar z").toggleClass("displaynone");
-        $(".ui.accordion").toggleClass("displaynone");
-        $(".ui.dropdown.item").toggleClass("displayblock");
-
-        $(".logo").find('img').toggle();
-
-    })
-    $(".ui.dropdown").dropdown({
-        allowCategorySelection: true,
-        transition: "fade up",
-        context: 'sidebar',
-        on: "hover"
-    });
-
-    $('.ui.accordion').accordion({
-        selector: {
-
-        }
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".collapsed").forEach(item => {
+            item.addEventListener("click", function() {
+                this.querySelector("i.fas.fa-chevron-down").classList.toggle("rotate");
+            });
+        });
     });
 </script>
+
 <style>
     .sidebar {
         width: 260px;
@@ -108,8 +65,6 @@
         left: 0;
         height: 100%;
         overflow: auto;
-        background-color: #f8f8f8;
-        border-right: 1px solid #ddd;
     }
 
     .content-wrapper {
@@ -117,37 +72,12 @@
         width: calc(100% - 260px);
     }
 
-    .marginlefting {
-        margin-left: 60px !important;
+    .nav-link {
+        padding: 10px 15px;
     }
 
-    .displaynone {
-        display: none !important;
-    }
-
-    .displayblock {
-        display: block !important;
-    }
-
-    .sidebar .item i {
-        font-size: 24px;
-        margin-top: -5px !important;
-    }
-
-    .logo {
-        padding: 10px !important;
-    }
-
-    .logo img {
-        width: 100% !important;
-    }
-
-    .title.item {
-        padding: .92857143em 1.14285714em !important;
-    }
-
-    .dropdown .menu .header {
-        padding-top: 3.9px !important;
-        padding-bottom: 3.9px !important;
+    .rotate {
+        transform: rotate(180deg);
+        transition: 0.3s;
     }
 </style>
