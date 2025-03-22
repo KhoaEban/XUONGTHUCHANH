@@ -4,7 +4,7 @@
         <div class="col-md-2 sidebar bg-light border-end">
             <div class="d-flex flex-column vh-100">
                 <div class="p-3 text-center border-bottom">
-                    <img src="{{ asset('image/images.png') }}" class="img-fluid" />
+                    <a href="{{ route('admin.dashboard') }}"><img src="{{ asset('image/images.png') }}" class="img-fluid" /></a>
                 </div>
 
                 <ul class="nav flex-column">
@@ -37,6 +37,11 @@
                         </a>
                     </li>
                 </ul>
+
+                {{-- Quay lại trang chủ --}}
+                <div class="p-3 text-center border-top">
+                    <a class="nav-link text-dark" href="{{ route('home') }}"><i class="fas fa-arrow-left me-2"></i>Quay lại trang chủ</a>
+                </div>
             </div>
         </div>
 

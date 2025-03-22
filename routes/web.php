@@ -5,18 +5,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\Dashboard;
 use App\Http\Controllers\Admin\CourseControllerAdmin;
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CategoryControllerAdmin;
 // User
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\CategoryController;
 use App\Http\Controllers\User\CourseController;
 use App\Http\Controllers\User\FaqController;
 use App\Http\Controllers\User\SupportController;
 use App\Http\Controllers\User\SimulationController;
 
 // Trang chủ
-Route::get('/', function () {
-    return view('user.home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
 
 // Đăng nhập, đăng ký
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -37,17 +37,17 @@ Route::middleware(['auth'])->group(function () {
 
     // Quản lý danh mục
     Route::prefix('admin/category')->group(function () {
-        Route::get('/', [CategoryController::class, 'index'])->name('admin.category.index');
-        Route::get('/create', [CategoryController::class, 'create'])->name('admin.category.create');
-        Route::post('/store', [CategoryController::class, 'store'])->name('admin.category.store');
-        Route::get('/edit/{category}', [CategoryController::class, 'edit'])->name('admin.category.edit');
-        Route::put('/update/{category}', [CategoryController::class, 'update'])->name('admin.category.update');
-        Route::delete('/delete/{category}', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
+        Route::get('/', [CategoryControllerAdmin::class, 'index'])->name('admin.category.index');
+        Route::get('/create', [CategoryControllerAdmin::class, 'create'])->name('admin.category.create');
+        Route::post('/store', [CategoryControllerAdmin::class, 'store'])->name('admin.category.store');
+        Route::get('/edit/{category}', [CategoryControllerAdmin::class, 'edit'])->name('admin.category.edit');
+        Route::put('/update/{category}', [CategoryControllerAdmin::class, 'update'])->name('admin.category.update');
+        Route::delete('/delete/{category}', [CategoryControllerAdmin::class, 'destroy'])->name('admin.category.destroy');
         // Route danh mục con
-        Route::get('/children/{id}', [CategoryController::class, 'getChildren']);
-        Route::get('/create/{parent_id}', [CategoryController::class, 'createChild'])->name('admin.category.create.child');
-        Route::post('/assignChild', [CategoryController::class, 'assignChild'])->name('admin.category.assignChild');
-        Route::delete('/unlink/{id}', [CategoryController::class, 'unlinkCategory'])->name('admin.category.unlink');
+        Route::get('/children/{id}', [CategoryControllerAdmin::class, 'getChildren']);
+        Route::get('/create/{parent_id}', [CategoryControllerAdmin::class, 'createChild'])->name('admin.category.create.child');
+        Route::post('/assignChild', [CategoryControllerAdmin::class, 'assignChild'])->name('admin.category.assignChild');
+        Route::delete('/unlink/{id}', [CategoryControllerAdmin::class, 'unlinkCategory'])->name('admin.category.unlink');
     });
 });
 
@@ -56,6 +56,10 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/home', [HomeController::class, 'index'])->name('user.home');
 });
+
+// Danh mục
+Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
+
 
 Route::get('/user/course', [CourseController::class, 'index'], function () {
     return view('course.index');

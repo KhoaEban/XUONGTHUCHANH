@@ -55,8 +55,9 @@
                                         Không có ảnh
                                     @endif
                                 </td>
-                                <td>{{ $category->created_at->format('d/m/Y') }}</td>
-                                <td>{{ $category->updated_at->format('d/m/Y') }}</td>
+                                <td>{{ $category->created_at ? $category->created_at->format('d/m/Y') : 'N/A' }}
+                                </td>
+                                <td>{{ $category->updated_at ? $category->updated_at->format('d/m/Y') : 'N/A' }}</td>
                                 <td>
                                     <!-- Kiểm tra nếu có danh mục con thì hiển thị button -->
                                     @if ($category->children->count() > 0)
