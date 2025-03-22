@@ -1,13 +1,33 @@
 <div class="video-sidebar">
     <ul>
         <li>
-            <a href="/" class="menu-item"><i class="fa fa-home fa-2x"></i>
+            <a href="/" class="menu-item">
+                <i class="fa fa-home"></i>
                 <div>Trang chủ</div>
             </a>
         </li>
         <li>
-            <a href="#" class="menu-item"><i class="fa fa-life-ring fa-2x"></i>
+            <a href="{{ route('user.support') }}" class="menu-item">
+                <i class="fa fa-life-ring"></i>
                 <div>Hỗ trợ</div>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('user.faq') }}" class="menu-item">
+                <i class="fa fa-question-circle"></i>
+                <div>Câu hỏi thường gặp</div>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('user.simulation') }}" class="menu-item">
+                <i class="fa fa-flask"></i>
+                <div>Thí nghiệm mô phỏng</div>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item">
+                <i class="fa fa-desktop"></i>
+                <div>Học liệu tập huấn CM hè</div>
             </a>
         </li>
     </ul>

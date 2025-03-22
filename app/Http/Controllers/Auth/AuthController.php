@@ -26,6 +26,11 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
+        // if (Auth::attempt($credentials)) {
+        //     return redirect()->route('home'); // Điều hướng đến trang user
+        // }
+
+        // Kiểm tra quyền đăng nhập
         if (Auth::attempt($credentials)) {
             return redirect()->route('home'); // Điều hướng đến trang user
             $user = Auth::user();
