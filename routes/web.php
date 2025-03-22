@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\Middleware;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\CourseController;
 use App\Http\Controllers\Admin\CourseControllerAdmin;
@@ -24,8 +23,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Admin
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
+    // Quản lý người dùng
+    Route::get('/admin/user', [AuthController::class, 'index'])->name('admin.user.index');
+    // Quản lý khóa học
     Route::get('/admin/course', [CourseControllerAdmin::class, 'index'])->name('admin.course.index');
     Route::get('/admin/course/create', [CourseControllerAdmin::class, 'create'])->name('admin.course.create');
+    Route::post('/admin/course', [CourseControllerAdmin::class, 'store'])->name('admin.course.store');
 });
 
 Route::middleware(['auth'])->group(function () {

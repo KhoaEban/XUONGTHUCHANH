@@ -16,7 +16,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     <style>
-
+        body {
+            background-color: #f8f8f8;
+        }
     </style>
 </head>
 
@@ -27,8 +29,7 @@
             <a class="item openbtn">
                 <i class="icon content"></i>
             </a>
-            <a class="item">Messages
-            </a>
+            <a class="item">Messages</a>
             <div class="right menu">
                 <div class="ui dropdown item">
                     Language <i class="dropdown icon"></i>
@@ -68,16 +69,9 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-1 col-lg-1 p-0 sidebar">
-                @extends('layouts.sidebar_admin')
-            </div>
-            <div class="col-md-7 col-lg-11 main-content py-5">
-                @yield('content')
-            </div>
-        </div>
-    </div>
+
+
+    @include('layouts.sidebar_admin')
 
 
 

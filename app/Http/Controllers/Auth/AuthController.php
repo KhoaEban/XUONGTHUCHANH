@@ -4,12 +4,25 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 
 class AuthController extends Controller
 {
+
+    public function index()
+    {
+        if (Auth::user()->role != 'admin') {
+            return redirect()->route('home');
+        }
+        // Lấy tất cả user
+        $users = User::paginate(5);
+        
+        return view('admin.user.index' , compact('users'));
+    }
+    
+
     // Hiển thị form đăng nhập
     public function showLoginForm()
     {

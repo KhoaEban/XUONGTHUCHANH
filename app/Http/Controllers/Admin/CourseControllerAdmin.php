@@ -14,6 +14,22 @@ class CourseControllerAdmin extends Controller
         if (Auth::user()->role != 'admin') {
             return redirect()->route('home');
         }
-        return view('admin.course.index');
+
+        $courses = Course::paginate(5);
+
+        return view('admin.course.index' , compact('courses'));
+    }
+
+    public function create()
+    {
+        if (Auth::user()->role != 'admin') {
+            return redirect()->route('home');
+        }
+        return view('admin.course.create');
+    }
+
+    public function store(Request $request)
+    {
+        // Xu ly luu khoa hoc
     }
 }
