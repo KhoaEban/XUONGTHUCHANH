@@ -8,14 +8,23 @@ return new class extends Migration {
     public function up()
     {
         $tables = [
-            'categories', 'courses', 'users', 'enrollments', 'comments', 
-            'lessons', 'questions', 'quizzes', 'quiz_results', 
-            'answers', 'certificates', 'payments'
+            'categories',
+            'courses',
+            'users',
+            'enrollments',
+            'comments',
+            'lessons',
+            'questions',
+            'quizzes',
+            'quiz_results',
+            'answers',
+            'certificates',
+            'payments'
         ];
 
         foreach ($tables as $table) {
             Schema::table($table, function (Blueprint $table) {
-                $table->string('slug')->unique(); // ✅ Loại bỏ `->after('name')`
+                $table->string('slug')->nullable();
             });
         }
     }
@@ -23,9 +32,18 @@ return new class extends Migration {
     public function down()
     {
         $tables = [
-            'categories', 'courses', 'users', 'enrollments', 'comments', 
-            'lessons', 'questions', 'quizzes', 'quiz_results', 
-            'answers', 'certificates', 'payments'
+            'categories',
+            'courses',
+            'users',
+            'enrollments',
+            'comments',
+            'lessons',
+            'questions',
+            'quizzes',
+            'quiz_results',
+            'answers',
+            'certificates',
+            'payments'
         ];
 
         foreach ($tables as $table) {

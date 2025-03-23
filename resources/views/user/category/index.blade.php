@@ -11,7 +11,6 @@
             </div>
         @endif
 
-
         <h2 class="mt-3">{{ $category->name }}</h2>
 
         <!-- Hiển thị danh mục con -->

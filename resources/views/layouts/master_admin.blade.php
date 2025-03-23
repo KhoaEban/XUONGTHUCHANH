@@ -27,6 +27,20 @@
         body {
             background-color: #e9e9e9;
         }
+
+        input,
+        select,
+        textarea,
+        button {
+            border-radius: 0 !important;
+        }
+
+        input,
+        select,
+        textarea,
+        button:focus {
+            box-shadow: none !important;
+        }
     </style>
 </head>
 
@@ -34,7 +48,8 @@
     <div class="pusher">
         <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom ps-3" style="margin-left: 260px;">
             <a class="navbar-brand position-relative" href="#">
-                <div class="d-flex align-items-center justify-content-center" style="position: absolute; top: 1px; right: 90px; font-size: 13px; font-weight: bold; background-color: red; border-radius: 50%; width: 18px; height: 18px; text-align: center; color: #ffffff">
+                <div class="d-flex align-items-center justify-content-center"
+                    style="position: absolute; top: 1px; right: 90px; font-size: 13px; font-weight: bold; background-color: red; border-radius: 50%; width: 18px; height: 18px; text-align: center; color: #ffffff">
                     <span>0</span>
                 </div>
                 <i class="fas fa-bell me-1"></i>
