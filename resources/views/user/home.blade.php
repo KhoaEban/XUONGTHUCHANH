@@ -474,5 +474,20 @@
             showSlides(slideIndex);
             autoplay();
         });
+
+
+        document.querySelector('.tag-slider-next').addEventListener('click', function() {
+            document.querySelector('.tag-slider').scrollBy({
+                left: 200,
+                behavior: 'smooth'
+            });
+        });
+
+        document.querySelector('.tag-slider-prev').addEventListener('click', function() {
+            document.querySelector('.tag-slider').scrollBy({
+                left: -200,
+                behavior: 'smooth'
+            });
+        });
     </script>
 @endsection

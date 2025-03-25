@@ -18,10 +18,10 @@ class AuthController extends Controller
         }
         // Lấy tất cả user
         $users = User::paginate(5);
-        
-        return view('admin.user.index' , compact('users'));
+
+        return view('admin.user.index', compact('users'));
     }
-    
+
 
     // Hiển thị form đăng nhập
     public function showLoginForm()
@@ -39,23 +39,19 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        // if (Auth::attempt($credentials)) {
-        //     return redirect()->route('home'); // Điều hướng đến trang user
-        // }
-
-        // Kiểm tra quyền đăng nhập
         if (Auth::attempt($credentials)) {
-            return redirect()->route('home'); // Điều hướng đến trang user
             $user = Auth::user();
+
+            // Kiểm tra quyền và điều hướng
             if ($user->role == 'admin') {
-                return redirect()->route('admin.dashboard'); // Điều hướng đến trang admin
-            } else if ($user->role == 'teacher') {
-                return redirect()->route('user.home'); // Điều hướng đến trang teacher
-            } else {
-                if ($user->role == 'student') {
-                    return redirect()->route('user.home'); // Điều hướng đến trang student
-                }
+                return redirect()->route('admin.dashboard'); // Chuyển đến trang admin
+            } elseif ($user->role == 'instructor') {
+                return redirect()->route('instructor.home'); // Chuyển đến trang teacher
+            } elseif ($user->role == 'student') {
+                return redirect()->route('user.home'); // Chuyển đến trang student
             }
+
+            return redirect()->route('home'); // Mặc định chuyển về trang home nếu không có quyền cụ thể
         }
 
         return back()->withErrors(['email' => 'Email hoặc mật khẩu không chính xác']);

@@ -26,31 +26,27 @@
         <!-- Bảng danh sách khóa học -->
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-bordered">
-                    <thead class="thead-light">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Tên khóa học</th>
-                            <th>Ngày tạo</th>
-                            <th>Ngày cập nhật</th>
-                            <th>Tác vụ</th>
+                            <th>STT</th>
+                            <th>Tiêu đề</th>
+                            <th>Giá</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($courses as $course)
+                        @foreach ($courses as $key => $course)
                             <tr>
-                                <td>{{ $course->id }}</td>
-                                <td>{{ $course->name }}</td>
-                                <td>{{ $course->created_at->format('d/m/Y') }}</td>
-                                <td>{{ $course->updated_at->format('d/m/Y') }}</td>
+                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $course->title }}</td>
+                                <td>{{ number_format($course->price, 0, ',', '.') }} VNĐ</td>
                                 <td>
-                                    <a href="{{ route('admin.course.edit', $course->id) }}"
-                                        class="btn btn-sm btn-primary">Sửa</a>
-                                    <form action="{{ route('admin.course.destroy', $course->id) }}" method="POST"
-                                        style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger"
+                                    <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning">Sửa</a>
+                                    <form action="{{ route('courses.destroy', $course->id) }}" method="POST"
+                                        style="display:inline;">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn btn-danger"
                                             onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button>
                                     </form>
                                 </td>

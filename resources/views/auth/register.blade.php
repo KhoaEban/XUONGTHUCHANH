@@ -21,11 +21,10 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    {{-- <link href="{{ asset('/css/sb-admin-2.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         body {
-            background-image: url('{{ asset('img/background.png') }}');
+            background-image: url('{{ asset('image/background.jpg') }}');
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -35,35 +34,9 @@
 </head>
 
 <body class="bg-gradient-primary">
+
     <div class="container">
         <div class="form-box login">
-            <form method="POST" action="{{ route('login') }}"></form>
-            @csrf
-            <h1>Login</h1>
-            <div class="input-box">
-                <input id="email" type="email" name="email" value="{{ old('email') }}" required placeholder="Email">
-                <i class="bx bx-user"></i>
-
-            </div>
-            <div class="input-box">
-                <input id="password" type="password" name="password" required placeholder="Password">
-                <i class="bx bx-lock-alt"></i>
-            </div>
-            <div class="forgot-link">
-                <a href=" "> Forgot Password?</a>
-            </div>
-            <button type="submit" class="btn">Login</button>
-            <p>or login with social platforms</p>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-google"></i></a>
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-github"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            </form>
-        </div>
-
-        <div class="form-box register">
             <form method="POST" action="{{ route('register') }}">
                 @csrf
                 <h1>Registration</h1>
@@ -101,22 +74,50 @@
                 </div>
             </form>
         </div>
+
+        <div class="form-box register">
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <h1>Login</h1>
+                <div class="input-box">
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required
+                        placeholder="Email">
+                    <i class='bx bxs-user'></i>
+                </div>
+                <div class="input-box">
+                    <input id="password" type="password" name="password" required placeholder="Password">
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <div class="forgot-link">
+                    <a>Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <p>or login with social platforms</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-google"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </form>
+        </div>
         <div class="toggle-box">
             <div class="toggle-panel toggle-left">
-                <h1>Hello, Welcome!</h1>
-                <p>Don't have an account?</p>
-                <button class="btn register-btn">Register</button>
+                <h1>Welcome Back!</h1>
+                <p>Bạn đã có tài khoản?</p>
+                <button class="btn register-btn">Đăng nhập</button>
             </div>
 
-            <div class="toggle-panel toggle-right">
-                <h1>Welcome Back!</h1>
-                <p>Already have an account?</p>
-                <button class="btn login-btn">Login</button>
+            <div class="toggle-panel toggle-right text-center">
+                <h2>Chào mừng đến với hệ thống khóa học online</h2>
+                <p>Bạn không có tài khoản?</p>
+                <button class="btn login-btn">Đăng ký</button>
             </div>
         </div>
     </div>
 
     <script src="{{ asset('js/auth.js') }}"></script>
+
 </body>
 
 </html>
