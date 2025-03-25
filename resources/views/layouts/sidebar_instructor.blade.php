@@ -1,65 +1,6 @@
-<div class="video-sidebar">
-    <ul>
-        <li class="dropdown">
-            <a href="#" class="menu-item">
-                <i class="fa fa-user-graduate"></i>
-                <div>Quản lý học sinh</div>
-                <i class="fa fa-chevron-down"></i>
-            </a>
-            <ul class="submenu"></ul>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="menu-item">
-                <i class="fa fa-building"></i>
-                <div>Sở GD&ĐT TPHCM</div>
-                <i class="fa fa-chevron-down"></i>
-            </a>
-            <ul class="submenu"></ul>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="menu-item">
-                <i class="fa fa-school"></i>
-                <div>Phòng GD&ĐT</div>
-                <i class="fa fa-chevron-down"></i>
-            </a>
-            <ul class="submenu"></ul>
-        </li>
-        <li>
-            <a href="#" class="menu-item">
-                <i class="fa fa-chalkboard-teacher"></i>
-                <div>Khóa học cộng đồng giáo viên</div>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="menu-item">
-                <i class="fa fa-tasks"></i>
-                <div>Nhiệm vụ trường học</div>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="menu-item">
-                <i class="fa fa-file-alt"></i>
-                <div>Duyệt học liệu số</div>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="menu-item">
-                <i class="fa fa-book"></i>
-                <div>Kho học liệu</div>
-            </a>
-        </li>
-        <li class="dropdown active">
-            <a href="#" class="menu-item">
-                <i class="fa fa-user"></i>
-                <div>Cá nhân</div>
-                <i class="fa fa-chevron-down"></i>
-            </a>
-            <ul class="submenu">
-                <li><a href="#">Danh sách khóa học đã tạo</a></li>
-            </ul>
-        </li>
-    </ul>
-</div>
+@extends('layouts.master')
+
+@section('content')
 
 <style>
     .video-sidebar {

@@ -36,9 +36,9 @@
 <style>
     .video-sidebar {
         width: 156px;
-        position: fixed;
+        position: absolute;
         /* Mặc định nằm dưới navbar */
-        /* top: 70px; */
+        top: 70px;
         /* Điều chỉnh theo độ cao của navbar */
         left: 0;
         background-color: #f8f8f8;
