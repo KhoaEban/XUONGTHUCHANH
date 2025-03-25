@@ -29,13 +29,9 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['check.role:instructor'])->group(function () {
-    Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.home');
-});
-
-Route::middleware(['check.role:student'])->group(function () {
-    Route::get('/user/home', [HomeController::class, 'index'])->name('user.home');
-});
+// Route::middleware(['check.role:student'])->group(function () {
+//     Route::get('/user/home', [HomeController::class, 'index'])->name('home');
+// });
 
 
 // Admin
@@ -73,21 +69,26 @@ Route::middleware(['check.role:admin'])->group(function () {
 });
 
 
+// Instructor
+Route::middleware(['check.role:instructor'])->group(function () {
+    Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
+
+});
+
+
 // User
 Route::prefix('user')->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('user.home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
     // Danh mục
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
+    Route::get('/course', [CourseController::class, 'index'])->name('course');
+    Route::get('/support', [SupportController::class, 'index'])->name('support');
+    Route::post('/support', [SupportController::class, 'submit'])->name('support');
 
-    Route::get('/course', [CourseController::class, 'index'], function () {
-        return view('course.index');
-    })->name('course');
-    Route::get('/support', [SupportController::class, 'index'])->name('user.support');
-    Route::post('/support/submit', [SupportController::class, 'submit'])->name('user.support.submit');
-
-    Route::get('/faq', [FaqController::class, 'index'])->name('user.faq');
-    Route::get('/simulation', [SimulationController::class, 'index'])->name('user.simulation');
+    Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+    Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
 });
 
 // 404

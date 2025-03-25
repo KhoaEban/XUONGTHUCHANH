@@ -1,33 +1,56 @@
-@extends('layouts.master')
+<div class="edu-sidebar">
+    <ul>
+        <li class="dropdown">
+            <a href="#" class="menu-item">
+                <i class="fa fa-user-graduate"></i>
+                <div>Quản lý học viên</div>
+                <i class="fa fa-chevron-down"></i>
+            </a>
+            <ul class="submenu"></ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="menu-item">
+                <i class="fa fa-building"></i>
+                <div>Quản lý Khóa Học</div>
+                <i class="fa fa-chevron-down"></i>
+            </a>
+            <ul class="submenu"></ul>
+        </li>
+    </ul>
+</div>
 
-@section('content')
 
 <style>
-    .video-sidebar {
+    .edu-sidebar {
         width: 250px;
         background-color: #0A2647;
         color: white;
-        padding: 10px 0;
-        height: 100vh;
-        position: fixed;
+        position: absolute;
+        top: 70px;
         left: 0;
-        /* top: 0; */
-        overflow-y: auto;
+        padding: 10px 0;
         height: calc(100vh - 56px);
         transition: all 0.3s ease-in-out;
+        overflow-y: auto;
     }
 
-    .video-sidebar ul {
+    .edu-sidebar.fixed {
+        position: fixed;
+        top: 0;
+        height: 100vh;
+    }
+
+    .edu-sidebar ul {
         list-style: none;
         padding: 0;
         margin: 0;
     }
 
-    .video-sidebar li {
+    .edu-sidebar li {
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .video-sidebar .menu-item {
+    .edu-sidebar .menu-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -37,21 +60,21 @@
         transition: 0.3s;
     }
 
-    .video-sidebar .menu-item:hover {
+    .edu-sidebar .menu-item:hover {
         background-color: #145DA0;
     }
 
-    .video-sidebar .submenu {
+    .edu-sidebar .submenu {
         display: none;
         background: #1A3B5D;
         padding-left: 20px;
     }
 
-    .video-sidebar .submenu li {
+    .edu-sidebar .submenu li {
         padding: 8px 0;
     }
 
-    .video-sidebar .submenu a {
+    .edu-sidebar .submenu a {
         color: white;
         text-decoration: none;
         display: block;
@@ -59,7 +82,7 @@
         transition: 0.3s;
     }
 
-    .video-sidebar .submenu a:hover {
+    .edu-sidebar .submenu a:hover {
         background: #367DBD;
     }
 
@@ -74,6 +97,10 @@
     .dropdown.active .fa-chevron-down {
         transform: rotate(180deg);
     }
+
+    footer {
+        
+    }
 </style>
 
 <script>
@@ -81,5 +108,15 @@
         item.addEventListener('click', function() {
             this.classList.toggle('active');
         });
+    });
+
+    window.addEventListener("scroll", function() {
+        var sidebar = document.querySelector(".edu-sidebar");
+        var navbarHeight = 70; // Điều chỉnh nếu navbar có độ cao khác
+        if (window.scrollY > navbarHeight) {
+            sidebar.classList.add("fixed");
+        } else {
+            sidebar.classList.remove("fixed");
+        }
     });
 </script>

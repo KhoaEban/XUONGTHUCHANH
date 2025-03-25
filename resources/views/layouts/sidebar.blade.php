@@ -6,28 +6,24 @@
                 <div>Trang chủ</div>
             </a>
         </li>
+        @if (Auth::user()->role == 'instructor')
+            <li>
+                <a href="{{ route('instructor.dashboard') }}" class="menu-item">
+                    <i class="fa fa-user-cog"></i>
+                    <div>Chức năng</div>
+                </a>
+            </li>
+        @endif
         <li>
-            <a href="{{ route('user.support') }}" class="menu-item">
+            <a href="{{ route('support') }}" class="menu-item">
                 <i class="fa fa-life-ring"></i>
                 <div>Hỗ trợ</div>
             </a>
         </li>
         <li>
-            <a href="{{ route('user.faq') }}" class="menu-item">
+            <a href="{{ route('faq') }}" class="menu-item">
                 <i class="fa fa-question-circle"></i>
                 <div>Câu hỏi thường gặp</div>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('user.simulation') }}" class="menu-item">
-                <i class="fa fa-flask"></i>
-                <div>Thí nghiệm mô phỏng</div>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="menu-item">
-                <i class="fa fa-desktop"></i>
-                <div>Học liệu tập huấn CM hè</div>
             </a>
         </li>
     </ul>
@@ -36,13 +32,10 @@
 <style>
     .video-sidebar {
         width: 156px;
-        position: absolute;
-        /* Mặc định nằm dưới navbar */
-        top: 70px;
-        /* Điều chỉnh theo độ cao của navbar */
-        left: 0;
         background-color: #f8f8f8;
-        border-right: 1px solid #ddd;
+        position: absolute;
+        top: 70px;
+        left: 0;
         padding: 0 0;
         height: calc(100vh - 56px);
         transition: all 0.3s ease-in-out;
@@ -50,7 +43,6 @@
 
     .video-sidebar.fixed {
         position: fixed;
-        /* Khi cuộn xuống thì cố định */
         top: 0;
         height: 100vh;
     }
