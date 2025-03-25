@@ -141,26 +141,13 @@
     <ul class="tag-slider slick-slider">
         <div class="slick-list draggable">
             <div class="slick-track" style="opacity: 1; width: auto; transform: translate3d(0px, 0px, 0px);">
-                <li><a href="/ket-qua?c=0&s=28&t=">Hoạt động trải nghiệm</a></li>
-                <li><a href="/ket-qua?c=0&s=29&t=">Giáo dục thể chất</a></li>
-                <li><a href="/ket-qua?c=0&s=30&t=">Khoa học tự nhiên</a></li>
-                <li><a href="/ket-qua?c=0&s=31&t=">Giáo dục quốc phòng</a></li>
-                <li><a href="/ket-qua?c=0&s=32&t=">Kinh tế và pháp luật</a></li>
-                <li><a href="/ket-qua?c=0&s=35&t=">Lịch sử và Địa lí</a></li>
-                <li><a href="/ket-qua?c=0&s=36&t=">Âm nhạc và Mĩ thuật</a></li>
-                <li><a href="/ket-qua?c=0&s=37&t=">Tiếng Việt</a></li>
-                <li><a href="/ket-qua?c=0&s=38&t=">Giáo dục địa phương</a></li>
-                <li><a href="/ket-qua?c=0&s=39&t=">Hướng nghiệp</a></li>
-                <li><a href="/ket-qua?c=0&s=40&t=">Thể dục</a></li>
-                <li><a href="/ket-qua?c=0&s=33&t=">Môn khác</a></li>
-                <li><a href="/ket-qua?c=0&s=37&t=">Tiếng Việt</a></li>
-                <li><a href="/ket-qua?c=0&s=38&t=">Giáo dục địa phương</a></li>
-                <li><a href="/ket-qua?c=0&s=39&t=">Hướng nghiệp</a></li>
-                <li><a href="/ket-qua?c=0&s=40&t=">Thể dục</a></li>
-                <li><a href="/ket-qua?c=0&s=33&t=">Môn khác</a></li>
+                @foreach ($categories as $category)
+                    <li><a href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a></li>
+                @endforeach
             </div>
         </div>
     </ul>
+
     <!-- Nút điều hướng slider -->
     <div class="tag-slider-prev">
         <div class="slider-btn"><i class="fas fa-angle-left"></i></div>
@@ -168,6 +155,7 @@
     <div class="tag-slider-next">
         <div class="slider-btn"><i class="fas fa-angle-right"></i></div>
     </div>
+
 
     <div class="slideshow-container">
         <div class="slides-wrapper">

@@ -15,92 +15,108 @@
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/d70c32c211.js" crossorigin="anonymous"></script>
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    {{-- <link href="{{ asset('/css/sb-admin-2.min.css') }}" rel="stylesheet"> --}}
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('{{ asset('img/background.png') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+        }
+    </style>
 </head>
 
-<body>
+<body class="bg-gradient-primary">
     <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Register') }}</div>
+        <div class="form-box login">
+            <form method="POST" action="{{ route('login') }}"></form>
+            @csrf
+            <h1>Login</h1>
+            <div class="input-box">
+                <input id="email" type="email" name="email" value="{{ old('email') }}" required placeholder="Email">
+                <i class="bx bx-user"></i>
 
-                    <div class="card-body">
-                        @if (session('success'))
-                            <div class="alert alert-success">{{ session('success') }}</div>
-                        @endif
+            </div>
+            <div class="input-box">
+                <input id="password" type="password" name="password" required placeholder="Password">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class="forgot-link">
+                <a href=" "> Forgot Password?</a>
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <p>or login with social platforms</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-google"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            </form>
+        </div>
 
-                        <form method="POST" action="{{ route('register') }}">
-                            @csrf
-
-                            <div class="row mb-3">
-                                <label for="name"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
-                                <div class="col-md-6">
-                                    <input id="name" type="text"
-                                        class="form-control @error('name') is-invalid @enderror" name="name"
-                                        value="{{ old('name') }}" required autofocus>
-                                    @error('name')
-                                        <span class="invalid-feedback"
-                                            role="alert"><strong>{{ $message }}</strong></span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="email"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-                                <div class="col-md-6">
-                                    <input id="email" type="email"
-                                        class="form-control @error('email') is-invalid @enderror" name="email"
-                                        value="{{ old('email') }}" required>
-                                    @error('email')
-                                        <span class="invalid-feedback"
-                                            role="alert"><strong>{{ $message }}</strong></span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="password"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-                                <div class="col-md-6">
-                                    <input id="password" type="password"
-                                        class="form-control @error('password') is-invalid @enderror" name="password"
-                                        required>
-                                    @error('password')
-                                        <span class="invalid-feedback"
-                                            role="alert"><strong>{{ $message }}</strong></span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="password-confirm"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
-                                <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control"
-                                        name="password_confirmation" required>
-                                </div>
-                            </div>
-
-                            <!-- Trường role (ẩn) -->
-                            <input type="hidden" name="role" value="user">
-
-                            <div class="row mb-0">
-                                <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">{{ __('Register') }}</button>
-                                </div>
-                            </div>
-                        </form>
-
-                        <div class="mt-3 text-center">
-                            <p>Đã có tài khoản? <a href="{{ route('login') }}">Đăng nhập ngay</a></p>
-                        </div>
-                    </div>
+        <div class="form-box register">
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+                <h1>Registration</h1>
+                <div class="input-box">
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
+                        value="{{ old('name') }}" required placeholder="Username">
+                    @error('name')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                    <i class='bx bxs-user'></i>
                 </div>
+                <div class="input-box">
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
+                        value="{{ old('email') }}" required placeholder="Email">
+                    <i class='bx bxs-envelope'></i>
+                    @error('email')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+                <div class="input-box">
+                    <input type="password" name="password" required placeholder="Password">
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" name="password_confirmation" required placeholder="Repeat Password">
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <button type="submit" class="btn">Register</button>
+                <p>or register with social platforms</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-google"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </form>
+        </div>
+        <div class="toggle-box">
+            <div class="toggle-panel toggle-left">
+                <h1>Hello, Welcome!</h1>
+                <p>Don't have an account?</p>
+                <button class="btn register-btn">Register</button>
+            </div>
+
+            <div class="toggle-panel toggle-right">
+                <h1>Welcome Back!</h1>
+                <p>Already have an account?</p>
+                <button class="btn login-btn">Login</button>
             </div>
         </div>
     </div>
+
+    <script src="{{ asset('js/auth.js') }}"></script>
 </body>
 
 </html>
