@@ -74,6 +74,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/delete/{congnghe}', [CongngheControllerAdmin::class, 'destroy'])->name('admin.congnghe.destroy');
 
     });
+
 });
 
 

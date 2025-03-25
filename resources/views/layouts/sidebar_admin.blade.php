@@ -6,6 +6,8 @@
                 <div class="p-3 text-center border-bottom">
                     <a href="{{ route('admin.dashboard') }}"><img src="{{ asset('image/images.png') }}"
                             class="img-fluid" /></a>
+
+                    <a href="{{ route('admin.dashboard') }}"><img src="{{ asset('image/images.png') }}" class="img-fluid" /></a>
                 </div>
 
                 <ul class="nav flex-column">
@@ -30,6 +32,7 @@
                             <ul class="nav flex-column ps-3">
                                 <li><a class="nav-link text-dark" href="{{ route('admin.congnghe.index') }}">Công
                                         nghê</a></li>
+                                <li><a class="nav-link text-dark" href="{{ route('admin.course.index') }}">Danh sách khóa học</a></li>
                             </ul>
                         </div>
                     </li>
@@ -39,7 +42,6 @@
                             <i class="fas fa-folder"></i> Quản lý Danh mục
                         </a>
                     </li>
-
 
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.user.index') }}">
@@ -52,6 +54,7 @@
                 <div class="p-3 text-center border-top">
                     <a class="nav-link text-dark" href="{{ route('home') }}"><i class="fas fa-arrow-left me-2"></i>Quay
                         lại trang chủ</a>
+                    <a class="nav-link text-dark" href="{{ route('home') }}"><i class="fas fa-arrow-left me-2"></i>Quay lại trang chủ</a>
                 </div>
             </div>
         </div>
@@ -94,6 +97,11 @@
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".collapsed").forEach(item => {
             item.addEventListener("click", function () {
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".collapsed").forEach(item => {
+            item.addEventListener("click", function() {
                 this.querySelector("i.fas.fa-chevron-down").classList.toggle("rotate");
             });
         });
