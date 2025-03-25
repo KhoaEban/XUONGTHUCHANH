@@ -1,7 +1,7 @@
 <div class="video-sidebar">
     <ul>
         <li>
-            <a href="/" class="menu-item">
+            <a href="{{ route('home') }}" class="menu-item">
                 <i class="fa fa-home"></i>
                 <div>Trang chủ</div>
             </a>
@@ -36,9 +36,9 @@
 <style>
     .video-sidebar {
         width: 156px;
-        position: absolute;
+        position: fixed;
         /* Mặc định nằm dưới navbar */
-        top: 70px;
+        /* top: 70px; */
         /* Điều chỉnh theo độ cao của navbar */
         left: 0;
         background-color: #f8f8f8;

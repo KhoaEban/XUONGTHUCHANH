@@ -375,7 +375,13 @@
         <div class="row">
             <!-- Sidebar bên trái -->
             <div class="col-md-1 col-lg-1 p-0 bg-light sidebar">
-                @extends('layouts.sidebar')
+                @if(Auth::check())
+                    @if(Auth::user()->role == 'instructor')
+                        @extends('layouts.sidebar_instructor')
+                    @else
+                        @extends('layouts.sidebar')
+                    @endif
+                @endif
             </div>
 
             <!-- Nội dung chính -->

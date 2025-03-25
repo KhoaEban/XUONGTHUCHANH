@@ -45,10 +45,10 @@ class AuthController extends Controller
             // Kiểm tra quyền và điều hướng
             if ($user->role == 'admin') {
                 return redirect()->route('admin.dashboard'); // Chuyển đến trang admin
-            } elseif ($user->role == 'teacher') {
-                return redirect()->route('teacher.dashboard'); // Chuyển đến trang teacher
+            } elseif ($user->role == 'instructor') {
+                return redirect()->route('instructor.home'); // Chuyển đến trang teacher
             } elseif ($user->role == 'student') {
-                return redirect()->route('student.dashboard'); // Chuyển đến trang student
+                return redirect()->route('user.home'); // Chuyển đến trang student
             }
 
             return redirect()->route('home'); // Mặc định chuyển về trang home nếu không có quyền cụ thể

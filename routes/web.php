@@ -15,6 +15,9 @@ use App\Http\Controllers\User\FaqController;
 use App\Http\Controllers\User\SupportController;
 use App\Http\Controllers\User\SimulationController;
 
+// Instructor
+use App\Http\Controllers\Teacher\HomeControllerInstructor;
+
 // Trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -26,12 +29,8 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['check.role:admin'])->group(function () {
-    Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
-});
-
-Route::middleware(['check.role:teacher'])->group(function () {
-    Route::get('/user/home', [HomeController::class, 'index'])->name('user.home');
+Route::middleware(['check.role:instructor'])->group(function () {
+    Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.home');
 });
 
 Route::middleware(['check.role:student'])->group(function () {

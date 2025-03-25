@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckInstructor;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->alias([
             'check.role' => CheckAdmin::class,
+        ]);
+
+        $middleware->alias([
+            'check.role' => CheckInstructor::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
