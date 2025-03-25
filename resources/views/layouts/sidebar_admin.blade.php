@@ -4,6 +4,9 @@
         <div class="col-md-2 sidebar bg-light border-end">
             <div class="d-flex flex-column vh-100">
                 <div class="p-3 text-center border-bottom">
+                    <a href="{{ route('admin.dashboard') }}"><img src="{{ asset('image/images.png') }}"
+                            class="img-fluid" /></a>
+
                     <a href="{{ route('admin.dashboard') }}"><img src="{{ asset('image/images.png') }}" class="img-fluid" /></a>
                 </div>
 
@@ -20,6 +23,15 @@
                         </a>
                         <div class="collapse" id="courseMenu">
                             <ul class="nav flex-column ps-3">
+                                <li><a class="nav-link text-dark" href="{{ route('admin.course.index') }}">Danh sách
+                                        khóa học</a></li>
+                            </ul>
+                            <ul class="nav flex-column ps-3">
+                                <li><a class="nav-link text-dark" href="{{ route('admin.khoa.index') }}">Khoa</a></li>
+                            </ul>
+                            <ul class="nav flex-column ps-3">
+                                <li><a class="nav-link text-dark" href="{{ route('admin.congnghe.index') }}">Công
+                                        nghê</a></li>
                                 <li><a class="nav-link text-dark" href="{{ route('admin.course.index') }}">Danh sách khóa học</a></li>
                             </ul>
                         </div>
@@ -40,6 +52,8 @@
 
                 {{-- Quay lại trang chủ --}}
                 <div class="p-3 text-center border-top">
+                    <a class="nav-link text-dark" href="{{ route('home') }}"><i class="fas fa-arrow-left me-2"></i>Quay
+                        lại trang chủ</a>
                     <a class="nav-link text-dark" href="{{ route('home') }}"><i class="fas fa-arrow-left me-2"></i>Quay lại trang chủ</a>
                 </div>
             </div>
@@ -51,6 +65,38 @@
         </div>
     </div>
 </div>
+
+<ul>
+    @auth
+        @if (Auth::user()->vaitro == 'admin')
+            <li class="nav-item">
+                <div>
+                    <div><a class="collapse-item" href="{{ route('khoa.index') }}"> <i class="fas fa-university mr-2"></i> Khoa</a></div>
+                </div>
+            </li>
+        @endif
+
+        @if (Auth::user()->vaitro == 'sinhvien')
+            <li class="nav-item">
+                <a><i class="fas fa-fw fa-book"></i>
+                    <span>Chương trình đào tạo</span>
+                </a>
+            </li>
+        @endif
+        @if (Auth::user()->vaitro == 'QL')
+            <span>Quản lý</span>
+            <div>
+                <div> <a class="collapse-item" href="') }}">Phân công</a></div>
+            </div>
+            </li>
+        @endif
+    @endauth
+</ul>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".collapsed").forEach(item => {
+            item.addEventListener("click", function () {
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
