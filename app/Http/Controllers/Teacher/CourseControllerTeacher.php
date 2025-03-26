@@ -23,7 +23,7 @@ class CourseControllerTeacher extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('instructor.courses.create' , compact('categories'));
+        return view('instructor.courses.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -70,29 +70,58 @@ class CourseControllerTeacher extends Controller
     public function edit($id)
     {
         $course = Course::where('instructor_id', Auth::id())->findOrFail($id);
-        return view('instructor.courses.edit', compact('course'));
+        $categories = Category::all();
+        return view('instructor.courses.edit', compact('course', 'categories'));
     }
 
     public function update(Request $request, $id)
     {
+        // Kiểm tra dữ liệu đầu vào
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
-            'thumbnail' => 'nullable|thumbnail|mimes:jpeg,png,jpg,gif|max:2048',
-            'price' => 'required|numeric|min:0',
+            'price'       => 'required|numeric',
+            'category_id' => 'required|integer|exists:categories,id',
+            'thumbnail'   => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
+        // Tìm khóa học của giảng viên hiện tại
         $course = Course::where('instructor_id', Auth::id())->findOrFail($id);
-        $course->title = $request->title;
-        $course->description = $request->description;
-        $course->price = $request->price;
 
-        if ($request->hasFile('thumbnail')) {
-            $imagePath = $request->file('thumbnail')->store('courses', 'public');
-            $course->image = $imagePath;
+        // Cập nhật thông tin khóa học
+        $course->title       = $request->title;
+        $course->description = $request->description;
+        $course->price       = $request->price;
+        $course->category_id = $request->category_id;
+
+        // Xử lý cập nhật slug nếu title thay đổi
+        if ($course->title !== $request->title) {
+            $slug = Str::slug($request->title, '-');
+            $count = Course::where('slug', 'LIKE', $slug . '%')->where('id', '!=', $id)->count();
+            if ($count > 0) {
+                $slug .= '-' . ($count + 1);
+            }
+            $course->slug = $slug;
         }
 
+        // Xử lý upload ảnh mới nếu có
+        if ($request->hasFile('thumbnail')) {
+            $image = $request->file('thumbnail');
+            $imageName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/courses'), $imageName);
+
+            // Xóa ảnh cũ (nếu có)
+            if ($course->thumbnail && file_exists(public_path($course->thumbnail))) {
+                unlink(public_path($course->thumbnail));
+            }
+
+            // Lưu ảnh mới vào database
+            $course->thumbnail = 'uploads/courses/' . $imageName;
+        }
+
+        // Lưu thay đổi vào database
         $course->save();
+
         return redirect()->route('instructor.courses.index')->with('success', 'Khóa học đã được cập nhật!');
     }
 
