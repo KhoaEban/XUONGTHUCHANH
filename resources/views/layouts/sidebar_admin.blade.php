@@ -42,7 +42,7 @@
 
                 {{-- Quay lại trang chủ --}}
                 <div class="p-3 text-center border-top">
-                    <a class="nav-link text-dark" href="{{ route('home') }}"><i class="fas fa-arrow-left me-2"></i>Quay
+                    <a class="nav-link text-dark" href="{{ url('/') }}"><i class="fas fa-arrow-left me-2"></i>Quay
                         lại trang chủ</a>
                 </div>
             </div>
@@ -55,49 +55,21 @@
     </div>
 </div>
 
-<ul>
-    @auth
-        @if (Auth::user()->vaitro == 'admin')
-            <li class="nav-item">
-                <div>
-                    <div><a class="collapse-item" href="{{ route('khoa.index') }}"> <i class="fas fa-university mr-2"></i>
-                            Khoa</a></div>
-                </div>
-            </li>
-        @endif
-
-        @if (Auth::user()->vaitro == 'sinhvien')
-            <li class="nav-item">
-                <a><i class="fas fa-fw fa-book"></i>
-                    <span>Chương trình đào tạo</span>
-                </a>
-            </li>
-        @endif
-        @if (Auth::user()->vaitro == 'QL')
-            <span>Quản lý</span>
-            <div>
-                <div> <a class="collapse-item" href="') }}">Phân công</a></div>
-            </div>
-            </li>
-        @endif
-    @endauth
-</ul>
-
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-                document.querySelectorAll(".collapsed").forEach(item => {
-                            item.addEventListener("click", function() {
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     document.querySelectorAll(".collapsed").forEach(item => {
+    //         item.addEventListener("click", function() {
+    //             this.nextElementSibling.classList.toggle("show");
+    //             this.querySelector("i.fas.fa-chevron-down").classList.toggle("rotate");
 
-                                        <
-                                        script >
-                                            document.addEventListener("DOMContentLoaded", function() {
-                                                document.querySelectorAll(".collapsed").forEach(item => {
-                                                    item.addEventListener("click", function() {
-                                                        this.querySelector("i.fas.fa-chevron-down")
-                                                            .classList.toggle("rotate");
-                                                    });
-                                                });
-                                            });
+    //             if (this.nextElementSibling.classList.contains("show")) {
+    //                 this.style.color = "#007bff";
+    //             } else {
+    //                 this.style.color = "#000";
+    //             }
+    //         });
+    //     });
+    // });
 </script>
 
 <style>

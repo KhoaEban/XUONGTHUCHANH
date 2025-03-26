@@ -17,9 +17,10 @@ use App\Http\Controllers\User\SimulationController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
-
+use App\Http\Controllers\Teacher\CourseControllerTeacher;
+use App\Http\Controllers\Teacher\LessonController;
 // Trang chủ
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index']);
 
 
 // Đăng nhập, đăng ký
@@ -40,7 +41,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
     // Quản lý người dùng
     Route::get('/admin/user', [AuthController::class, 'index'])->name('admin.user.index');
-    
+
     // Quản lý khóa học
     Route::prefix('admin/course')->group(function () {
         Route::get('/', [CourseControllerAdmin::class, 'index'])->name('admin.course.index');
@@ -65,7 +66,6 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::post('/assignChild', [CategoryControllerAdmin::class, 'assignChild'])->name('admin.category.assignChild');
         Route::delete('/unlink/{id}', [CategoryControllerAdmin::class, 'unlinkCategory'])->name('admin.category.unlink');
     });
-
 });
 
 
@@ -73,17 +73,39 @@ Route::middleware(['check.role:admin'])->group(function () {
 Route::middleware(['check.role:instructor'])->group(function () {
     Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
 
+
+    // Quản lý khóa học
+    Route::prefix('instructor')->group(function () {
+        Route::get('/courses', [CourseControllerTeacher::class, 'index'])->name('instructor.courses.index');
+        Route::get('/courses/create', [CourseControllerTeacher::class, 'create'])->name('instructor.courses.create');
+        Route::post('/courses', [CourseControllerTeacher::class, 'store'])->name('instructor.courses.store');
+        Route::get('/courses/edit/{course}', [CourseControllerTeacher::class, 'edit'])->name('instructor.courses.edit');
+        Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
+        Route::put('/courses/{course}', [CourseControllerTeacher::class, 'update'])->name('instructor.courses.update');
+        Route::delete('/courses/{course}', [CourseControllerTeacher::class, 'destroy'])->name('instructor.courses.destroy');
+    });
+    // Quản lý bài học
+    Route::prefix('instructor')->group(function () {
+        Route::get('/lesson', [LessonController::class, 'index'])->name('instructor.lesson.index');
+        Route::get('/create', [LessonController::class, 'create'])->name('instructor.lesson.create');
+        Route::post('/store', [LessonController::class, 'store'])->name('instructor.lesson.store');
+        Route::get('/edit/{lesson}', [LessonController::class, 'edit'])->name('instructor.lesson.edit');
+        Route::put('/update/{lesson}', [LessonController::class, 'update'])->name('instructor.lesson.update');
+        Route::delete('/delete/{lesson}', [LessonController::class, 'destroy'])->name('instructor.lesson.destroy');
+    });
 });
+
 
 
 // User
 Route::prefix('user')->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-
     // Danh mục
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
     Route::get('/course', [CourseController::class, 'index'])->name('course');
+    Route::get('/course/{slug}', [CourseController::class, 'show'])->name('course.show');
+    Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
+    Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lessons.show');
     Route::get('/support', [SupportController::class, 'index'])->name('support');
     Route::post('/support', [SupportController::class, 'submit'])->name('support');
 

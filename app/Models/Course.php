@@ -20,6 +20,12 @@ class Course extends Model
         'slug'
     ];
 
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
+
     public function instructor()
     {
         return $this->belongsTo(User::class, 'instructor_id');

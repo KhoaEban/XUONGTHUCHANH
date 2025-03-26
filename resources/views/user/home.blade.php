@@ -195,81 +195,27 @@
     <div class="row">
         <div class="col-12">
             <div class="row">
-                <div class="col-3">
-                    <div class="card">
-                        <a href="{{ route('course') }}" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
+                @foreach ($courses as $course)
+                    <div class="col-3">
+                        <div class="card">
+                            <a href="{{ route('course.show', $course->slug) }}"
+                                class="card-link text-decoration-none text-dark">
+                                <img class="card-img-top"
+                                    src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}"
+                                    alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $course->name }}</h5>
+                                    <p class="card-text text-secondary">{{ $course->instructor->name }}</p>
+                                    <div class="d-flex align-items-center text-secondary">
+                                        <p class="card-text m-0">{{ $course->lessons->count() }} nội dung</p>
+                                        <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
+                                        <p class="card-text">{{ $course->created_at->format('d/m/Y') }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -353,81 +299,26 @@
     <div class="row">
         <div class="col-12">
             <div class="row">
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
+                @if (count($courses) > 0)
+                    <div class="col-3">
+                        <div class="card">
+                            <a href="{{ route('course.show', $courses[0]->slug) }}" class="card-link text-decoration-none text-dark">
+                                <img class="card-img-top"
+                                    src="{{ asset($courses[0]->thumbnail ?? 'images/default-thumbnail.jpg') }}"
+                                    alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $courses[0]->name }}</h5>
+                                    <p class="card-text text-secondary">{{ $courses[0]->instructor->name }}</p>
+                                    <div class="d-flex align-items-center text-secondary">
+                                        <p class="card-text m-0">{{ $courses[0]->lessons->count() }} nội dung</p>
+                                        <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
+                                        <p class="card-text">{{ $courses[0]->created_at->format('d/m/Y') }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
