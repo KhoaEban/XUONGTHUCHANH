@@ -103,6 +103,9 @@ Route::prefix('user')->group(function () {
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
     Route::get('/course', [CourseController::class, 'index'])->name('course');
+    Route::get('/course/{slug}', [CourseController::class, 'show'])->name('course.show');
+    Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
+    Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lessons.show');
     Route::get('/support', [SupportController::class, 'index'])->name('support');
     Route::post('/support', [SupportController::class, 'submit'])->name('support');
 
