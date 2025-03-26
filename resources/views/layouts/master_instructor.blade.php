@@ -299,7 +299,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Logo -->
-            <a class="navbar-brand m-0" href="{{ route('home') }}">
+            <a class="navbar-brand m-0" href="{{ url('/') }}">
                 <img class="img-fluid rounded" src="{{ asset('image/images.png') }}" alt="Logo">
             </a>
 

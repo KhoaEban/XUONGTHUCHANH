@@ -4,7 +4,7 @@
             <div class="video-sidebar">
                 <ul>
                     <li>
-                        <a href="{{ route('home') }}" class="menu-item">
+                        <a href="{{ url('/') }}" class="menu-item">
                             <i class="fa fa-home"></i>
                             <div>Trang chủ</div>
                         </a>

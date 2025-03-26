@@ -36,6 +36,6 @@ class SupportController extends Controller
         // Gửi email thông báo (tùy chọn)
         // Mail::to('admin@example.com')->send(new SupportRequest($data));
 
-        return redirect()->route('user.support')->with('success', 'Yêu cầu hỗ trợ đã được gửi thành công!');
+        return redirect()->route('support')->with('success', 'Yêu cầu hỗ trợ đã được gửi thành công!');
     }
 }

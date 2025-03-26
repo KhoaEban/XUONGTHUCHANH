@@ -42,17 +42,34 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            // Kiểm tra quyền và điều hướng
-            if ($user->role == 'admin') {
-                return redirect()->route('admin.dashboard'); // Chuyển đến trang admin
-            } elseif ($user->role == 'instructor') {
-                return redirect()->route('instructor.dashboard'); // Chuyển đến trang teacher
-            } elseif ($user->role == 'student') {
-                return redirect()->route('home'); // Chuyển đến trang student
+            // Điều hướng theo vai trò
+            switch ($user->role) {
+                case 'admin':
+                    return redirect()->route('admin.dashboard');
+                case 'instructor':
+                    return redirect()->route('instructor.dashboard');
+                case 'student':
+                    return redirect('/');
+                default:
+                    Auth::logout();
+                    return redirect('/login')->with('error', 'Tài khoản không hợp lệ.');
             }
-
-            return redirect()->route('home'); // Mặc định chuyển về trang home nếu không có quyền cụ thể
         }
+
+        // if (Auth::attempt($credentials)) {
+        //     $user = Auth::user();
+
+        //     // Kiểm tra quyền và điều hướng
+        //     if ($user->role == 'admin') {
+        //         return redirect()->route('admin.dashboard'); // Chuyển đến trang admin
+        //     } elseif ($user->role == 'instructor') {
+        //         return redirect()->route('instructor.dashboard'); // Chuyển đến trang teacher
+        //     } elseif ($user->role == 'student') {
+        //         return redirect()->route('home'); // Chuyển đến trang student
+        //     }
+
+        //     return redirect()->route('home'); // Mặc định chuyển về trang home nếu không có quyền cụ thể
+        // }
 
         return back()->withErrors(['email' => 'Email hoặc mật khẩu không chính xác']);
     }

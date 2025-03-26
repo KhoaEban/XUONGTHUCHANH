@@ -19,7 +19,7 @@ use App\Http\Controllers\User\SimulationController;
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
 
 // Trang chủ
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index']);
 
 
 // Đăng nhập, đăng ký
@@ -78,8 +78,6 @@ Route::middleware(['check.role:admin,instructor'])->group(function () {
 
 // User
 Route::prefix('user')->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-
     // Danh mục
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
