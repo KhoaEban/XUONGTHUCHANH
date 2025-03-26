@@ -70,7 +70,7 @@ Route::middleware(['check.role:admin'])->group(function () {
 
 
 // Instructor
-Route::middleware(['check.role:instructor'])->group(function () {
+Route::middleware(['check.role:admin,instructor'])->group(function () {
     Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
 
 });

@@ -46,9 +46,9 @@ class AuthController extends Controller
             if ($user->role == 'admin') {
                 return redirect()->route('admin.dashboard'); // Chuyển đến trang admin
             } elseif ($user->role == 'instructor') {
-                return redirect()->route('instructor.home'); // Chuyển đến trang teacher
+                return redirect()->route('instructor.dashboard'); // Chuyển đến trang teacher
             } elseif ($user->role == 'student') {
-                return redirect()->route('user.home'); // Chuyển đến trang student
+                return redirect()->route('home'); // Chuyển đến trang student
             }
 
             return redirect()->route('home'); // Mặc định chuyển về trang home nếu không có quyền cụ thể

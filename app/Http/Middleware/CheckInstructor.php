@@ -18,7 +18,6 @@ class CheckInstructor
         $user = Auth::user();
 
         if ($user->role !== 'instructor') {
-            // abort(403, 'Bạn không có quyền truy cập!');
             return redirect('/404');
         }
 
