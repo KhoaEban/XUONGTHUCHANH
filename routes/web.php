@@ -41,7 +41,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
     // Quản lý người dùng
     Route::get('/admin/user', [AuthController::class, 'index'])->name('admin.user.index');
-    
+
     // Quản lý khóa học
     Route::prefix('admin/course')->group(function () {
         Route::get('/', [CourseControllerAdmin::class, 'index'])->name('admin.course.index');
@@ -66,20 +66,22 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::post('/assignChild', [CategoryControllerAdmin::class, 'assignChild'])->name('admin.category.assignChild');
         Route::delete('/unlink/{id}', [CategoryControllerAdmin::class, 'unlinkCategory'])->name('admin.category.unlink');
     });
-
 });
 
 
 // Instructor
 Route::middleware(['check.role:instructor'])->group(function () {
     Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.home');
-// Quản lý khóa học của giảng viên
-Route::get('/courses', [CourseControllerTeacher::class, 'index'])->name('instructor.courses.index');
-Route::get('/courses/create', [CourseControllerTeacher::class, 'create'])->name('instructor.courses.create');
-Route::post('/courses', [CourseControllerTeacher::class, 'store'])->name('instructor.courses.store');
-Route::get('/courses/{id}/edit', [CourseControllerTeacher::class, 'edit'])->name('instructor.courses.edit');
-Route::put('/courses/{id}', [CourseControllerTeacher::class, 'update'])->name('instructor.courses.update');
-Route::delete('/courses/{id}', [CourseControllerTeacher::class, 'destroy'])->name('instructor.courses.destroy');
+    // Quản lý khóa học của giảng viên
+    Route::prefix('instructor')->group(function () {
+        Route::get('/courses', [CourseControllerTeacher::class, 'index'])->name('instructor.courses.index');
+        Route::get('/courses/create', [CourseControllerTeacher::class, 'create'])->name('instructor.courses.create');
+        Route::post('/courses', [CourseControllerTeacher::class, 'store'])->name('instructor.courses.store');
+        Route::get('/courses/edit/{course}', [CourseControllerTeacher::class, 'edit'])->name('instructor.courses.edit');
+        Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
+        Route::put('/courses/{course}', [CourseControllerTeacher::class, 'update'])->name('instructor.courses.update');
+        Route::delete('/courses/{course}', [CourseControllerTeacher::class, 'destroy'])->name('instructor.courses.destroy');
+    });
 });
 
 
@@ -102,4 +104,3 @@ Route::prefix('user')->group(function () {
 Route::fallback(function () {
     return view('errors.404');
 });
-  

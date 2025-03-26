@@ -10,7 +10,6 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
         'instructor_id',
         'title',
         'description',
@@ -19,6 +18,12 @@ class Course extends Model
         'thumbnail',
         'slug'
     ];
+
+    // Định nghĩa khóa chính bằng slug để tự động tìm kiếm theo slug thay vì id
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function instructor()
     {
