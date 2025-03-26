@@ -6,7 +6,6 @@
                 <div>Quản lý học viên</div>
                 <i class="fa fa-chevron-down"></i>
             </a>
-            <ul class="submenu"></ul>
         </li>
         <li class="dropdown">
             <a href="#" class="menu-item">
@@ -14,10 +13,23 @@
                 <div>Quản lý Khóa Học</div>
                 <i class="fa fa-chevron-down"></i>
             </a>
-            <ul class="submenu"></ul>
+            <ul class="submenu">
+                <li>
+                    <a href="{{ route('instructor.courses.index') }}">
+                        <i class="fa fa-list"></i> Danh sách khóa học
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('instructor.courses.create') }}">
+                        <i class="fa fa-plus"></i> Thêm khóa học
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul>
 </div>
+
+
 
 
 <style>
@@ -98,9 +110,7 @@
         transform: rotate(180deg);
     }
 
-    footer {
-        
-    }
+ 
 </style>
 
 <script>

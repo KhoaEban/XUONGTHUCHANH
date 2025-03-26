@@ -17,6 +17,7 @@ use App\Http\Controllers\User\SimulationController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
+use App\Http\Controllers\Teacher\CourseControllerTeacher;
 
 // Trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -71,8 +72,14 @@ Route::middleware(['check.role:admin'])->group(function () {
 
 // Instructor
 Route::middleware(['check.role:instructor'])->group(function () {
-    Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
-
+    Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.home');
+// Quản lý khóa học của giảng viên
+Route::get('/courses', [CourseControllerTeacher::class, 'index'])->name('instructor.courses.index');
+Route::get('/courses/create', [CourseControllerTeacher::class, 'create'])->name('instructor.courses.create');
+Route::post('/courses', [CourseControllerTeacher::class, 'store'])->name('instructor.courses.store');
+Route::get('/courses/{id}/edit', [CourseControllerTeacher::class, 'edit'])->name('instructor.courses.edit');
+Route::put('/courses/{id}', [CourseControllerTeacher::class, 'update'])->name('instructor.courses.update');
+Route::delete('/courses/{id}', [CourseControllerTeacher::class, 'destroy'])->name('instructor.courses.destroy');
 });
 
 
@@ -95,3 +102,4 @@ Route::prefix('user')->group(function () {
 Route::fallback(function () {
     return view('errors.404');
 });
+  
