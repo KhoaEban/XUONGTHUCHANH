@@ -17,6 +17,7 @@ use App\Http\Controllers\User\SimulationController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
+use App\Http\Controllers\Teacher\LessonController;
 
 // Trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -73,6 +74,15 @@ Route::middleware(['check.role:admin'])->group(function () {
 Route::middleware(['check.role:instructor'])->group(function () {
     Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
 
+    // Quản lý bài học
+    Route::prefix('instructor/lesson')->group(function () {
+        Route::get('/', [LessonController::class, 'index'])->name('instructor.lesson.index');
+        Route::get('/create', [LessonController::class, 'create'])->name('instructor.lesson.create');
+        Route::post('/store', [LessonController::class, 'store'])->name('instructor.lesson.store');
+        Route::get('/edit/{lesson}', [LessonController::class, 'edit'])->name('instructor.lesson.edit');
+        Route::put('/update/{lesson}', [LessonController::class, 'update'])->name('instructor.lesson.update');
+        Route::delete('/delete/{lesson}', [LessonController::class, 'destroy'])->name('instructor.lesson.destroy');
+    });
 });
 
 

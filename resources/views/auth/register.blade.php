@@ -64,6 +64,17 @@
                     <input type="password" name="password_confirmation" required placeholder="Repeat Password">
                     <i class='bx bxs-lock-alt'></i>
                 </div>
+                <div class="input-box">
+                    <label for="role" class="form-label">Role</label>
+                    <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="student" {{ old('role') == 'student' ? 'selected' : '' }}>Student</option>
+                        <option value="instructor" {{ old('role') == 'instructor' ? 'selected' : '' }}>Instructor</option>
+                    </select>
+                    @error('role')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
                 <button type="submit" class="btn">Register</button>
                 <p>or register with social platforms</p>
                 <div class="social-icons">

@@ -20,7 +20,7 @@
                 @foreach ($subcategories as $subcategory)
                     <div class="col-md-4 col-sm-6 mb-3">
                         <div class="category-card">
-                            <a href="{{ route('category.show', $subcategory->slug) }}" class="text-decoration-none">
+                            <a href="{{ route('category.show', ['slug' => $subcategory->slug]) }}" class="text-decoration-none">
                                 <img class="category-img" src="{{ asset('storage/' . $subcategory->image) }}"
                                     alt="{{ $subcategory->name }}">
                                 <div class="category-title">{{ $subcategory->name }}</div>

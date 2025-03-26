@@ -38,16 +38,11 @@ class CategoryController extends Controller
      */
     public function show($slug)
     {
-        // Tìm danh mục theo slug
+        // Fetch the category using the slug
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        // Lấy danh mục con nếu có
-        $subcategories = Category::where('parent_id', $category->id)->get();
-
-        // Nếu không có danh mục con, lấy danh sách bài học
-        // $lessons = Lesson::where('category_id', $category->id)->get();
-
-        return view('user.category.index', compact('category', 'subcategories'));
+        // Return the view with the category data
+        return view('user.category.show', compact('category'));
     }
 
     /**
