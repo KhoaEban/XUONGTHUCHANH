@@ -97,7 +97,7 @@
                     <iframe id="lesson-video" width="100%" height="500" src="{{ $course->lessons->first()->video_url ?? '' }}" 
                         title="YouTube video player" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy">
                     </iframe>
                 </div>
 
