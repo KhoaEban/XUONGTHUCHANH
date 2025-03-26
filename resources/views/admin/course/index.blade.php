@@ -42,8 +42,8 @@
                                 <td>{{ $course->title }}</td>
                                 <td>{{ number_format($course->price, 0, ',', '.') }} VNĐ</td>
                                 <td>
-                                    <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning">Sửa</a>
-                                    <form action="{{ route('courses.destroy', $course->id) }}" method="POST"
+                                    <a href="{{ route('admin.course.edit', $course->id) }}" class="btn btn-warning">Sửa</a>
+                                    <form action="{{ route('admin.course.destroy', $course->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="btn btn-danger"

@@ -42,7 +42,7 @@
 
                 {{-- Quay lại trang chủ --}}
                 <div class="p-3 text-center border-top">
-                    <a class="nav-link text-dark" href="{{ route('home') }}"><i class="fas fa-arrow-left me-2"></i>Quay
+                    <a class="nav-link text-dark" href="{{ url('/') }}"><i class="fas fa-arrow-left me-2"></i>Quay
                         lại trang chủ</a>
                 </div>
             </div>
