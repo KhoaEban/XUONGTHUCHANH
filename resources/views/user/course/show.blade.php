@@ -1,7 +1,6 @@
 @extends('layouts.master')
 
 <style>
-    /* Phần video chính */
     .main-content {
         flex: 3;
         background: white;
@@ -9,12 +8,13 @@
         border-radius: 10px;
     }
 
-    .video-container video {
+    .video-container iframe {
         width: 100%;
+        height: 500px;
         border-radius: 10px;
     }
 
-    .video-info h2 {
+    .video-info h3 {
         margin-top: 10px;
         font-size: 22px;
     }
@@ -52,7 +52,6 @@
         display: block;
     }
 
-    /* Phần danh sách bài giảng */
     .sidebar-course {
         flex: 1;
         margin-left: 20px;
@@ -61,26 +60,9 @@
         border-radius: 10px;
     }
 
-    .sidebar-course h3 {
-        font-size: 18px;
-        margin-bottom: 15px;
-    }
-
-    .related-courses {
-        flex: 1;
-        margin-left: 20px;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-    }
-
-    .related-courses h3 {
-        font-size: 18px;
-        margin-bottom: 15px;
-    }
-
     .video-list {
         list-style: none;
+        padding: 0;
     }
 
     .video-list li {
@@ -109,19 +91,21 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 ">
             <div class="main-content p-0">
                 <div id="video-container">
-                    <iframe id="lesson-video" width="100%" height="500"
-                        src="{{ $course->lessons->first()->video_url ?? '' }}" title="YouTube video player" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <iframe id="lesson-video" width="100%" height="500" src="{{ $course->lessons->first()->video_url ?? '' }}" 
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                    </iframe>
                 </div>
 
                 <div class="video-info">
                     <h3 id="lesson-title">{{ $course->lessons->first()->title ?? '' }}</h3>
                     <p><span class="author">Giảng viên: {{ $course->instructor->name ?? 'Đang cập nhật' }}</span></p>
                 </div>
+
                 <div class="tabs">
                     <button class="tab-button active" onclick="openTab(event, 'gioithieu')">Giới thiệu</button>
                     <button class="tab-button" onclick="openTab(event, 'noidung')">Nội dung khóa học</button>
@@ -129,6 +113,7 @@
                     <button class="tab-button" onclick="openTab(event, 'thongtin')">Thông tin giảng viên</button>
                     <button class="tab-button" onclick="openTab(event, 'danhgia')">Đánh giá</button>
                 </div>
+
                 <div id="gioithieu" class="tab-content active">
                     <p>{!! nl2br(e($course->lessons->first()->content)) !!}</p>
                 </div>
@@ -137,7 +122,7 @@
                         @foreach ($course->lessons as $lesson)
                             <li>
                                 <a href="#" onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}')">
-                                    {{ $lesson->title }} - ({{ gmdate('i:s', $lesson->duration) }})
+                                    {{ $lesson->title }} - ({{ gmdate('H:i:s', $lesson->duration) }})
                                     @if ($lesson->completed)
                                         ✅
                                     @endif
@@ -164,21 +149,15 @@
                     <div class="card-body">
                         <h3>Nội dung khóa học</h3>
                         <ul class="video-list">
-                            <div class="card">
-                                <div class="card-body">
-                                    @foreach ($course->lessons as $lesson)
-                                        <li class="m-0"
-                                            onclick="loadLesson('{{ asset($lesson->video_url) }}', '{{ $lesson->title }}')">
-                                            <img src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}"
-                                                alt="Video">
-                                            <div>
-                                                <h4>{{ $lesson->title }}</h4>
-                                                <p>{{ gmdate('i:s', $lesson->duration) }}</p>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                </div>
-                            </div>
+                            @foreach ($course->lessons as $lesson)
+                                <li onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}')">
+                                    <img src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}" alt="Video">
+                                    <div>
+                                        <h4>{{ $lesson->title }}</h4>
+                                        <p>{{ \Carbon\CarbonInterval::seconds($lesson->duration)->cascade()->forHumans() }}</p>
+                                    </div>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
@@ -203,15 +182,10 @@
                 evt.currentTarget.className += " active";
             }
 
-            // function loadLesson(videoUrl, title) {
-            //     document.querySelector('.video-container video source').src = videoUrl;
-            //     document.querySelector('.video-container video').load();
-            //     document.querySelector('.video-info h2').innerText = title;
-            // }
-
             function loadLesson(videoUrl, title) {
                 document.getElementById("lesson-title").innerText = title;
                 document.getElementById("lesson-video").src = videoUrl;
             }
         </script>
-    @endsection
+    </div>
+@endsection
