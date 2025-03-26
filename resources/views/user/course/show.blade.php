@@ -63,24 +63,35 @@
     .video-list {
         list-style: none;
         padding: 0;
+        margin: 0;
+        overflow-y: scroll;
+        max-height: 500px;
+        scrollbar-width: thin;
+        scrollbar-color: #000000;
+        background: #f1f1f1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 5px; 
     }
 
     .video-list li {
         display: flex;
         align-items: center;
-        margin-bottom: 10px;
         cursor: pointer;
     }
 
     .video-list img {
-        width: 80px;
-        height: 60px;
+        width: 100px;
+        /* height: 60px; */
         border-radius: 5px;
         margin-right: 10px;
     }
 
-    .video-list h4 {
+    .video-list h4, span {
         font-size: 14px;
+        margin-right: 5px;
     }
 
     .video-list p {
@@ -115,7 +126,7 @@
                 </div>
 
                 <div id="gioithieu" class="tab-content active">
-                    <p>{!! nl2br(e($course->lessons->first()->content)) !!}</p>
+                    <p class="px-3">{!! nl2br(e($course->lessons->first()->content)) !!}</p>
                 </div>
                 <div id="noidung" class="tab-content">
                     <ul>
@@ -123,9 +134,9 @@
                             <li>
                                 <a href="#" onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}')">
                                     {{ $lesson->title }} - ({{ gmdate('H:i:s', $lesson->duration) }})
-                                    @if ($lesson->completed)
+                                    {{-- @if ($lesson->completed)
                                         ✅
-                                    @endif
+                                    @endif --}}
                                 </a>
                             </li>
                         @endforeach
@@ -152,9 +163,11 @@
                             @foreach ($course->lessons as $lesson)
                                 <li onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}')">
                                     <img src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}" alt="Video">
-                                    <div>
-                                        <h4>{{ $lesson->title }}</h4>
-                                        <p>{{ \Carbon\CarbonInterval::seconds($lesson->duration)->cascade()->forHumans() }}</p>
+                                    <div class="d-flex align-items-center">
+                                        <span>{{ $lesson->order_number }}.</span><h4 class="m-0">{{ $lesson->title }}</h4>
+                                        @if ($lesson->completed)
+                                            <p>✅</p>
+                                        @endif
                                     </div>
                                 </li>
                             @endforeach
