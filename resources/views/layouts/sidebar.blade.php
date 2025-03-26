@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="col-md-11 content-wrapper p-0">
-            <main class="main-content px-3">
+            <main class="main-content px-3" style="min-height: 50vh">
                 @yield('content')
             </main>
 

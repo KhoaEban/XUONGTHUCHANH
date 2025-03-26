@@ -41,7 +41,8 @@
                 @csrf
                 <h1>Login</h1>
                 <div class="input-box">
-                    <input id="email" type="email" name="email" value="{{ old('email') }}" required placeholder="Email">
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required
+                        placeholder="Email">
                     <i class='bx bxs-user'></i>
                 </div>
                 <div class="input-box">
@@ -89,6 +90,18 @@
                 <div class="input-box">
                     <input type="password" name="password_confirmation" required placeholder="Repeat Password">
                     <i class='bx bxs-lock-alt'></i>
+                </div>
+                <div class="input-box">
+                    <label for="role" class="form-label">Vai trò</label>
+                    <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
+                        <option value="" disabled selected>Chọn vai trò</option>
+                        <option value="student" {{ old('role') == 'student' ? 'selected' : '' }}>Student</option>
+                        <option value="instructor" {{ old('role') == 'instructor' ? 'selected' : '' }}>Instructor
+                        </option>
+                    </select>
+                    @error('role')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
                 </div>
                 <button type="submit" class="btn">Register</button>
                 <p>or register with social platforms</p>

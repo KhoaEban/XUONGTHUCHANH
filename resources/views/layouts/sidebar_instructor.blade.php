@@ -21,15 +21,26 @@
                             <i class="fa fa-chevron-down"></i>
                         </a>
                         <ul class="submenu">
-                            <li><a href="#">Danh sách khóa học</a></li>
-                            <li><a href="#">Thêm mới khóa học</a></li>
+                            <li><a href="{{ route('instructor.courses.index') }}">Danh sách khóa học</a></li>
+                            <li><a href="{{ route('instructor.courses.create') }}">Thêm mới khóa học</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="menu-item">
+                            <i class="fa fa-book"></i>
+                            <div>Quản lý bài học</div>
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="{{ route('instructor.lesson.index') }}">Danh sách bài học</a></li>
+                            <li><a href="{{ route('instructor.lesson.create') }}">Thêm mới bài học</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="col-md-10 content-wrapper p-0">
-            <main class="main-content px-3">
+            <main class="main-content px-3" style="min-height: 50vh">
                 @yield('content')
             </main>
 

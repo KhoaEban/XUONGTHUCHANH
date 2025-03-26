@@ -313,7 +313,7 @@
             </div>
 
             <!-- Icon bên phải -->
-            <div class="d-flex align-items-center ms-3">
+            <div class="d-flex align-items-center">
                 <div class="icon me-3"><i class="fas fa-th"></i></div>
                 <div class="icon me-3"><i class="fas fa-bell"></i></div>
 
