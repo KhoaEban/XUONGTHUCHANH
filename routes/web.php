@@ -1,46 +1,45 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+// Admin
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\User\CourseController;
-use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Admin\Dashboard;
-use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\Admin\CourseControllerAdmin;
+use App\Http\Controllers\Admin\CategoryControllerAdmin;
 
-<<<<<<< Updated upstream
-Route::get('/', function () {
-    return view('user.home');
-})->name('home');
-=======
+// User
+use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\CategoryController;
+use App\Http\Controllers\User\CourseController;
+use App\Http\Controllers\User\FaqController;
+use App\Http\Controllers\User\SupportController;
+use App\Http\Controllers\User\SimulationController;
+
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
 
 // Trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
->>>>>>> Stashed changes
 
+
+// Đăng nhập, đăng ký
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth.admin'])->group(function () {
+// Route::middleware(['check.role:student'])->group(function () {
+//     Route::get('/user/home', [HomeController::class, 'index'])->name('home');
+// });
+
+
+// Admin
+Route::middleware(['check.role:admin'])->group(function () {
+    // Trang chủ Admin
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
-<<<<<<< Updated upstream
-});
-
-Route::middleware(['auth.user'])->group(function () {
-    Route::get('/user/home', [HomeController::class, 'index'])->name('user.home');
-});
-
-Route::get('/user/course', [CourseController::class, 'index'], function () {
-    return view('course.index');
-})->name('course');
-=======
     // Quản lý người dùng
     Route::get('/admin/user', [AuthController::class, 'index'])->name('admin.user.index');
-    Route::get('/admin/instructors/{id}/courses', [CourseControllerAdmin::class, 'viewInstructorCourses'])->name('admin.courses.instructor_courses');
 
     // Quản lý khóa học
     Route::prefix('admin/course')->group(function () {
@@ -96,4 +95,3 @@ Route::prefix('user')->group(function () {
 Route::fallback(function () {
     return view('errors.404');
 });
->>>>>>> Stashed changes
