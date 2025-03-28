@@ -34,6 +34,9 @@ class CourseControllerAdmin extends Controller
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+
+
+
         $course = new Course();
         $course->instructor_id = auth()->id();
         $course->title = $request->title;
@@ -51,11 +54,15 @@ class CourseControllerAdmin extends Controller
         return redirect()->route('admin.course.index')->with('success', 'Khóa học đã được tạo!');
     }
 
+
+
     public function edit($id)
     {
         $course = Course::findOrFail($id);
         return view('admin.course.edit', compact('course'));
     }
+
+
 
 
     public function update(Request $request, $id)
@@ -69,6 +76,8 @@ class CourseControllerAdmin extends Controller
             'category_id' => 'required|exists:categories,id',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+
 
         $course->title = $request->title;
         $course->description = $request->description;
@@ -85,6 +94,9 @@ class CourseControllerAdmin extends Controller
         return redirect()->route('admin.course.index')->with('success', 'Khóa học đã được cập nhật!');
     }
 
+
+
+    
     public function destroy($id)
     {
         $course = Course::findOrFail($id);
