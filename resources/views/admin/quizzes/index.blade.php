@@ -55,54 +55,32 @@
             <thead class="">
                 <tr>
                     <th>#</th>
-                    <th>Hình ảnh</th>
                     <th>Tiêu đề</th>
-                    <th>Khóa học</th>
-                    <th>Thứ tự bài học</th>
-                    <th>Người tạo</th>
-                    <th>Hành động</th>
+                    <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody class="align-middle">
-                @foreach ($lessons as $index => $lesson)
-                    @if (auth()->user()->role === 'admin' || auth()->user()->id === $lesson->instructor_id)
-                        <tr class="course-item" data-category="{{ $lesson->course_id }}"
-                            data-instructor="{{ $lesson->instructor->id ?? '' }}">
-
-                            <td>{{ $lesson->id }}</td>
-                            {{-- Hiển thị hình ảnh khóa học nếu có --}}
-                            <td>
-                                @if ($lesson->course->thumbnail)
-                                    <img src="{{ asset($lesson->course->thumbnail) }}" alt="Course Image" width="80"
-                                        height="50" style="object-fit: cover; border-radius: 5px;">
-                                @else
-                                    <img src="{{ asset('images/default-thumbnail.jpg') }}" alt="Default Image"
-                                        width="80" height="50" style="object-fit: cover; border-radius: 5px;">
-                                @endif
-                            </td>
-
-                            <td>{{ $lesson->title }}</td>
-                            <td>{{ $lesson->course->title ?? 'N/A' }}</td>
-                            <td>{{ $lesson->order_number }}</td>
-                            <td>{{ optional($lesson->course->instructor)->name ?? 'N/A' }}</td>
-
-                            <td>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('admin.lessons.show', $lesson->id) }}" class="text-primary"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="{{ route('admin.lessons.edit', $lesson->id) }}" class="text-warning"><i
-                                            class="fas fa-edit"></i></a>
-                                    <form action="{{ route('admin.lessons.destroy', $lesson->id) }}" method="POST"
-                                        style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" style="border: none; background-color: transparent;"
-                                            class="text-danger"><i class="fas fa-trash"></i></button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @endif
+                @foreach ($quizzes as $quiz)
+                    <tr>
+                        <td>{{ $quiz->id }}</td>
+                        <td>{{ $quiz->title }}</td>
+                        <td>{{ $quiz->slug }}</td>
+                        <td>
+                            <div class="d-flex justify-content-between align-items-center">
+                                {{-- <a href="{{ route('admin.quizzes.show', $lesson->id) }}" class="text-primary"><i
+                                        class="fas fa-eye"></i></a> --}}
+                                <a href="{{ route('admin.quizzes.edit', $lesson->id) }}" class="text-warning"><i
+                                        class="fas fa-edit"></i></a>
+                                <form action="{{ route('admin.quizzes.destroy', $lesson->id) }}" method="POST"
+                                    style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" style="border: none; background-color: transparent;"
+                                        class="text-danger"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>

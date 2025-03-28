@@ -2,33 +2,42 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
-class Lesson extends Model
+
+class Quiz extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'course_id',
-        'title',
-        'video_url',
-        'content',
-        'order_number',
-        'slug'
-    ];
+    protected $fillable = ['course_id', 'title', 'slug'];
 
-    // Mối quan hệ với khóa học
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
+
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
 
-    // Lấy giảng viên từ khóa học
-    public function instructor()
+    public function questions()
     {
-        return $this->course->instructor();
+        return $this->hasMany(Question::class);
+    }
+
+    public function quiz_results()
+    {
+        return $this->hasMany(Result::class);
+    }
+
+
+    public function lessons()
+    {
+        return $this->course->lessons;
     }
 
     // Slug

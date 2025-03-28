@@ -16,16 +16,24 @@ class LessonControllerAdmin extends Controller
     public function index(Request $request)
     {
         $instructor_id = $request->input('instructor_id');
+        $course_id = $request->input('course_id'); // Lấy giá trị lọc khóa học
 
         // Lấy danh sách giảng viên
         $instructors = User::where('role', 'instructor')->get();
 
-        // Lấy danh sách bài học kèm khóa học và giảng viên
-        $lessons = Lesson::with(['course', 'instructor'])
+        // Lấy danh sách khóa học
+        $courses = Course::all();
+
+        // Lấy danh sách bài học với điều kiện lọc
+        $lessons = Lesson::with(['course.instructor'])
+            ->when($course_id, function ($query) use ($course_id) {
+                return $query->where('course_id', $course_id);
+            })
+            ->when($instructor_id, function ($query) use ($instructor_id) {
+                return $query->where('instructor_id', $instructor_id);
+            })
             ->orderBy('order_number')
             ->get();
-
-        $courses = Course::all();
 
         return view('admin.lessons.index', compact('lessons', 'courses', 'instructors'));
     }
@@ -33,15 +41,15 @@ class LessonControllerAdmin extends Controller
 
     public function show($id)
     {
-        $lessons = Course::with('instructor', 'courses', 'lessons')->findOrFail($id);
+        $lesson = Lesson::with(['course', 'instructor'])->findOrFail($id);
 
-        // Kiểm tra nếu không phải admin và không phải người tạo khóa học thì từ chối truy cập
-        if (Auth::user()->role !== 'admin' && Auth::user()->id !== $lessons->instructor_id) {
-            abort(403, 'Bạn không có quyền truy cập khóa học này.');
+        if (Auth::user()->role !== 'admin' && Auth::user()->id !== $lesson->instructor_id) {
+            abort(403, 'Bạn không có quyền truy cập bài học này.');
         }
 
-        return view('admin.lessons.show', compact('lessons'));
+        return view('admin.lessons.show', compact('lesson'));
     }
+
 
 
     public function create()
@@ -64,7 +72,7 @@ class LessonControllerAdmin extends Controller
         Lesson::create($request->all());
         return redirect()->route('admin.lessons.index')->with('success', 'Lesson created successfully.');
     }
-    
+
 
     public function edit(Lesson $lesson)
     {
@@ -88,7 +96,11 @@ class LessonControllerAdmin extends Controller
 
     public function destroy(Lesson $lesson)
     {
+        if (Auth::user()->role !== 'admin' && Auth::user()->id !== $lesson->instructor_id) {
+            return redirect()->route('admin.lessons.index')->with('error', 'Bạn không có quyền xóa bài học này.');
+        }
+
         $lesson->delete();
-        return redirect()->route('admin.lessons.index')->with('success', 'Lesson deleted successfully.');
+        return redirect()->route('admin.lessons.index')->with('success', 'Bài học đã được xóa thành công.');
     }
 }

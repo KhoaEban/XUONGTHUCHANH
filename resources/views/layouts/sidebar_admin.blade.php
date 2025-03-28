@@ -28,7 +28,16 @@
                         <div class="collapse" id="courseMenu">
                             <ul class="nav flex-column ps-3">
                                 <li>
-                                    <a class="nav-link text-dark" href="{{ route('admin.lessons.index') }}">Danh sách Bài học
+                                    <a class="nav-link text-dark" href="{{ route('admin.lessons.index') }}">Danh sách
+                                        Bài học
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="collapse" id="courseMenu">
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.quizzes.index') }}">Quizzes
                                     </a>
                                 </li>
                             </ul>

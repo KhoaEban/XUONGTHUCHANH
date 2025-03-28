@@ -6,6 +6,9 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\Dashboard;
 use App\Http\Controllers\Admin\CourseControllerAdmin;
 use App\Http\Controllers\Admin\CategoryControllerAdmin;
+use App\Http\Controllers\Admin\LessonControllerAdmin;
+use App\Http\Controllers\Admin\QuizControllerAdmin;
+use App\Http\Controllers\Admin\QuestionControllerAdmin;
 
 // User
 use App\Http\Controllers\User\HomeController;
@@ -49,6 +52,17 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::delete('/delete/{course}', [CourseControllerAdmin::class, 'destroy'])->name('admin.courses.destroy');
     });
 
+    // Quản lý bài học
+    Route::prefix('admin/lessons')->group(function () {
+        Route::get('/', [LessonControllerAdmin::class, 'index'])->name('admin.lessons.index');
+        Route::get('/show/{lesson}', [LessonControllerAdmin::class, 'show'])->name('admin.lessons.show');
+        Route::get('/create', [LessonControllerAdmin::class, 'create'])->name('admin.lessons.create');
+        Route::post('/store', [LessonControllerAdmin::class, 'store'])->name('admin.lessons.store');
+        Route::get('/edit/{lesson}', [LessonControllerAdmin::class, 'edit'])->name('admin.lessons.edit');
+        Route::put('/update/{lesson}', [LessonControllerAdmin::class, 'update'])->name('admin.lessons.update');
+        Route::delete('/delete/{lesson}', [LessonControllerAdmin::class, 'destroy'])->name('admin.lessons.destroy');
+    });
+
     // Quản lý danh mục
     Route::prefix('admin/category')->group(function () {
         Route::get('/', [CategoryControllerAdmin::class, 'index'])->name('admin.category.index');
@@ -63,16 +77,35 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::post('/assignChild', [CategoryControllerAdmin::class, 'assignChild'])->name('admin.category.assignChild');
         Route::delete('/unlink/{id}', [CategoryControllerAdmin::class, 'unlinkCategory'])->name('admin.category.unlink');
     });
+
+    // Quản lý bài tập
+    Route::prefix('quizzes')->group(function () {
+        Route::get('/', [QuizControllerAdmin::class, 'index'])->name('admin.quizzes.index');
+        Route::get('/create', [QuizControllerAdmin::class, 'create'])->name('admin.quizzes.create');
+        Route::post('/store', [QuizControllerAdmin::class, 'store'])->name('admin.quizzes.store');
+        Route::get('/edit/{quiz}', [QuizControllerAdmin::class, 'edit'])->name('admin.quizzes.edit');
+        Route::put('/update/{quiz}', [QuizControllerAdmin::class, 'update'])->name('admin.quizzes.update');
+        Route::delete('/delete/{quiz}', [QuizControllerAdmin::class, 'destroy'])->name('admin.quizzes.destroy');
+    });
+
+    // Quản lý câu hỏi
+    Route::prefix('questions')->group(function () {
+        Route::get('/', [QuestionControllerAdmin::class, 'index'])->name('admin.questions.index');
+        Route::get('/create', [QuestionControllerAdmin::class, 'create'])->name('admin.questions.create');
+        Route::post('/store', [QuestionControllerAdmin::class, 'store'])->name('admin.questions.store');
+        Route::get('/edit/{question}', [QuestionControllerAdmin::class, 'edit'])->name('admin.questions.edit');
+        Route::put('/update/{question}', [QuestionControllerAdmin::class, 'update'])->name('admin.questions.update');
+        Route::delete('/delete/{question}', [QuestionControllerAdmin::class, 'destroy'])->name('admin.questions.destroy');
+    });
 });
 
 
 // Instructor
 Route::middleware(['check.role:instructor'])->group(function () {
-    Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
-
 
     // Quản lý khóa học
     Route::prefix('instructor')->group(function () {
+        Route::get('/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
         Route::get('/courses', [CourseControllerTeacher::class, 'index'])->name('instructor.courses.index');
         Route::get('/courses/create', [CourseControllerTeacher::class, 'create'])->name('instructor.courses.create');
         Route::post('/courses', [CourseControllerTeacher::class, 'store'])->name('instructor.courses.store');
