@@ -92,4 +92,15 @@ class CourseControllerAdmin extends Controller
         $course->delete();
         return redirect()->route('admin.course.index')->with('success', 'Khóa học đã bị xóa!');
     }
+
+    public function viewInstructorCourses($id)
+    {
+
+        $instructor = User::where('role', 'instructor')->where('id', $id)->firstOrFail();
+
+
+        $courses = $instructor->courses;
+
+        return view('admin.course.instructor_courses', compact('instructor', 'courses', 'categories'));
+    }
 }
