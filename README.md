@@ -33,3 +33,5 @@ php artisan serve
 # git add .
 # git commit -m "Initial commit"
 # git push origin Branch-Son
+
+# đổi nhánh git checkout < tên nhánh >
