@@ -35,7 +35,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // });
 
 
-// Admin
+
+
+
+
 Route::middleware(['check.role:admin'])->group(function () {
     // Trang chủ Admin
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
@@ -43,6 +46,10 @@ Route::middleware(['check.role:admin'])->group(function () {
     Route::get('/admin/user', [AuthController::class, 'index'])->name('admin.user.index');
 
     // Quản lý khóa học
+
+
+
+
     Route::prefix('admin/course')->group(function () {
         Route::get('/', [CourseControllerAdmin::class, 'index'])->name('admin.course.index');
         Route::get('/create', [CourseControllerAdmin::class, 'create'])->name('admin.course.create');
@@ -51,6 +58,9 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::put('/update/{course}', [CourseControllerAdmin::class, 'update'])->name('admin.course.update');
         Route::delete('/delete/{course}', [CourseControllerAdmin::class, 'destroy'])->name('admin.course.destroy');
     });
+
+
+
 
     // Quản lý danh mục
     Route::prefix('admin/category')->group(function () {
@@ -67,6 +77,9 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::delete('/unlink/{id}', [CategoryControllerAdmin::class, 'unlinkCategory'])->name('admin.category.unlink');
     });
 });
+
+
+
 
 
 // Instructor
