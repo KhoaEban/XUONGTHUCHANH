@@ -68,10 +68,10 @@
 </html>
 
 
-<!-- <style>
+<style>
     body {
         position: relative;
         top: 50%;
         transform: translateY(50%);
     }
-</style> -->
+</style>
