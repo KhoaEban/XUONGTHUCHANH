@@ -17,6 +17,9 @@ class Category extends Model
         return $this->belongsTo(Category::class);
     }
 
+
+
+
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
@@ -27,10 +30,16 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
+
+
+
     public function child_categories()
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+
+
+
 
     // Slug
     public static function boot()
@@ -45,4 +54,7 @@ class Category extends Model
             $model->slug = Str::slug($model->name);
         });
     }
+
+
+    
 }
