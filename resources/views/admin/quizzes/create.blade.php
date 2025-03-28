@@ -10,7 +10,12 @@
         <form action="{{ route('admin.quizzes.store') }}" method="POST">
             @csrf
             <label>Course ID:</label>
-            <input type="number" name="course_id" required>
+            {{-- <input type="number" name="course_id" required> --}}
+            <select name="course_id" required>
+                @foreach ($courses as $course)
+                    <option value="{{ $course->id }}">{{ $course->title }}</option>
+                @endforeach
+            </select>
             <label>Title:</label>
             <input type="text" name="title" required>
             <button type="submit">Save</button>

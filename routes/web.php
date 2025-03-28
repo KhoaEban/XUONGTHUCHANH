@@ -79,7 +79,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
 
     // Quản lý bài tập
-    Route::prefix('quizzes')->group(function () {
+    Route::prefix('admin/quizzes')->group(function () {
         Route::get('/', [QuizControllerAdmin::class, 'index'])->name('admin.quizzes.index');
         Route::get('/create', [QuizControllerAdmin::class, 'create'])->name('admin.quizzes.create');
         Route::post('/store', [QuizControllerAdmin::class, 'store'])->name('admin.quizzes.store');
@@ -89,7 +89,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
 
     // Quản lý câu hỏi
-    Route::prefix('questions')->group(function () {
+    Route::prefix('admin/questions')->group(function () {
         Route::get('/', [QuestionControllerAdmin::class, 'index'])->name('admin.questions.index');
         Route::get('/create', [QuestionControllerAdmin::class, 'create'])->name('admin.questions.create');
         Route::post('/store', [QuestionControllerAdmin::class, 'store'])->name('admin.questions.store');

@@ -9,14 +9,22 @@
         </div>
         <form action="{{ route('admin.quizzes.update', $quiz) }}" method="POST">
             @csrf @method('PUT')
-            <label>Title:</label>
-            <input type="text" name="title" value="{{ $quiz->title }}" required>
+            <label class="form-label">Khóa học:</label>
+            <select class="form-select" name="course_id" required>
+                @foreach ($courses as $course)
+                    <option value="{{ $course->id }}" {{ $course->id == $quiz->course_id ? 'selected' : '' }}>
+                        {{ $course->title }}
+                    </option>
+                @endforeach
+            </select>
+            <label class="form-label">Title:</label>
+            <input class="form-control" type="text" name="title" value="{{ $quiz->title }}" required>
             <button type="submit">Update</button>
         </form>
 
         <hr>
 
-        <form action="{{ route('admin.quizzes.destroy', $course->id) }}" method="POST" class="text-center">
+        <form action="{{ route('admin.quizzes.destroy', $quiz->id) }}" method="POST" class="text-center">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa

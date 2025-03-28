@@ -6,9 +6,9 @@
         <div class="d-flex justify-content-between mb-3">
             <!-- Nút tạo khóa học -->
             <div class="d-flex justify-content-between gap-2">
-                <a href="{{ route('admin.quizzes.create') }}" class=""
+                <a href="{{ route('admin.questions.create') }}" class=""
                     style="border: none; background-color: #2185D0; color: white; padding: 10px; font-size: 16px; font-weight: bold;">Thêm
-                    Bài tập
+                    Câu Hỏi
                 </a>
                 {{-- Tìm kiếm --}}
                 {{-- <form action="{{ route('admin.courses.index') }}" method="GET">
@@ -54,24 +54,26 @@
             <thead class="">
                 <tr>
                     <th>#</th>
-                    <th>Tiêu đề</th>
-                    <th>Slug</th>
+                    <th>Quiz</th>
+                    <th>Nội dung</th>
+                    <th>Câu trả lời đúng</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody class="align-middle">
-                @foreach ($quizzes as $quiz)
+                @foreach ($questions as $question)
                     <tr>
-                        <td>{{ $quiz->id }}</td>
-                        <td>{{ $quiz->title }}</td>
-                        <td>{{ $quiz->slug }}</td>
+                        <td>{{ $question->id }}</td>
+                        <td>{{ $question->quiz->title }}</td>
+                        <td>{{ $question->question_text }}</td>
+                        <td>{{ $question->correct_answer }}</td>
                         <td>
                             <div class="d-flex justify-content-between align-items-center">
                                 {{-- <a href="{{ route('admin.quizzes.show', $lesson->id) }}" class="text-primary"><i
                                         class="fas fa-eye"></i></a> --}}
-                                <a href="{{ route('admin.quizzes.edit', $quiz->id) }}" class="text-warning"><i
+                                <a href="{{ route('admin.questions.edit', $question->id) }}" class="text-warning"><i
                                         class="fas fa-edit"></i></a>
-                                <form action="{{ route('admin.quizzes.destroy', $quiz->id) }}" method="POST"
+                                <form action="{{ route('admin.questions.destroy', $question->id) }}" method="POST"
                                     style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa?')">
                                     @csrf
                                     @method('DELETE')
@@ -86,7 +88,7 @@
         </table>
 
         {{-- Hiển thị thông báo nếu không có bài học nào --}}
-        @if ($quizzes->isEmpty())
+        @if ($questions->isEmpty())
             <div class="alert alert-warning text-center mt-3">Chưa có bài học nào!</div>
         @endif
     </div>

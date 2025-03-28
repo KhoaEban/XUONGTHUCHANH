@@ -2,33 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-
-class Quiz extends Model
+class Question extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['quiz_id', 'content', 'correct_answer'];
+    protected $fillable = ['quiz_id', 'question_text', 'slug', 'correct_answer'];
 
-    public function quiz()
-    {
-        return $this->belongsTo(Quiz::class);
-    }
-
-    // Slug
     public static function boot()
     {
         parent::boot();
 
-        static::creating(function ($model) {
-            $model->slug = Str::slug($model->name);
+        static::creating(function ($question) {
+            $question->slug = Str::slug($question->question_text);
         });
 
-        static::updating(function ($model) {
-            $model->slug = Str::slug($model->name);
+        static::updating(function ($question) {
+            $question->slug = Str::slug($question->question_text);
         });
+    }
+
+    public function quiz()
+    {
+        return $this->belongsTo(Quiz::class);
     }
 }

@@ -4,62 +4,82 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+use App\Models\Question;
+use App\Models\Quiz;
 
 class QuestionControllerAdmin extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $questions = Question::with('quiz')->get();
+        return view('admin.questions.index', compact('questions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $quizzes = Quiz::all();
+        return view('admin.questions.create', compact('quizzes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'quiz_id' => 'required|exists:quizzes,id',
+            'question_text' => 'required|string|unique:questions,question_text',
+            'correct_answer' => 'required|string',
+        ]);
+
+        $slug = Str::slug($request->question_text);
+        $count = Question::where('slug', 'LIKE', "$slug%")->count();
+
+        if ($count > 0) {
+            $slug .= '-' . ($count + 1);
+        }
+
+        Question::create([
+            'quiz_id' => $request->quiz_id,
+            'question_text' => $request->question_text,
+            'slug' => $slug,
+            'correct_answer' => $request->correct_answer,
+        ]);
+
+        return redirect()->route('admin.questions.index')->with('success', 'Question created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Question $question)
     {
-        //
+        $quizzes = Quiz::all();
+        return view('admin.questions.edit', compact('question', 'quizzes'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Question $question)
     {
-        //
+        $request->validate([
+            'question_text' => 'required|string|unique:questions,question_text,' . $question->id,
+            'correct_answer' => 'required|string',
+        ]);
+
+        $slug = Str::slug($request->question_text);
+        $count = Question::where('slug', 'LIKE', "$slug%")->where('id', '!=', $question->id)->count();
+
+        if ($count > 0) {
+            $slug .= '-' . ($count + 1);
+        }
+
+        $question->update([
+            'question_text' => $request->question_text,
+            'slug' => $slug,
+            'correct_answer' => $request->correct_answer,
+        ]);
+
+        return redirect()->route('admin.questions.index')->with('success', 'Question updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Question $question)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $question->delete();
+        return redirect()->route('admin.questions.index')->with('success', 'Question deleted successfully.');
     }
 }

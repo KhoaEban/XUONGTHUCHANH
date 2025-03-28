@@ -4,62 +4,72 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+use App\Models\Quiz;
+use App\Models\Course;
 
 class QuizControllerAdmin extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $courses = Course::all();
+        $quizzes = Quiz::paginate(10);
+        return view('admin.quizzes.index', compact('quizzes', 'courses'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $courses = Course::all();
+        return view('admin.quizzes.create', compact('courses'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'title' => 'required|string|max:255|unique:quizzes,title',
+        ]);
+
+        $slug = Str::slug($request->title);
+        $count = Quiz::where('slug', 'LIKE', "$slug%")->count();
+
+        if ($count > 0) {
+            $slug .= '-' . ($count + 1);
+        }
+
+        Quiz::create([
+            'course_id' => $request->course_id,
+            'title' => $request->title,
+            'slug' => $slug,
+        ]);
+
+        return redirect()->route('admin.quizzes.index')->with('success', 'Quiz created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Quiz $quiz)
     {
-        //
+        $courses = Course::all();
+        return view('admin.quizzes.edit', compact('quiz', 'courses'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Quiz $quiz)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255|unique:quizzes,title,' . $quiz->id,
+        ]);
+
+        $quiz->update([
+            'title' => $request->title,
+            'slug' => Str::slug($request->title), // Cập nhật slug tự động
+        ]);
+
+        return redirect()->route('admin.quizzes.index')->with('success', 'Quiz updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Quiz $quiz)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $quiz->delete();
+        return redirect()->route('admin.quizzes.index')->with('success', 'Quiz deleted successfully.');
     }
 }

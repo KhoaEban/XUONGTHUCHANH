@@ -13,7 +13,7 @@ class Quiz extends Model
 
     protected $fillable = ['course_id', 'title', 'slug'];
 
-    public function questions()
+    public function question()
     {
         return $this->hasMany(Question::class);
     }
@@ -24,15 +24,10 @@ class Quiz extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function questions()
-    {
-        return $this->hasMany(Question::class);
-    }
-
-    public function quiz_results()
-    {
-        return $this->hasMany(Result::class);
-    }
+    // public function quiz_results()
+    // {
+    //     return $this->hasMany(Result::class);
+    // }
 
 
     public function lessons()
@@ -41,16 +36,17 @@ class Quiz extends Model
     }
 
     // Slug
+
     public static function boot()
     {
         parent::boot();
 
-        static::creating(function ($model) {
-            $model->slug = Str::slug($model->name);
+        static::creating(function ($quiz) {
+            $quiz->slug = Str::slug($quiz->title);
         });
 
-        static::updating(function ($model) {
-            $model->slug = Str::slug($model->name);
+        static::updating(function ($quiz) {
+            $quiz->slug = Str::slug($quiz->title);
         });
     }
 }
