@@ -4,12 +4,25 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 
 class AuthController extends Controller
 {
+
+    public function index()
+    {
+        if (Auth::user()->role != 'admin') {
+            return redirect()->route('home');
+        }
+        // Lấy tất cả user
+        $users = User::paginate(5);
+
+        return view('admin.user.index', compact('users'));
+    }
+
+
     // Hiển thị form đăng nhập
     public function showLoginForm()
     {
@@ -27,7 +40,20 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('home'); // Điều hướng đến trang user
+            $user = Auth::user();
+
+            // Điều hướng theo vai trò
+            switch ($user->role) {
+                case 'admin':
+                    return redirect()->route('admin.dashboard');
+                case 'instructor':
+                    return redirect()->route('instructor.dashboard');
+                case 'student':
+                    return redirect('/');
+                default:
+                    Auth::logout();
+                    return redirect('/login')->with('error', 'Tài khoản không hợp lệ.');
+            }
         }
 
         return back()->withErrors(['email' => 'Email hoặc mật khẩu không chính xác']);
@@ -46,6 +72,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required|same:password',
         ]);
 
         User::create([

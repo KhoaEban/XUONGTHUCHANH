@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\Course;
 use App\Models\Category;
 use App\Models\User;
+
 class CourseControllerAdmin extends Controller
 {
     public function index()
@@ -101,5 +102,4 @@ class CourseControllerAdmin extends Controller
 
         return view('admin.instructor_courses', compact('instructor', 'courses'));
     }
-
 }

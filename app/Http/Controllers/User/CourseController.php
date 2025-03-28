@@ -3,27 +3,24 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 use App\Models\Course;
-use App\Models\User;
-use App\Models\UserCourse;
-use App\Models\UserSubject;
-use App\Models\Subject;
-use App\Models\UserSubjectCourse;
-use App\Models\SubjectCourse;
-use App\Models\SubjectUser;
-use App\Models\SubjectUserCourse;
+use App\Models\Category;
+use App\Models\Lesson;
 
 class CourseController extends Controller
 {
-    public function __construct()
-    {
-        // 
-    }
 
     public function index()
     {
-        
-        return view('user.course.index');
+        $course = Course::all();
+        return view('user.course.index', compact('course'));
     }
 
+    public function show($slug)
+    {
+        $course = Course::with('lessons', 'instructor')->where('slug', $slug)->firstOrFail();
+        return view('user.course.show', compact('course'));
+    }
 }

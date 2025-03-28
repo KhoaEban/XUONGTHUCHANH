@@ -1,0 +1,95 @@
+
+/* ==== app2.css - Giao diện hiện đại ==== */
+
+/* Font & nền tổng thể */
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #f8f9fc;
+    color: #343a40;
+}
+
+/* Card giao diện */
+.card {
+    border-radius: 1rem;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e3e6f0;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #4e73df;
+}
+
+/* Button đẹp hơn */
+.btn {
+    border-radius: 30px;
+    font-weight: 500;
+    padding: 8px 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #4e73df;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #2e59d9;
+}
+
+/* Label đẹp hơn */
+label {
+    font-weight: 600;
+    color: #5a5c69;
+}
+
+/* Select2 đẹp hơn */
+.select2-container--default .select2-selection--multiple {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 6px;
+    min-height: 42px;
+    background-color: #fff;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #4e73df;
+    color: #fff;
+    border: none;
+    padding: 2px 8px;
+    margin-top: 5px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+}
+
+/* Table đẹp hơn */
+.table {
+    background-color: #fff;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.table th {
+    background-color: #f1f4fa;
+    font-weight: bold;
+    color: #4e73df;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.table td {
+    border-top: 1px solid #e3e6f0;
+}
+
+/* Form group spacing */
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+/* Footer tinh tế */
+footer {
+    font-size: 0.875rem;
+    color: #858796;
+}

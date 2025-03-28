@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Header LMS360</title>
+    <title>@yield('title', 'Trang chủ')</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -211,7 +211,6 @@
 
         /* footer */
         footer {
-            background-image: url(image/footer-background.png);
             padding: 40px 10%;
             color: #1a1a1a;
             font-family: Arial, sans-serif;
@@ -300,7 +299,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Logo -->
-            <a class="navbar-brand m-0" href="{{ route('home') }}">
+            <a class="navbar-brand m-0" href="{{ url('/') }}">
                 <img class="img-fluid rounded" src="{{ asset('image/images.png') }}" alt="Logo">
             </a>
 
@@ -314,7 +313,7 @@
             </div>
 
             <!-- Icon bên phải -->
-            <div class="d-flex align-items-center ms-3">
+            <div class="d-flex align-items-center">
                 <div class="icon me-3"><i class="fas fa-th"></i></div>
                 <div class="icon me-3"><i class="fas fa-bell"></i></div>
 
@@ -326,10 +325,32 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            @if (Auth::user()->role == 'admin')
+                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i
+                                            class="fas fa-tachometer-alt"></i> Quản lý</a></li>
+                            @else
+                                @if (Auth::user()->role == 'instructor')
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fas fa-user-cog"></i> Chức năng
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            {{-- icon hồ sơ --}}
+                                            <i class="fas fa-user"></i> Hồ sơ
+                                        </a>
+                                    </li>
+                                @else
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            {{-- icon hồ sơ --}}
+                                            <i class="fas fa-user"></i> Hồ sơ
+                                        </a>
+                                    </li>
+                                @endif
+                            @endif
                             <li>
                                 <a class="dropdown-item" href="#"
-                                    onclick="event.preventDefault();
-                        document.getElementById('logout-form').submit();">
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="fas fa-sign-out-alt"></i> Đăng xuất
                                 </a>
                             </li>
@@ -344,105 +365,10 @@
                     <a href="{{ route('register') }}" class="btn btn-primary">Đăng ký</a>
                 @endif
             </div>
-
         </div>
     </nav>
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar bên trái -->
-            <div class="col-md-1 col-lg-1 p-0 bg-light sidebar">
-                @extends('layouts.sidebar')
-            </div>
-
-            <!-- Nội dung chính -->
-            <div class="col-md-7 col-lg-11 main-content">
-                @yield('content')
-            </div>
-        </div>
-    </div>
-    <br>
-    <br>
-    <br>
-    {{-- Footer --}}
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <img src="{{ asset('image/logo-trung-tam-giao-duc-setdc.png') }}" alt="Logo 1" class="footer-logo">
-                <h3>TRUNG TÂM PHÁT TRIỂN GDĐT PHÍA NAM</h3>
-                <p>BỘ GIÁO DỤC VÀ ĐÀO TẠO</p>
-                <p>ĐỐI TÁC NGHIÊN CỨU, ỨNG DỤNG KHCN VÀ CHUYỂN ĐỔI SỐ</p>
-            </div>
-
-            <div class="footer-section">
-                <img src="{{ asset('image/logo-khong-nen---color.png') }}" alt="Logo 2" class="footer-logo">
-                <p>TẬP ĐOÀN KHOA HỌC CÔNG NGHỆ BÁCH KHOA</p>
-                <p>Địa chỉ: Số 3 Công Trường Quốc Tế, Quận 3, TPHCM</p>
-                <p>Điện thoại: (0287)102 0246 - 090 303 0246</p>
-            </div>
-
-            <div class="footer-section">
-                <img src="{{ asset('image/logo-stb.png') }}" alt="Logo 3" class="footer-logo">
-                <h3>CÔNG TY CỔ PHẦN SÁCH VÀ THIẾT BỊ TRƯỜNG HỌC TPHCM</h3>
-                <p>ĐƠN VỊ CUNG CẤP HỌC LIỆU SỐ BẢN QUYỀN</p>
-            </div>
-        </div>
-
-        <div class="footer-links">
-            <div class="footer-column">
-                <h4>BACH KHOA TECH GROUP</h4>
-                <ul>
-                    <li><a href="#">Giới thiệu</a></li>
-                    <li><a href="#">Tầm nhìn - Sứ mệnh</a></li>
-                    <li><a href="#">Khách hàng tiêu biểu</a></li>
-                    <li><a href="#">Tin tức</a></li>
-                    <li><a href="#">Tuyển dụng</a></li>
-                    <li><a href="#">Phân phối sản phẩm</a></li>
-                    <li><a href="#">Liên hệ hỗ trợ</a></li>
-                </ul>
-                <div class="app-links">
-                    <img src="appstore.png" alt="App Store">
-                    <img src="googleplay.png" alt="Google Play">
-                </div>
-            </div>
-
-            <div class="footer-column">
-                <h4>CHUYỂN ĐỔI SỐ TRONG DẠY VÀ HỌC</h4>
-                <ul>
-                    <li><a href="#">Hệ thống Quản lý học tập LMS 360 e-Learning</a></li>
-                    <li><a href="#">Hệ thống Ngân hàng học liệu số dùng chung</a></li>
-                    <li><a href="#">Học liệu số bản quyền</a></li>
-                    <li><a href="#">Phòng thí nghiệm mô phỏng</a></li>
-                    <li><a href="#">Chatbot BKTech ứng dụng trí tuệ nhân tạo</a></li>
-                    <li><a href="#">Hệ thống Kiểm tra đánh giá trực tuyến</a></li>
-                    <li><a href="#">Phần mềm tạo học liệu số bảng trí tuệ nhân tạo</a></li>
-                    <li><a href="#">Đào tạo nhân lực số</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-column">
-                <h4>CHUYỂN ĐỔI SỐ TRONG QUẢN LÝ</h4>
-                <ul>
-                    <li><a href="#">Hệ thống Quản lý trường học</a></li>
-                    <li><a href="#">Ứng dụng truyền thông nội bộ</a></li>
-                    <li><a href="#">Học bạ số</a></li>
-                    <li><a href="#">Sắp xếp Thời khóa biểu tự động</a></li>
-                    <li><a href="#">Điểm danh thông minh với camera AI</a></li>
-                    <li><a href="#">Hệ thống Kiểm định chất lượng Giáo dục</a></li>
-                    <li><a href="#">Hệ thống Thi đua khen thưởng</a></li>
-                    <li><a href="#">Hệ thống đánh giá và tự đánh giá</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>Copyright ©2021 - Bản quyền thuộc Công Ty Cổ Phần Tập Đoàn Khoa Học Công Nghệ Bách Khoa</p>
-            <div class="social-icons">
-                <a href="#"><img src="facebook.png" alt="Facebook"></a>
-                <a href="#"><img src="zalo.png" alt="Zalo"></a>
-            </div>
-        </div>
-    </footer>
+    @include('layouts.sidebar')
 
 
     <!-- Bootstrap JS -->
@@ -450,19 +376,3 @@
 </body>
 
 </html>
-
-<script>
-    document.querySelector('.tag-slider-next').addEventListener('click', function() {
-        document.querySelector('.tag-slider').scrollBy({
-            left: 200,
-            behavior: 'smooth'
-        });
-    });
-
-    document.querySelector('.tag-slider-prev').addEventListener('click', function() {
-        document.querySelector('.tag-slider').scrollBy({
-            left: -200,
-            behavior: 'smooth'
-        });
-    });
-</script>

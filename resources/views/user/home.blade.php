@@ -141,26 +141,13 @@
     <ul class="tag-slider slick-slider">
         <div class="slick-list draggable">
             <div class="slick-track" style="opacity: 1; width: auto; transform: translate3d(0px, 0px, 0px);">
-                <li><a href="/ket-qua?c=0&s=28&t=">Hoạt động trải nghiệm</a></li>
-                <li><a href="/ket-qua?c=0&s=29&t=">Giáo dục thể chất</a></li>
-                <li><a href="/ket-qua?c=0&s=30&t=">Khoa học tự nhiên</a></li>
-                <li><a href="/ket-qua?c=0&s=31&t=">Giáo dục quốc phòng</a></li>
-                <li><a href="/ket-qua?c=0&s=32&t=">Kinh tế và pháp luật</a></li>
-                <li><a href="/ket-qua?c=0&s=35&t=">Lịch sử và Địa lí</a></li>
-                <li><a href="/ket-qua?c=0&s=36&t=">Âm nhạc và Mĩ thuật</a></li>
-                <li><a href="/ket-qua?c=0&s=37&t=">Tiếng Việt</a></li>
-                <li><a href="/ket-qua?c=0&s=38&t=">Giáo dục địa phương</a></li>
-                <li><a href="/ket-qua?c=0&s=39&t=">Hướng nghiệp</a></li>
-                <li><a href="/ket-qua?c=0&s=40&t=">Thể dục</a></li>
-                <li><a href="/ket-qua?c=0&s=33&t=">Môn khác</a></li>
-                <li><a href="/ket-qua?c=0&s=37&t=">Tiếng Việt</a></li>
-                <li><a href="/ket-qua?c=0&s=38&t=">Giáo dục địa phương</a></li>
-                <li><a href="/ket-qua?c=0&s=39&t=">Hướng nghiệp</a></li>
-                <li><a href="/ket-qua?c=0&s=40&t=">Thể dục</a></li>
-                <li><a href="/ket-qua?c=0&s=33&t=">Môn khác</a></li>
+                @foreach ($categories as $category)
+                    <li><a href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a></li>
+                @endforeach
             </div>
         </div>
     </ul>
+
     <!-- Nút điều hướng slider -->
     <div class="tag-slider-prev">
         <div class="slider-btn"><i class="fas fa-angle-left"></i></div>
@@ -168,6 +155,7 @@
     <div class="tag-slider-next">
         <div class="slider-btn"><i class="fas fa-angle-right"></i></div>
     </div>
+
 
     <div class="slideshow-container">
         <div class="slides-wrapper">
@@ -207,81 +195,27 @@
     <div class="row">
         <div class="col-12">
             <div class="row">
-                <div class="col-3">
-                    <div class="card">
-                        <a href="{{ route('course') }}" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
+                @foreach ($courses as $course)
+                    <div class="col-3">
+                        <div class="card">
+                            <a href="{{ route('course.show', $course->slug) }}"
+                                class="card-link text-decoration-none text-dark">
+                                <img class="card-img-top"
+                                    src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}"
+                                    alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $course->name }}</h5>
+                                    <p class="card-text text-secondary">{{ $course->instructor->name }}</p>
+                                    <div class="d-flex align-items-center text-secondary">
+                                        <p class="card-text m-0">{{ $course->lessons->count() }} nội dung</p>
+                                        <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
+                                        <p class="card-text">{{ $course->created_at->format('d/m/Y') }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -365,81 +299,26 @@
     <div class="row">
         <div class="col-12">
             <div class="row">
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
+                @if (count($courses) > 0)
+                    <div class="col-3">
+                        <div class="card">
+                            <a href="{{ route('course.show', $courses[0]->slug) }}" class="card-link text-decoration-none text-dark">
+                                <img class="card-img-top"
+                                    src="{{ asset($courses[0]->thumbnail ?? 'images/default-thumbnail.jpg') }}"
+                                    alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $courses[0]->name }}</h5>
+                                    <p class="card-text text-secondary">{{ $courses[0]->instructor->name }}</p>
+                                    <div class="d-flex align-items-center text-secondary">
+                                        <p class="card-text m-0">{{ $courses[0]->lessons->count() }} nội dung</p>
+                                        <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
+                                        <p class="card-text">{{ $courses[0]->created_at->format('d/m/Y') }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -485,6 +364,21 @@
 
             showSlides(slideIndex);
             autoplay();
+        });
+
+
+        document.querySelector('.tag-slider-next').addEventListener('click', function() {
+            document.querySelector('.tag-slider').scrollBy({
+                left: 200,
+                behavior: 'smooth'
+            });
+        });
+
+        document.querySelector('.tag-slider-prev').addEventListener('click', function() {
+            document.querySelector('.tag-slider').scrollBy({
+                left: -200,
+                behavior: 'smooth'
+            });
         });
     </script>
 @endsection
