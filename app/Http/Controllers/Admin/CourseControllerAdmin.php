@@ -92,14 +92,4 @@ class CourseControllerAdmin extends Controller
         $course->delete();
         return redirect()->route('admin.course.index')->with('success', 'Khóa học đã bị xóa!');
     }
-    public function viewInstructorCourses($id)
-    {
-        // Lấy giảng viên với role là 'instructor' và load luôn khóa học
-        $instructor = User::where('role', 'instructor')->where('id', $id)->firstOrFail();
-
-        // Lấy danh sách khóa học của giảng viên đó
-        $courses = $instructor->courses;
-
-        return view('admin.course.instructor_courses', compact('instructor', 'courses', 'categories'));
-    }
 }
