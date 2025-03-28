@@ -27,8 +27,10 @@
                         </div>
                         <div class="collapse" id="courseMenu">
                             <ul class="nav flex-column ps-3">
-                                <li><a class="nav-link text-dark" href="#">Danh sách
-                                        khóa học của giảng viên</a></li>
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.lessons.index') }}">Danh sách Bài học
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
