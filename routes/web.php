@@ -31,8 +31,6 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
-
 // Admin
 Route::middleware(['check.role:admin'])->group(function () {
     // Trang chủ Admin
@@ -41,13 +39,14 @@ Route::middleware(['check.role:admin'])->group(function () {
     Route::get('/admin/user', [AuthController::class, 'index'])->name('admin.user.index');
 
     // Quản lý khóa học
-    Route::prefix('admin/course')->group(function () {
-        Route::get('/', [CourseControllerAdmin::class, 'index'])->name('admin.course.index');
-        Route::get('/create', [CourseControllerAdmin::class, 'create'])->name('admin.course.create');
-        Route::post('/store', [CourseControllerAdmin::class, 'store'])->name('admin.course.store');
-        Route::get('/edit/{course}', [CourseControllerAdmin::class, 'edit'])->name('admin.course.edit');
-        Route::put('/update/{course}', [CourseControllerAdmin::class, 'update'])->name('admin.course.update');
-        Route::delete('/delete/{course}', [CourseControllerAdmin::class, 'destroy'])->name('admin.course.destroy');
+    Route::prefix('admin/courses')->group(function () {
+        Route::get('/', [CourseControllerAdmin::class, 'index'])->name('admin.courses.index');
+        Route::get('/show/{create}', [CourseControllerAdmin::class, 'show'])->name('admin.courses.show');
+        Route::get('/create', [CourseControllerAdmin::class, 'create'])->name('admin.courses.create');
+        Route::post('/store', [CourseControllerAdmin::class, 'store'])->name('admin.courses.store');
+        Route::get('/edit/{course}', [CourseControllerAdmin::class, 'edit'])->name('admin.courses.edit');
+        Route::put('/update/{course}', [CourseControllerAdmin::class, 'update'])->name('admin.courses.update');
+        Route::delete('/delete/{course}', [CourseControllerAdmin::class, 'destroy'])->name('admin.courses.destroy');
     });
 
     // Quản lý danh mục

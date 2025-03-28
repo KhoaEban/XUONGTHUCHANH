@@ -21,13 +21,13 @@
                         </a>
                         <div class="collapse" id="courseMenu">
                             <ul class="nav flex-column ps-3">
-                                <li><a class="nav-link text-dark" href="{{ route('admin.course.index') }}">Danh sách
+                                <li><a class="nav-link text-dark" href="{{ route('admin.courses.index') }}">Danh sách
                                         khóa học</a></li>
                             </ul>
                         </div>
                         <div class="collapse" id="courseMenu">
                             <ul class="nav flex-column ps-3">
-                                <li><a class="nav-link text-dark" href="{{ route('admin.courses.instructor_courses') }}">Danh sách
+                                <li><a class="nav-link text-dark" href="#">Danh sách
                                         khóa học của giảng viên</a></li>
                             </ul>
                         </div>
