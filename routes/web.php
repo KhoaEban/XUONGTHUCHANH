@@ -47,9 +47,9 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::get('/show/{create}', [CourseControllerAdmin::class, 'show'])->name('admin.courses.show');
         Route::get('/create', [CourseControllerAdmin::class, 'create'])->name('admin.courses.create');
         Route::post('/store', [CourseControllerAdmin::class, 'store'])->name('admin.courses.store');
-        Route::get('/edit/{course}', [CourseControllerAdmin::class, 'edit'])->name('admin.courses.edit');
-        Route::put('/update/{course}', [CourseControllerAdmin::class, 'update'])->name('admin.courses.update');
-        Route::delete('/delete/{course}', [CourseControllerAdmin::class, 'destroy'])->name('admin.courses.destroy');
+        Route::get('/edit/{id}', [CourseControllerAdmin::class, 'edit'])->name('admin.courses.edit');
+        Route::put('/update/{id}', [CourseControllerAdmin::class, 'update'])->name('admin.courses.update');
+        Route::delete('/delete/{id}', [CourseControllerAdmin::class, 'destroy'])->name('admin.courses.destroy');
     });
 
     // Quản lý bài học

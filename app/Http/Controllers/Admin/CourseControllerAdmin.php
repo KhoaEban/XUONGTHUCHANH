@@ -119,7 +119,12 @@ class CourseControllerAdmin extends Controller
         ]);
 
         // Tìm khóa học của giảng viên hiện tại
-        $course = Course::where('instructor_id', Auth::id())->findOrFail($id);
+        $course = Course::findOrFail($id);
+
+        // Kiểm tra nếu người dùng không phải là admin hoặc không phải giảng viên sở hữu khóa học
+        if (Auth::user()->role !== 'admin' && Auth::id() !== $course->instructor_id) {
+            abort(403, 'Bạn không có quyền chỉnh sửa khóa học này.');
+        }
 
         // Cập nhật thông tin khóa học
         $course->title       = $request->title;
