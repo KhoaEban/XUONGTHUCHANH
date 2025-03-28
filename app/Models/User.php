@@ -20,6 +20,8 @@ class User extends Authenticatable
     ];
 
 
+
+    
     public function hasRole($role)
     {
         // Implement your role checking logic here

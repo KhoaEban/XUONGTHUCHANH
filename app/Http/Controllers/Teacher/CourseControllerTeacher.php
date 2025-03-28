@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-// Import model
+
+
+
 use App\Models\Course;
 use App\Models\Category;
 
