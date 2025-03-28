@@ -9,9 +9,9 @@
         </div>
         <form action="{{ route('admin.course.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="form-group mb-3">
-                <label for="name">Tên hóa học:</label>
-                <input type="text" name="name" id="name" class="form-control" required>
+            <div>
+                <label for="title">Tieu de:</label>
+                <input type="text" name="title" id="title" class="form-control" required>
             </div>
             <div class="form-group mb-3">
                 <label for="description">Mô tả:</label>
@@ -35,11 +35,18 @@
                 </select>
             </div>
 
+
+            <div class="form-group mb-3">
+                <label for="form-label">Giá:</label>
+                <input type="number" name="price" id="price" class="form-control" required>
+            </div>
             <div class="form-group mb-3">
                 <label for="image">Hình ảnh:</label>
                 <input type="file" name="image" id="image" class="form-control-file" required>
             </div>
+
             <button type="submit" class="btn" style="background-color: #2185D0; color: #fff">Thêm khóa học</button>
         </form>
     </div>
+
 @endsection
