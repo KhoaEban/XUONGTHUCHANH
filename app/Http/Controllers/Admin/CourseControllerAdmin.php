@@ -100,6 +100,6 @@ class CourseControllerAdmin extends Controller
         // Lấy danh sách khóa học của giảng viên đó
         $courses = $instructor->courses;
 
-        return view('admin.instructor_courses', compact('instructor', 'courses'));
+        return view('admin.course.instructor_courses', compact('instructor', 'courses', 'categories'));
     }
 }
