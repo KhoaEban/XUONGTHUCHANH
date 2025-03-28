@@ -29,6 +29,7 @@
                     @endforeach
                 </select>
             </div>
+            
             <div class="d-flex">
                 <button type="submit" class="btn btn-success me-2">Gán danh mục</button>
                 <a href="{{ route('admin.category.index') }}" class="btn btn-secondary">Hủy</a>

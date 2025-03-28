@@ -85,19 +85,22 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-                document.querySelectorAll(".collapsed").forEach(item => {
-                            item.addEventListener("click", function() {
+        document.querySelectorAll(".collapsed").forEach(item => {
+            item.addEventListener("click", function() {
+                this.querySelector("i.fas.fa-chevron-down").classList.toggle("rotate");
+            });
+        });
+    });
+</script>
 
-                                        <
-                                        script >
-                                            document.addEventListener("DOMContentLoaded", function() {
-                                                document.querySelectorAll(".collapsed").forEach(item => {
-                                                    item.addEventListener("click", function() {
-                                                        this.querySelector("i.fas.fa-chevron-down")
-                                                            .classList.toggle("rotate");
-                                                    });
-                                                });
-                                            });
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".collapsed").forEach(item => {
+            item.addEventListener("click", function() {
+                this.querySelector("i.fas.fa-chevron-down").classList.toggle("rotate");
+            });
+        });
+    });
 </script>
 
 <style>

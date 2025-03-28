@@ -87,7 +87,8 @@ Route::middleware(['check.role:instructor'])->group(function () {
 
 // User
 Route::prefix('user')->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('user.home');
+
 
     // Danh mục
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');

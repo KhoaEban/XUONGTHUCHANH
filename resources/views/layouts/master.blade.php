@@ -396,7 +396,7 @@
                 <br>
                 <br>
                 {{-- Footer --}}
-                <footer style="background-image: url({{ asset('image/footer-background.png') }});">
+                <footer style="background-image: url('{{ asset('image/footer-background.png') }}');">
                     <div class="footer-container">
                         <div class="footer-section">
                             <img src="{{ asset('image/logo-trung-tam-giao-duc-setdc.png') }}" alt="Logo 1"
