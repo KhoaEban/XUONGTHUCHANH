@@ -17,6 +17,12 @@ use App\Http\Controllers\User\SimulationController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
+
+// Trang chủ
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Instructor
+use App\Http\Controllers\Teacher\HomeControllerInstructor;
 use App\Http\Controllers\Teacher\CourseControllerTeacher;
 use App\Http\Controllers\Teacher\LessonController;
 // Trang chủ
@@ -66,6 +72,21 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::post('/assignChild', [CategoryControllerAdmin::class, 'assignChild'])->name('admin.category.assignChild');
         Route::delete('/unlink/{id}', [CategoryControllerAdmin::class, 'unlinkCategory'])->name('admin.category.unlink');
     });
+
+});
+
+
+// Instructor
+Route::middleware(['check.role:instructor'])->group(function () {
+    Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
+
+});
+
+
+// User
+Route::prefix('user')->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
 });
 
 
@@ -103,6 +124,7 @@ Route::prefix('user')->group(function () {
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
     Route::get('/course', [CourseController::class, 'index'])->name('course');
+
     Route::get('/course/{slug}', [CourseController::class, 'show'])->name('course.show');
     Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
     Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lessons.show');
