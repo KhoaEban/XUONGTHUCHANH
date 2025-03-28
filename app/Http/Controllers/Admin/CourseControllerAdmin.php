@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
 use App\Models\Category;
-use App\Models\User;
 
 class CourseControllerAdmin extends Controller
 {
@@ -152,15 +151,5 @@ class CourseControllerAdmin extends Controller
         $course = Course::findOrFail($id);
         $course->delete();
         return redirect()->route('admin.course.index')->with('success', 'Khóa học đã bị xóa!');
-    }
-    public function viewInstructorCourses($id)
-    {
-        // Lấy giảng viên với role là 'instructor' và load luôn khóa học
-        $instructor = User::where('role', 'instructor')->where('id', $id)->firstOrFail();
-
-        // Lấy danh sách khóa học của giảng viên đó
-        $courses = $instructor->courses;
-
-        return view('admin.instructor_courses', compact('instructor', 'courses'));
     }
 }

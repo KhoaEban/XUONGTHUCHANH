@@ -25,12 +25,6 @@
                                         khóa học</a></li>
                             </ul>
                         </div>
-                        <div class="collapse" id="courseMenu">
-                            <ul class="nav flex-column ps-3">
-                                <li><a class="nav-link text-dark" href="{{ route('admin.courses.instructor_courses') }}">Danh sách
-                                        khóa học của giảng viên</a></li>
-                            </ul>
-                        </div>
                     </li>
 
                     <li class="nav-item">
@@ -101,5 +95,4 @@
         transform: rotate(180deg);
         transition: 0.3s;
     }
-</style>
 </style>
