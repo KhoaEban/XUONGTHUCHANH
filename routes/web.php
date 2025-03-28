@@ -16,15 +16,12 @@ use App\Http\Controllers\User\SupportController;
 use App\Http\Controllers\User\SimulationController;
 
 // Instructor
-use App\Http\Controllers\Teacher\HomeControllerInstructor;
+use App\Http\Controllers\Instructor\HomeControllerInstructor;
+use App\Http\Controllers\Instructor\CourseControllerTeacher;
+use App\Http\Controllers\Instructor\LessonController;
 
 // Trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// Instructor
-use App\Http\Controllers\Teacher\HomeControllerInstructor;
-use App\Http\Controllers\Teacher\CourseControllerTeacher;
-use App\Http\Controllers\Teacher\LessonController;
 // Trang chủ
 Route::get('/', [HomeController::class, 'index']);
 
