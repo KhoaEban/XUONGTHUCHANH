@@ -19,6 +19,7 @@ use App\Http\Controllers\User\SimulationController;
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
 use App\Http\Controllers\Teacher\CourseControllerTeacher;
 use App\Http\Controllers\Teacher\LessonController;
+
 // Trang chủ
 Route::get('/', [HomeController::class, 'index']);
 
@@ -30,9 +31,6 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Route::middleware(['check.role:student'])->group(function () {
-//     Route::get('/user/home', [HomeController::class, 'index'])->name('home');
-// });
 
 
 // Admin

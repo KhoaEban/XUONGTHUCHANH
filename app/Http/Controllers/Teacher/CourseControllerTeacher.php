@@ -132,4 +132,4 @@ class CourseControllerTeacher extends Controller
         return redirect()->route('instructor.courses.index')->with('success', 'Khóa học đã bị xóa!');
     }
 }
-}
+
