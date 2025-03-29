@@ -25,7 +25,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         body {
-            background-image: url('{{ asset('img/background.png') }}');
+            background-image: url('{{ asset('image/background2.jpg') }}');
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;

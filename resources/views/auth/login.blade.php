@@ -41,7 +41,7 @@
         <div class="form-box login">
             <form method="POST" action="{{ route('login') }}">
                 @csrf
-                <h1>Login</h1>
+                <h2>Login</h2>
                 <div class="input-box">
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required placeholder="Email">
                     <i class='bx bxs-user'></i>
@@ -67,7 +67,7 @@
         <div class="form-box register">
             <form method="POST" action="{{ route('register') }}">
                 @csrf
-                <h1>Registration</h1>
+                <h2 class="mt-5">Registration</h2>
                 <div class="input-box">
                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                         value="{{ old('name') }}" required placeholder="Username">
