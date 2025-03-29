@@ -9,7 +9,9 @@ class Answer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['quiz_result_id', 'question_id', 'selected_answer', 'is_correct'];
+    public $timestamps = false;
+
+    protected $fillable = ['question_id', 'selected_answer', 'is_correct'];
 
     public function quizResult()
     {
@@ -19,5 +21,11 @@ class Answer extends Model
     public function question()
     {
         return $this->belongsTo(Question::class);
+    }
+
+
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
     }
 }

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container-fluid mt-4">
-        <h2 class="mb-3">Danh Sách Bài Học</h2>
+        <h2 class="mb-3">Danh Sách Bài Tập</h2>
         <div class="d-flex justify-content-between mb-3">
             <!-- Nút tạo khóa học -->
             <div class="d-flex justify-content-between gap-2">
@@ -54,6 +54,8 @@
             <thead class="">
                 <tr>
                     <th>#</th>
+                    <th>Mã Khóa học</th>
+                    <th>Mã bài học</th>
                     <th>Tiêu đề</th>
                     <th>Slug</th>
                     <th>Thao tác</th>
@@ -63,6 +65,8 @@
                 @foreach ($quizzes as $quiz)
                     <tr>
                         <td>{{ $quiz->id }}</td>
+                        <td>{{ $quiz->course_id }}</td>
+                        <td>{{ $quiz->lesson_id }}</td>
                         <td>{{ $quiz->title }}</td>
                         <td>{{ $quiz->slug }}</td>
                         <td>

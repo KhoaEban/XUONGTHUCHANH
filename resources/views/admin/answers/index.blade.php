@@ -2,13 +2,13 @@
 
 @section('content')
     <div class="container-fluid mt-4">
-        <h2 class="mb-3">Danh Sách Câu Trả Lời</h2>
+        <h2 class="mb-3">Danh Sách Câu Hỏi</h2>
         <div class="d-flex justify-content-between mb-3">
             <!-- Nút tạo khóa học -->
             <div class="d-flex justify-content-between gap-2">
                 <a href="{{ route('admin.answers.create') }}" class=""
                     style="border: none; background-color: #2185D0; color: white; padding: 10px; font-size: 16px; font-weight: bold;">Thêm
-                    Câu Trả Lời
+                    Câu Hỏi
                 </a>
                 {{-- Tìm kiếm --}}
                 {{-- <form action="{{ route('admin.courses.index') }}" method="GET">
@@ -54,9 +54,9 @@
             <thead class="">
                 <tr>
                     <th>#</th>
-                    <th>Mã câu hỏi</th>
-                    <th>Văn bản trả lời</th>
-                    <th>Đúng / Sai</th>
+                    <th>Câu hỏi</th>
+                    <th>Trả lời văn bản</th>
+                    <th>Câu trả lời đúng</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
@@ -64,13 +64,13 @@
                 @foreach ($answers as $answer)
                     <tr>
                         <td>{{ $answer->id }}</td>
-                        <td>{{ $answer->question_id }}</td>
+                        <td>{{ $answer->question->question_text }}</td>
                         <td>{{ $answer->answer_text }}</td>
-                        <td>{{ $answer->is_correct }}</td>
+                        <td>{{ $answer->is_correct ? 'Đúng' : 'Sai' }}</td>
                         <td>
                             <div class="d-flex justify-content-between align-items-center">
                                 {{-- <a href="{{ route('admin.quizzes.show', $lesson->id) }}" class="text-primary"><i
-                                        class="fas fa-eye"></i></a> --}}
+                                                class="fas fa-eye"></i></a> --}}
                                 <a href="{{ route('admin.answers.edit', $answer->id) }}" class="text-warning"><i
                                         class="fas fa-edit"></i></a>
                                 <form action="{{ route('admin.answers.destroy', $answer->id) }}" method="POST"

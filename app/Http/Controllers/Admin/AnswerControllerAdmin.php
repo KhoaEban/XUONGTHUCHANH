@@ -3,50 +3,104 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Answer;
-use App\Models\QuizResult;
-use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use App\Models\Answer;
+use App\Models\Question;
+use App\Models\Quiz;
 
 class AnswerControllerAdmin extends Controller
 {
+    // Hiển thị danh sách câu trả lời
     public function index()
     {
-        $answers = Answer::with(['quizResult', 'question'])->get();
+        $answers = Answer::with('question')->orderBy('id', 'desc')->get();
         return view('admin.answers.index', compact('answers'));
     }
 
+    // Form tạo mới
     public function create()
     {
-        $quizResults = QuizResult::all();
-        $questions = Question::all();
-        return view('admin.answers.create', compact('quizResults', 'questions'));
+        $quizzes = Quiz::all();
+        return view('admin.answers.create', compact('quizzes'));
     }
 
+    // Lưu câu trả lời mới
     public function store(Request $request)
     {
         $request->validate([
-            'quiz_result_id' => 'required|exists:quiz_results,id',
             'question_id' => 'required|exists:questions,id',
-            'selected_answer' => 'required|string',
+            'answer_text' => 'required|string',
+            'is_correct' => 'required|boolean',
         ]);
 
-        $correctAnswer = Question::find($request->question_id)->correct_answer;
-        $isCorrect = $correctAnswer == $request->selected_answer;
+        $slug = $this->uniqueSlug($request->answer_text);
 
         Answer::create([
-            'quiz_result_id' => $request->quiz_result_id,
             'question_id' => $request->question_id,
-            'selected_answer' => $request->selected_answer,
-            'is_correct' => $isCorrect,
+            'answer_text' => $request->answer_text,
+            'is_correct' => $request->is_correct,
+            'slug' => $slug,
         ]);
 
-        return redirect()->route('admin.answers.index')->with('success', 'Answer created successfully.');
+        return redirect()->route('admin.answers.index')->with('success', 'Câu trả lời đã được thêm thành công.');
     }
 
+    // Form chỉnh sửa
+    public function edit(Answer $answer)
+    {
+        $quizzes = Quiz::all();
+        $questions = Question::where('quiz_id', optional($answer->question)->quiz_id)->get();
+        return view('admin.answers.edit', compact('answer', 'quizzes', 'questions'));
+    }
+
+    // Cập nhật câu trả lời
+    public function update(Request $request, Answer $answer)
+    {
+        $request->validate([
+            'answer_text' => 'required|string',
+            'is_correct' => 'required|boolean',
+        ]);
+
+        $slug = $this->uniqueSlug($request->answer_text, $answer->id);
+
+        $answer->update([
+            'answer_text' => $request->answer_text,
+            'slug' => $slug,
+            'is_correct' => $request->is_correct,
+        ]);
+
+        return redirect()->route('admin.answers.index')->with('success', 'Câu trả lời đã được cập nhật.');
+    }
+
+    // Xóa câu trả lời
     public function destroy(Answer $answer)
     {
-        $answer->delete();
-        return redirect()->route('admin.answers.index')->with('success', 'Answer deleted successfully.');
+        if ($answer) {
+            $answer->delete();
+            return redirect()->route('admin.answers.index')->with('success', 'Câu trả lời đã bị xóa.');
+        }
+        return redirect()->route('admin.answers.index')->with('error', 'Không tìm thấy câu trả lời.');
+    }
+
+    // Lấy danh sách câu hỏi theo quiz_id (AJAX)
+    public function getQuestionsByQuiz($quizId)
+    {
+        $questions = Question::where('quiz_id', $quizId)->get();
+        return response()->json($questions);
+    }
+
+    // Hàm tạo slug không trùng lặp
+    private function uniqueSlug($text, $ignoreId = null)
+    {
+        $slug = Str::slug($text);
+        $query = Answer::where('slug', 'LIKE', "$slug%");
+
+        if ($ignoreId) {
+            $query->where('id', '!=', $ignoreId);
+        }
+
+        $count = $query->count();
+        return $count ? $slug . '-' . ($count + 1) : $slug;
     }
 }

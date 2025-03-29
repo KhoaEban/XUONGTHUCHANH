@@ -55,9 +55,11 @@ class QuizControllerAdmin extends Controller
     public function edit(Quiz $quiz)
     {
         $courses = Course::all();
-        $lessons = Lesson::all();
+        $lessons = Lesson::where('course_id', $quiz->course_id)->get();
+
         return view('admin.quizzes.edit', compact('quiz', 'courses', 'lessons'));
     }
+
 
     public function update(Request $request, Quiz $quiz)
     {
@@ -74,6 +76,13 @@ class QuizControllerAdmin extends Controller
 
         return redirect()->route('admin.quizzes.index')->with('success', 'Quiz updated successfully.');
     }
+
+    public function getLessons($courseId)
+    {
+        $lessons = Lesson::where('course_id', $courseId)->get();
+        return response()->json($lessons);
+    }
+
 
     public function destroy(Quiz $quiz)
     {

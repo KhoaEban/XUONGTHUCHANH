@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container-fluid mt-4">
-        <h2 class="mb-3">Danh Sách Bài Học</h2>
+        <h2 class="mb-3">Danh Sách Câu Hỏi</h2>
         <div class="d-flex justify-content-between mb-3">
             <!-- Nút tạo khóa học -->
             <div class="d-flex justify-content-between gap-2">

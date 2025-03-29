@@ -6,21 +6,26 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+// Models
 use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\Lesson;
 
 class QuestionControllerAdmin extends Controller
 {
     public function index()
     {
         $questions = Question::with('quiz')->get();
-        return view('admin.questions.index', compact('questions'));
+        $lessons = Lesson::all();
+        $quizzes = Quiz::all();
+        return view('admin.questions.index', compact('questions', 'lessons', 'quizzes'));
     }
 
     public function create()
     {
         $quizzes = Quiz::all();
-        return view('admin.questions.create', compact('quizzes'));
+        $lessons = Lesson::all();
+        return view('admin.questions.create', compact('quizzes', 'lessons'));
     }
 
     public function store(Request $request)
@@ -51,7 +56,8 @@ class QuestionControllerAdmin extends Controller
     public function edit(Question $question)
     {
         $quizzes = Quiz::all();
-        return view('admin.questions.edit', compact('question', 'quizzes'));
+        $lessons = Lesson::all();
+        return view('admin.questions.edit', compact('question', 'quizzes', 'lessons'));
     }
 
     public function update(Request $request, Question $question)
@@ -76,6 +82,13 @@ class QuestionControllerAdmin extends Controller
 
         return redirect()->route('admin.questions.index')->with('success', 'Question updated successfully.');
     }
+
+    public function getQuizzesByLesson($lessonId)
+    {
+        $quizzes = Quiz::where('lesson_id', $lessonId)->get();
+        return response()->json($quizzes);
+    }
+
 
     public function destroy(Question $question)
     {

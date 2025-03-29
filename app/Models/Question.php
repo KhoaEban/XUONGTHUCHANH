@@ -25,8 +25,20 @@ class Question extends Model
         });
     }
 
+    // Quan hệ với bảng options (Lựa chọn)
+    public function options()
+    {
+        return $this->hasMany(Option::class);
+    }
+
+    // Quan hệ với bảng quiz (Bài kiểm tra)
     public function quiz()
     {
         return $this->belongsTo(Quiz::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
     }
 }

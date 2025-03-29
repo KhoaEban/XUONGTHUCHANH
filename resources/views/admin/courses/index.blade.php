@@ -13,7 +13,40 @@
                     khóa học
                 </a>
             </div>
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center gap-2">
+                <!-- Tìm kiếm -->
+                <form action="{{ route('admin.courses.index') }}" method="GET" class="d-flex align-items-center">
+                    <input type="text" name="search" placeholder="Tìm kiếm khóa học" value="{{ request('search') }}"
+                        class="d-inline w-auto"
+                        style="border: none; border: 1px solid #6C757D; color: #000000; padding: 10px; font-size: 14px;"
+                        onchange="this.form.submit()">
+                </form>
+
+                <!-- Lọc theo danh mục -->
+                <form action="{{ route('admin.courses.index') }}" method="GET">
+                    <select name="category_id" class="d-inline w-auto"
+                        style="border: none; border: 1px solid #6C757D; color: #000000; padding: 10px; font-size: 14px;"
+                        onchange="this.form.submit()">
+                        <option value="">Tất cả danh mục</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}"
+                                {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+
+                <!-- Sắp xếp thứ tự -->
+                <form action="{{ route('admin.courses.index') }}" method="GET">
+                    <select name="sort_order" class="d-inline w-auto"
+                        style="border: none; border: 1px solid #6C757D; color: #000000; padding: 10px; font-size: 14px;"
+                        onchange="this.form.submit()">
+                        <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>Giảm dần</option>
+                        <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>Tăng dần</option>
+                    </select>
+                </form>
+
                 {{-- Xem khóa học của giảng viên đã tạo --}}
                 <form action="{{ route('admin.courses.index') }}" method="GET" style="margin-right: 5px;">
                     <select name="instructor_id" class="d-inline w-auto"
@@ -34,8 +67,8 @@
                         <option value="">Bulk Actions</option>
                         <option value="delete">Delete</option>
                     </select>
-                    <button type="submit"
-                        style="border: none; background-color: #6C757D; color: white; padding: 10px; font-size: 14px;">Apply</button>
+                    {{-- <button type="submit"
+                        style="border: none; background-color: #6C757D; color: white; padding: 10px; font-size: 14px;">Apply</button> --}}
                 </form>
             </div>
         </div>
@@ -83,8 +116,8 @@
                                             <a class="text-warning" href="{{ route('admin.courses.edit', $course->id) }}">
                                                 <i class="fa fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST"
-                                                class="d-inline">
+                                            <form action="{{ route('admin.courses.destroy', $course->id) }}"
+                                                method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="border-0 bg-transparent text-danger" type="submit"

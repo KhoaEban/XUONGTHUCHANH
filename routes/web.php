@@ -19,7 +19,7 @@ use App\Http\Controllers\User\CourseController;
 use App\Http\Controllers\User\FaqController;
 use App\Http\Controllers\User\SupportController;
 use App\Http\Controllers\User\SimulationController;
-use App\Models\Lesson;
+use App\Http\Controllers\User\QuizController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
@@ -89,6 +89,7 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::get('/edit/{quiz}', [QuizControllerAdmin::class, 'edit'])->name('admin.quizzes.edit');
         Route::put('/update/{quiz}', [QuizControllerAdmin::class, 'update'])->name('admin.quizzes.update');
         Route::delete('/delete/{quiz}', [QuizControllerAdmin::class, 'destroy'])->name('admin.quizzes.destroy');
+        Route::get('/get-lessons/{courseId}', [QuizControllerAdmin::class, 'getLessons']);
     });
 
     // Quản lý câu hỏi
@@ -99,6 +100,7 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::get('/edit/{question}', [QuestionControllerAdmin::class, 'edit'])->name('admin.questions.edit');
         Route::put('/update/{question}', [QuestionControllerAdmin::class, 'update'])->name('admin.questions.update');
         Route::delete('/delete/{question}', [QuestionControllerAdmin::class, 'destroy'])->name('admin.questions.destroy');
+        Route::get('/get-quizzes/{lessonId}', [QuestionControllerAdmin::class, 'getQuizzesByLesson']);
     });
 
     // Quản lý kết quả bài tập
@@ -110,12 +112,16 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::put('/update/{quizResult}', [QuizResultControllerAdmin::class, 'update'])->name('admin.quiz_results.update');
         Route::delete('/delete/{quizResult}', [QuizResultControllerAdmin::class, 'destroy'])->name('admin.quiz_results.destroy');
     });
+    
     // Quản lý câu trả lời
     Route::prefix('admin/answers')->group(function () {
         Route::get('/', [AnswerControllerAdmin::class, 'index'])->name('admin.answers.index');
         Route::get('/create', [AnswerControllerAdmin::class, 'create'])->name('admin.answers.create');
         Route::post('/store', [AnswerControllerAdmin::class, 'store'])->name('admin.answers.store');
+        Route::get('/edit/{answer}', [AnswerControllerAdmin::class, 'edit'])->name('admin.answers.edit');
+        Route::put('/update/{answer}', [AnswerControllerAdmin::class, 'update'])->name('admin.answers.update');
         Route::delete('/delete/{answer}', [AnswerControllerAdmin::class, 'destroy'])->name('admin.answers.destroy');
+        Route::get('/get-questions/{quizId}', [AnswerControllerAdmin::class, 'getQuestionsByQuiz']);
     });
 });
 
@@ -162,18 +168,9 @@ Route::prefix('user')->group(function () {
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
 
-    Route::get('/lessons/{id}/quizzes', function ($id) {
-        $lesson = Lesson::with('quizzes')->find($id);
+    Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
 
-        if (!$lesson) {
-            return response()->json(['message' => 'Bài học không tồn tại'], 404);
-        }
-
-        return response()->json([
-            'lesson' => $lesson->title,
-            'quizzes' => $lesson->quizzes
-        ]);
-    });
+    Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
 });
 
 // 404

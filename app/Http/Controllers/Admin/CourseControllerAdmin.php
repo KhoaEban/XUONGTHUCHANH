@@ -16,27 +16,52 @@ class CourseControllerAdmin extends Controller
 {
     public function index(Request $request)
     {
-        $instructor_id = $request->input('instructor_id');
+        $query = Course::with(['category', 'instructor']);
 
-        // Lấy danh sách giảng viên để hiển thị trong bộ lọc
+        // Nếu không phải admin, chỉ lấy khóa học của giảng viên hiện tại
+        if (Auth::user()->role !== 'admin') {
+            $query->where('instructor_id', Auth::id());
+        }
+
+        // Lọc theo danh mục
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Lọc theo khoảng giá
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Lọc theo từ khóa tìm kiếm
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        // Lọc theo giảng viên (chỉ admin mới có quyền lọc)
+        if ($request->filled('instructor_id') && Auth::user()->role === 'admin') {
+            $query->where('instructor_id', $request->instructor_id);
+        }
+
+        // Áp dụng sắp xếp
+        $query->orderBy(
+            $request->get('sort_by', 'created_at'),
+            $request->get('sort_order', 'desc')
+        );
+
+        // Lấy danh sách khóa học
+        $courses = $query->paginate(10);
+
+        // Lấy danh sách danh mục & giảng viên
+        $categories = Category::all();
         $instructors = User::where('role', 'instructor')->get();
 
-        // Nếu là admin, hiển thị tất cả khóa học, nếu là giảng viên chỉ hiển thị khóa học của họ
-        $query = Course::with('instructor', 'category');
-
-        if (Auth::user()->role !== 'admin') {
-            $query->where('instructor_id', Auth::user()->id);
-        }
-
-        // Lọc theo giảng viên nếu admin chọn
-        if ($instructor_id) {
-            $query->where('instructor_id', $instructor_id);
-        }
-
-        $courses = $query->paginate(10);
-        $categories = Category::all();
-        return view('admin.courses.index', compact('courses', 'instructors'));
+        return view('admin.courses.index', compact('courses', 'categories', 'instructors'));
     }
+
 
 
     public function show($id)

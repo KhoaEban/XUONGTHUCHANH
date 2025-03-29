@@ -35,8 +35,13 @@ class Quiz extends Model
         return $this->course->lessons;
     }
 
+    // Quan hệ với bảng questions (Câu hỏi)
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+    
     // Slug
-
     public static function boot()
     {
         parent::boot();

@@ -106,11 +106,25 @@
         <div class="col-md-8 ">
             <div class="main-content p-0">
                 <div id="video-container">
-                    <iframe id="lesson-video" width="100%" height="500"
+                    {{-- <iframe id="lesson-video" width="100%" height="500"
                         src="{{ $course->lessons->first()->video_url ?? '' }}" title="YouTube video player" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy">
-                    </iframe>
+                    </iframe> --}}
+                    @if ($course->lessons->first()->video_url)
+                        <iframe id="lesson-video" width="100%" height="500"
+                            src="{{ preg_replace('/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', 'https://www.youtube.com/embed/$1', $course->lessons->first()->video_url) }}?controls=0&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&fs=1"
+                            title="{{ $course->lessons->first()->title }}" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    @else
+                        <iframe id="lesson-video" width="100%" height="500"
+                            src="{{ asset('images/default-thumbnail.jpg') }}" title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    @endif
                 </div>
 
                 <div class="video-info">
@@ -174,16 +188,18 @@
                                         @endif
                                     </div>
                                 </li>
+
+                                <!-- Danh sách bài kiểm tra -->
+                                <ul id="quiz-list-{{ $lesson->id }}" class="quiz-list">
+                                    @foreach ($lesson->quizzes as $quiz)
+                                        <li>
+                                            <a href="{{ route('quizzes.show', $quiz->id) }}">{{ $quiz->title }}</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             @endforeach
                         </ul>
                     </div>
-
-                    <!-- Khu vực hiển thị bài kiểm tra -->
-                    <div id="quiz-section" class="tab-content" style="display: none;">
-                        <h3>Bài kiểm tra</h3>
-                        <ul id="quiz-list"></ul>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -215,26 +231,14 @@
                 document.getElementById("lesson-title").innerText = title;
                 document.getElementById("lesson-video").src = videoUrl;
 
-                fetch(`/web/lessons/${lessonId}/quizzes`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let quizSection = document.getElementById("quiz-section");
-                        let quizList = document.getElementById("quiz-list");
+                // Ẩn tất cả danh sách quiz trước đó
+                document.querySelectorAll(".quiz-list").forEach(el => el.style.display = "none");
 
-                        quizList.innerHTML = "";
-
-                        if (data.length > 0) {
-                            quizSection.style.display = "block";
-
-                            data.forEach(quiz => {
-                                let li = document.createElement("li");
-                                li.innerHTML = `<a href="/quizzes/${quiz.id}">${quiz.title}</a>`;
-                                quizList.appendChild(li);
-                            });
-                        } else {
-                            quizSection.style.display = "none";
-                        }
-                    });
+                // Hiển thị danh sách quiz của bài học được chọn
+                let quizList = document.getElementById(`quiz-list-${lessonId}`);
+                if (quizList) {
+                    quizList.style.display = "block";
+                }
             }
         </script>
     </div>
