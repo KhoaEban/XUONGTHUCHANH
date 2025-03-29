@@ -38,16 +38,16 @@ class CategoryControllerAdmin extends Controller
     }
 
 
-    // public function unlinkChild($id)
-    // {
-    //     $category = Category::findOrFail($id);
+    public function unlinkChild($id)
+    {
+        $category = Category::findOrFail($id);
 
-    //     // Đặt parent_id về null để loại bỏ quan hệ cha-con
-    //     $category->parent_id = null;
-    //     $category->save();
+        // Đặt parent_id về null để loại bỏ quan hệ cha-con
+        $category->parent_id = null;
+        $category->save();
 
-    //     return response()->json(['success' => true, 'message' => 'Đã loại bỏ danh mục con khỏi danh mục cha']);
-    // }
+        return response()->json(['success' => true, 'message' => 'Đã loại bỏ danh mục con khỏi danh mục cha']);
+    }
 
     public function unlinkCategory($id)
     {
