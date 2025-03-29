@@ -41,16 +41,19 @@ class CourseControllerAdmin extends Controller
 
     public function show($id)
     {
-        $course = Course::with('instructor', 'category', 'lessons')->findOrFail($id);
+        $course = Course::with([
+            'instructor',
+            'category',
+            'lessons.quizzes' // Nạp danh sách quiz của từng bài học
+        ])->findOrFail($id);
 
-        // Kiểm tra nếu không phải admin và không phải người tạo khóa học thì từ chối truy cập
+        // Kiểm tra quyền truy cập
         if (Auth::user()->role !== 'admin' && Auth::user()->id !== $course->instructor_id) {
             abort(403, 'Bạn không có quyền truy cập khóa học này.');
         }
 
         return view('admin.courses.show', compact('course'));
     }
-
 
 
     public function create()

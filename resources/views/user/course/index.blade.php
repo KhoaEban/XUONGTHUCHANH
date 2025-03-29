@@ -112,10 +112,9 @@
         <div class="col-md-8">
             <div class="main-content">
                 <div class="video-container">
-                    <video controls poster="{{ asset('images/video-thumbnail.jpg') }}">
-                        <source src="{{ $course->lessons->first()->video_url ?? '' }}" type="video/mp4">
-                        Trình duyệt của bạn không hỗ trợ video.
-                    </video>
+                    <iframe width="100%" height="500" src="{{ $course->video_url }}" frameborder="0"
+                        allowfullscreen loading="lazy">
+                    </iframe>
                 </div>
                 <div class="video-info">
                     <h2>{{ $course->title }}</h2>

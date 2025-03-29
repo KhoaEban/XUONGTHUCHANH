@@ -34,16 +34,18 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="collapse" id="courseMenu">
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu2">
+                            <i class="fas fa-book"></i> Quản lý quizzes <i class="fas fa-chevron-down float-end"></i>
+                        </a>
+                        <div class="collapse" id="courseMenu2">
                             <ul class="nav flex-column ps-3">
                                 <li>
                                     <a class="nav-link text-dark" href="{{ route('admin.quizzes.index') }}">Quizzes
                                     </a>
                                 </li>
                             </ul>
-                        </div>
-
-                        <div class="collapse" id="courseMenu">
                             <ul class="nav flex-column ps-3">
                                 <li>
                                     <a class="nav-link text-dark" href="{{ route('admin.questions.index') }}">Câu hỏi
@@ -51,7 +53,16 @@
                                 </li>
                             </ul>
                         </div>
+                        <div class="collapse" id="courseMenu2">
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.answers.index') }}">Câu trả lời
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
+                    
 
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.category.index') }}">

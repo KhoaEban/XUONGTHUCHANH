@@ -73,7 +73,7 @@
         flex-direction: column;
         gap: 10px;
         padding: 10px;
-        border-radius: 5px; 
+        border-radius: 5px;
     }
 
     .video-list li {
@@ -89,7 +89,8 @@
         margin-right: 10px;
     }
 
-    .video-list h4, span {
+    .video-list h4,
+    span {
         font-size: 14px;
         margin-right: 5px;
     }
@@ -105,8 +106,8 @@
         <div class="col-md-8 ">
             <div class="main-content p-0">
                 <div id="video-container">
-                    <iframe id="lesson-video" width="100%" height="500" src="{{ $course->lessons->first()->video_url ?? '' }}" 
-                        title="YouTube video player" frameborder="0"
+                    <iframe id="lesson-video" width="100%" height="500"
+                        src="{{ $course->lessons->first()->video_url ?? '' }}" title="YouTube video player" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy">
                     </iframe>
@@ -161,10 +162,13 @@
                         <h3>Nội dung khóa học</h3>
                         <ul class="video-list">
                             @foreach ($course->lessons as $lesson)
-                                <li onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}')">
-                                    <img src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}" alt="Video">
+                                <li
+                                    onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}', {{ $lesson->id }})">
+                                    <img src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}"
+                                        alt="Video">
                                     <div class="d-flex align-items-center">
-                                        <span>{{ $lesson->order_number }}.</span><h4 class="m-0">{{ $lesson->title }}</h4>
+                                        <span>{{ $lesson->order_number }}.</span>
+                                        <h4 class="m-0">{{ $lesson->title }}</h4>
                                         @if ($lesson->completed)
                                             <p>✅</p>
                                         @endif
@@ -173,6 +177,13 @@
                             @endforeach
                         </ul>
                     </div>
+
+                    <!-- Khu vực hiển thị bài kiểm tra -->
+                    <div id="quiz-section" class="tab-content" style="display: none;">
+                        <h3>Bài kiểm tra</h3>
+                        <ul id="quiz-list"></ul>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -198,6 +209,32 @@
             function loadLesson(videoUrl, title) {
                 document.getElementById("lesson-title").innerText = title;
                 document.getElementById("lesson-video").src = videoUrl;
+            }
+
+            function loadLesson(videoUrl, title, lessonId) {
+                document.getElementById("lesson-title").innerText = title;
+                document.getElementById("lesson-video").src = videoUrl;
+
+                fetch(`/web/lessons/${lessonId}/quizzes`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let quizSection = document.getElementById("quiz-section");
+                        let quizList = document.getElementById("quiz-list");
+
+                        quizList.innerHTML = "";
+
+                        if (data.length > 0) {
+                            quizSection.style.display = "block";
+
+                            data.forEach(quiz => {
+                                let li = document.createElement("li");
+                                li.innerHTML = `<a href="/quizzes/${quiz.id}">${quiz.title}</a>`;
+                                quizList.appendChild(li);
+                            });
+                        } else {
+                            quizSection.style.display = "none";
+                        }
+                    });
             }
         </script>
     </div>

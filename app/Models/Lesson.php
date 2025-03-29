@@ -31,6 +31,13 @@ class Lesson extends Model
         return $this->course->instructor();
     }
 
+    // Mỗi quan hệ quizzes với bài kiểm tra
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
+    }
+
+
     // Slug
     public static function boot()
     {

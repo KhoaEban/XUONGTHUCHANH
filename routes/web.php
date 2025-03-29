@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\CategoryControllerAdmin;
 use App\Http\Controllers\Admin\LessonControllerAdmin;
 use App\Http\Controllers\Admin\QuizControllerAdmin;
 use App\Http\Controllers\Admin\QuestionControllerAdmin;
+use App\Http\Controllers\Admin\QuizResultControllerAdmin;
+use App\Http\Controllers\Admin\AnswerControllerAdmin;
 
 // User
 use App\Http\Controllers\User\HomeController;
@@ -17,6 +19,7 @@ use App\Http\Controllers\User\CourseController;
 use App\Http\Controllers\User\FaqController;
 use App\Http\Controllers\User\SupportController;
 use App\Http\Controllers\User\SimulationController;
+use App\Models\Lesson;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
@@ -97,6 +100,23 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::put('/update/{question}', [QuestionControllerAdmin::class, 'update'])->name('admin.questions.update');
         Route::delete('/delete/{question}', [QuestionControllerAdmin::class, 'destroy'])->name('admin.questions.destroy');
     });
+
+    // Quản lý kết quả bài tập
+    Route::prefix('admin/quiz-results')->group(function () {
+        Route::get('/', [QuizResultControllerAdmin::class, 'index'])->name('admin.quiz_results.index');
+        Route::get('/create', [QuizResultControllerAdmin::class, 'create'])->name('admin.quiz_results.create');
+        Route::post('/store', [QuizResultControllerAdmin::class, 'store'])->name('admin.quiz_results.store');
+        Route::get('/edit/{quizResult}', [QuizResultControllerAdmin::class, 'edit'])->name('admin.quiz_results.edit');
+        Route::put('/update/{quizResult}', [QuizResultControllerAdmin::class, 'update'])->name('admin.quiz_results.update');
+        Route::delete('/delete/{quizResult}', [QuizResultControllerAdmin::class, 'destroy'])->name('admin.quiz_results.destroy');
+    });
+    // Quản lý câu trả lời
+    Route::prefix('admin/answers')->group(function () {
+        Route::get('/', [AnswerControllerAdmin::class, 'index'])->name('admin.answers.index');
+        Route::get('/create', [AnswerControllerAdmin::class, 'create'])->name('admin.answers.create');
+        Route::post('/store', [AnswerControllerAdmin::class, 'store'])->name('admin.answers.store');
+        Route::delete('/delete/{answer}', [AnswerControllerAdmin::class, 'destroy'])->name('admin.answers.destroy');
+    });
 });
 
 
@@ -141,6 +161,19 @@ Route::prefix('user')->group(function () {
 
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
+
+    Route::get('/lessons/{id}/quizzes', function ($id) {
+        $lesson = Lesson::with('quizzes')->find($id);
+
+        if (!$lesson) {
+            return response()->json(['message' => 'Bài học không tồn tại'], 404);
+        }
+
+        return response()->json([
+            'lesson' => $lesson->title,
+            'quizzes' => $lesson->quizzes
+        ]);
+    });
 });
 
 // 404
