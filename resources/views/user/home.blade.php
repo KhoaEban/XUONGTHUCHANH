@@ -1,142 +1,5 @@
 @extends('layouts.master')
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
-
-    /* Side bar */
-    body {
-        font-family: Arial, sans-serif;
-    }
-
-    .slideshow-container {
-        margin: 0 auto;
-        position: relative;
-        overflow: hidden;
-        /* height: 438px; */
-    }
-
-    .slides-wrapper {
-        display: flex;
-        width: 300%;
-        transition: transform 0.6s ease-in-out;
-    }
-
-    .mySlides {
-        width: 100%;
-        flex: 1;
-    }
-
-    /* Fix chiều cao hình ảnh */
-    .mySlides img {
-        width: 100%;
-        object-fit: cover;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-
-    .prev,
-    .next {
-        cursor: pointer;
-        position: absolute;
-        top: 50%;
-        width: auto;
-        margin-top: -22px;
-        padding: 16px;
-        color: white;
-        font-weight: bold;
-        font-size: 18px;
-        transition: 0.6s ease;
-        border-radius: 0 3px 3px 0;
-        user-select: none;
-        z-index: 10;
-        text-decoration: none;
-    }
-
-    .next {
-        right: 0;
-        border-radius: 3px 0 0 3px;
-    }
-
-    .prev:hover,
-    .next:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    .dot {
-        cursor: pointer;
-        height: 15px;
-        width: 15px;
-        margin: 0 2px;
-        background-color: #bbb;
-        border-radius: 50%;
-        display: inline-block;
-        transition: background-color 0.6s ease;
-    }
-
-    .active,
-    .dot:hover {
-        background-color: #717171;
-    }
-
-    .custom-header {
-        width: fit-content;
-        /* Để phần nền xanh chỉ bọc quanh chữ */
-        clip-path: polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%);
-        /* Tạo góc cắt */
-    }
-
-    .card {
-        transition: transform 0.2s ease;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.213);
-        border: none;
-    }
-
-    .card:hover {
-        transform: scale(1.05);
-    }
-
-    .news-card {
-        background-color: white;
-    }
-
-    .news-img {
-        border-radius: 15px;
-        width: 752.766px;
-        height: 426px;
-        overflow: hidden;
-    }
-
-    .news-content {
-        padding: 0 15px;
-    }
-
-    .carousel-item {
-        background-color: #fff;
-        width: 478px;
-    }
-
-    .carousel-item img {
-        /* bo tròn phía trên */
-        border-radius: 15px 15px 0 0;
-        height: 318.656px;
-    }
-
-    .carousel-item:hover {
-        transform: scale(1.05);
-    }
-
-    .carousel_caption {
-        padding: 15px;
-    }
-
-    .carousel_caption h5 {
-        font-size: 15px;
-    }
-</style>
-
 @section('content')
     <ul class="tag-slider slick-slider">
         <div class="slick-list draggable">
@@ -302,7 +165,8 @@
                 @if (count($courses) > 0)
                     <div class="col-3">
                         <div class="card">
-                            <a href="{{ route('course.show', $courses[0]->slug) }}" class="card-link text-decoration-none text-dark">
+                            <a href="{{ route('course.show', $courses[0]->slug) }}"
+                                class="card-link text-decoration-none text-dark">
                                 <img class="card-img-top"
                                     src="{{ asset($courses[0]->thumbnail ?? 'images/default-thumbnail.jpg') }}"
                                     alt="Card image cap">
@@ -322,63 +186,200 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let slideIndex = 0;
-            let slidesWrapper = document.querySelector(".slides-wrapper");
-            let dots = document.getElementsByClassName("dot");
-            let intervalId; // Lưu ID của interval
-
-            function showSlides(n) {
-                slideIndex = (n + 3) % 3;
-                slidesWrapper.style.transform = `translateX(-${slideIndex * 100 / 3}%)`;
-
-                // Cập nhật chấm tròn (nếu có)
-                for (let i = 0; i < dots.length; i++) {
-                    dots[i].classList.remove("active");
-                }
-                dots[slideIndex]?.classList.add("active");
-            }
-
-            window.plusSlides = function(n) {
-                showSlides(slideIndex + n);
-            };
-
-            window.currentSlide = function(n) {
-                showSlides(n);
-            };
-
-            function autoplay() {
-                intervalId = setInterval(() => {
-                    showSlides(slideIndex + 1);
-                }, 3000); // Giữ ảnh trong 4 giây trước khi chuyển
-            }
-
-            function stopAutoplay() {
-                clearInterval(intervalId);
-            }
-
-            slidesWrapper.addEventListener("mouseenter", stopAutoplay);
-            slidesWrapper.addEventListener("mouseleave", autoplay);
-
-            showSlides(slideIndex);
-            autoplay();
-        });
-
-
-        document.querySelector('.tag-slider-next').addEventListener('click', function() {
-            document.querySelector('.tag-slider').scrollBy({
-                left: 200,
-                behavior: 'smooth'
-            });
-        });
-
-        document.querySelector('.tag-slider-prev').addEventListener('click', function() {
-            document.querySelector('.tag-slider').scrollBy({
-                left: -200,
-                behavior: 'smooth'
-            });
-        });
-    </script>
 @endsection
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let slideIndex = 0;
+        let slidesWrapper = document.querySelector(".slides-wrapper");
+        let dots = document.getElementsByClassName("dot");
+        let intervalId; // Lưu ID của interval
+
+        function showSlides(n) {
+            slideIndex = (n + 3) % 3;
+            slidesWrapper.style.transform = `translateX(-${slideIndex * 100 / 3}%)`;
+
+            // Cập nhật chấm tròn (nếu có)
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].classList.remove("active");
+            }
+            dots[slideIndex]?.classList.add("active");
+        }
+
+        window.plusSlides = function(n) {
+            showSlides(slideIndex + n);
+        };
+
+        window.currentSlide = function(n) {
+            showSlides(n);
+        };
+
+        function autoplay() {
+            intervalId = setInterval(() => {
+                showSlides(slideIndex + 1);
+            }, 3000); // Giữ ảnh trong 4 giây trước khi chuyển
+        }
+
+        function stopAutoplay() {
+            clearInterval(intervalId);
+        }
+
+        slidesWrapper.addEventListener("mouseenter", stopAutoplay);
+        slidesWrapper.addEventListener("mouseleave", autoplay);
+
+        showSlides(slideIndex);
+        autoplay();
+    });
+
+
+    document.querySelector('.tag-slider-next').addEventListener('click', function() {
+        document.querySelector('.tag-slider').scrollBy({
+            left: 200,
+            behavior: 'smooth'
+        });
+    });
+
+    document.querySelector('.tag-slider-prev').addEventListener('click', function() {
+        document.querySelector('.tag-slider').scrollBy({
+            left: -200,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Side bar */
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .slideshow-container {
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        /* height: 438px; */
+    }
+
+    .slides-wrapper {
+        display: flex;
+        width: 300%;
+        transition: transform 0.6s ease-in-out;
+    }
+
+    .mySlides {
+        width: 100%;
+        flex: 1;
+    }
+
+    /* Fix chiều cao hình ảnh */
+    .mySlides img {
+        width: 100%;
+        object-fit: cover;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .prev,
+    .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        margin-top: -22px;
+        padding: 16px;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+        z-index: 10;
+        text-decoration: none;
+    }
+
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+    }
+
+    .prev:hover,
+    .next:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .dot {
+        cursor: pointer;
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
+
+    .active,
+    .dot:hover {
+        background-color: #717171;
+    }
+
+    .custom-header {
+        width: fit-content;
+        /* Để phần nền xanh chỉ bọc quanh chữ */
+        clip-path: polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%);
+        /* Tạo góc cắt */
+    }
+
+    .card {
+        transition: transform 0.2s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.213);
+        border: none;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .news-card {
+        background-color: white;
+    }
+
+    .news-img {
+        border-radius: 15px;
+        width: 752.766px;
+        height: 426px;
+        overflow: hidden;
+    }
+
+    .news-content {
+        padding: 0 15px;
+    }
+
+    .carousel-item {
+        background-color: #fff;
+        width: 478px;
+    }
+
+    .carousel-item img {
+        /* bo tròn phía trên */
+        border-radius: 15px 15px 0 0;
+        height: 318.656px;
+    }
+
+    .carousel-item:hover {
+        transform: scale(1.05);
+    }
+
+    .carousel_caption {
+        padding: 15px;
+    }
+
+    .carousel_caption h5 {
+        font-size: 15px;
+    }
+</style>

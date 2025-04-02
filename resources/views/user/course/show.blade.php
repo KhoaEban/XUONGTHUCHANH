@@ -73,7 +73,7 @@
         flex-direction: column;
         gap: 10px;
         padding: 10px;
-        border-radius: 5px; 
+        border-radius: 5px;
     }
 
     .video-list li {
@@ -89,7 +89,8 @@
         margin-right: 10px;
     }
 
-    .video-list h4, span {
+    .video-list h4,
+    span {
         font-size: 14px;
         margin-right: 5px;
     }
@@ -101,22 +102,16 @@
 </style>
 
 @section('content')
-    @if (!$course->isPaidByUser(auth()->id()))
-        <div class="alert alert-warning">
-            Bạn cần thanh toán để truy cập khóa học này. 
-            <a href="{{ route('course.payment', ['slug' => $course->slug]) }}" class="btn btn-primary">Thanh toán ngay</a>
-        </div>
-    @else
-        <div class="row">
-            <div class="col-md-8 ">
-                <div class="main-content p-0">
-                    <div id="video-container">
-                        <iframe id="lesson-video" width="100%" height="500" src="{{ $course->lessons->first()->video_url ?? '' }}" 
-                            title="YouTube video player" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy">
-                        </iframe>
-                    </div>
+    <div class="row">
+        <div class="col-md-8 ">
+            <div class="main-content p-0">
+                <div id="video-container">
+                    <iframe id="lesson-video" width="100%" height="500" src="{{ $course->lessons->first()->video_url ?? '' }}" 
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy">
+                    </iframe>
+                </div>
 
                     <div class="video-info">
                         <h3 id="lesson-title">{{ $course->lessons->first()->title ?? '' }}</h3>
@@ -160,28 +155,28 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="sidebar-course m-0">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3>Nội dung khóa học</h3>
-                            <ul class="video-list">
-                                @foreach ($course->lessons as $lesson)
-                                    <li onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}')">
-                                        <img src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}" alt="Video">
-                                        <div class="d-flex align-items-center">
-                                            <span>{{ $lesson->order_number }}.</span><h4 class="m-0">{{ $lesson->title }}</h4>
-                                            @if ($lesson->completed)
-                                                <p>✅</p>
-                                            @endif
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
+        <div class="col-md-4">
+            <div class="sidebar-course m-0">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Nội dung khóa học</h3>
+                        <ul class="video-list">
+                            @foreach ($course->lessons as $lesson)
+                                <li onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}')">
+                                    <img src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}" alt="Video">
+                                    <div class="d-flex align-items-center">
+                                        <span>{{ $lesson->order_number }}.</span><h4 class="m-0">{{ $lesson->title }}</h4>
+                                        @if ($lesson->completed)
+                                            <p>✅</p>
+                                        @endif
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>
+        </div>
 
             <script>
                 function openTab(evt, tabName) {
@@ -201,11 +196,10 @@
                     evt.currentTarget.className += " active";
                 }
 
-                function loadLesson(videoUrl, title) {
-                    document.getElementById("lesson-title").innerText = title;
-                    document.getElementById("lesson-video").src = videoUrl;
-                }
-            </script>
-        </div>
-    @endif
+            function loadLesson(videoUrl, title) {
+                document.getElementById("lesson-title").innerText = title;
+                document.getElementById("lesson-video").src = videoUrl;
+            }
+        </script>
+    </div>
 @endsection
