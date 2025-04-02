@@ -67,7 +67,7 @@
                             </ul>
                         </div>
                     </li>
-                    
+
 
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.category.index') }}">
@@ -78,6 +78,11 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.user.index') }}">
                             <i class="fas fa-users"></i> Quản lý Người dùng
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('admin.comments.index') }}">
+                            <i class="fas fa-users"></i> Quản lý Bình luận
                         </a>
                     </li>
                 </ul>
