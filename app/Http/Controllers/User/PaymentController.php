@@ -156,90 +156,53 @@ class PaymentController extends Controller
         return view('user.payment.failure');
     }
     public function userPaymentHistory()
-{
-    $userId = Auth::id();
-    $payments = Payment::where('user_id', $userId)
-        ->with('course')
-        ->orderBy('created_at', 'desc')
-        ->get();
+    {
+        $userId = Auth::id();
+        $payments = Payment::where('user_id', $userId)
+            ->with('course')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    $enrollments = Enrollment::where('user_id', $userId)
-        ->with('course')
-        ->get();
+        $enrollments = Enrollment::where('user_id', $userId)
+            ->with('course')
+            ->get();
 
-    return view('user.payment.history', compact('payments', 'enrollments'));
-}
-
-public function cancelPayment(Payment $payment)
-{
-    if ($payment->user_id !== Auth::id()) {
-        abort(403, 'Bạn không có quyền hủy thanh toán này.');
+        return view('user.history', compact('payments', 'enrollments'));
     }
 
-    $payment->status = 'cancelled';
-    $payment->save();
+    public function cancelPayment(Payment $payment)
+    {
+        if ($payment->user_id !== Auth::id()) {
+            abort(403, 'Bạn không có quyền hủy thanh toán này.');
+        }
 
-    Enrollment::where('user_id', Auth::id())
-        ->where('course_id', $payment->course_id)
-        ->update(['status' => 'cancelled']);
+        $payment->status = 'cancelled';
+        $payment->save();
 
-    return redirect()->back()->with('success', 'Thanh toán đã được hủy.');
-}
+        Enrollment::where('user_id', Auth::id())
+            ->where('course_id', $payment->course_id)
+            ->update(['status' => 'cancelled']);
 
-public function buyAgain(Course $course)
-{
-    $userId = Auth::id();
-
-    // Tạo bản ghi thanh toán mới với trạng thái 'pending'
-    $newPayment = Payment::create([
-        'user_id' => $userId,
-        'course_id' => $course->id,
-        'amount' => $course->price,
-        'payment_method' => 'buy_again',
-        'status' => 'pending',
-        'transaction_id' => uniqid(),
-    ]);
-
-    // Lưu payment_id vào session để sử dụng trong processPayment
-    session(['payment_id' => $newPayment->id]);
-
-    return redirect()->route('course.payment', ['slug' => $course->slug]);
-}
-
-public function adminPaymentHistory(Request $request)
-{
-    $query = Payment::with('user', 'course', 'enrollment')->orderBy('created_at', 'desc');
-
-    // Tìm kiếm
-    if ($request->has('search')) {
-        $searchTerm = $request->input('search');
-        $query->whereHas('user', function ($q) use ($searchTerm) {
-            $q->where('name', 'like', '%' . $searchTerm . '%');
-        })->orWhereHas('course', function ($q) use ($searchTerm) {
-            $q->where('title', 'like', '%' . $searchTerm . '%');
-        })->orWhere('transaction_id', 'like', '%' . $searchTerm . '%');
+        return redirect()->back()->with('success', 'Thanh toán đã được hủy.');
     }
 
-    // Lọc theo trạng thái
-    if ($request->has('status')) {
-        $query->where('status', $request->input('status'));
+    public function buyAgain(Course $course)
+    {
+        $userId = Auth::id();
+
+        // Tạo bản ghi thanh toán mới với trạng thái 'pending'
+        $newPayment = Payment::create([
+            'user_id' => $userId,
+            'course_id' => $course->id,
+            'amount' => $course->price,
+            'payment_method' => 'buy_again',
+            'status' => 'pending',
+            'transaction_id' => uniqid(),
+        ]);
+
+        // Lưu payment_id vào session để sử dụng trong processPayment
+        session(['payment_id' => $newPayment->id]);
+
+        return redirect()->route('course.payment', ['slug' => $course->slug]);
     }
-
-    // Phân trang
-    $payments = $query->paginate(10);
-
-    // Kiểm tra dữ liệu
-    // dd($payments);
-
-    return view('admin.payment.history', compact('payments'));
-}
-public function updateEnrollmentStatus(Enrollment $enrollment, Request $request)
-{
-    $request->validate(['status' => 'required|in:pending,active,cancelled']);
-
-    $enrollment->status = $request->status;
-    $enrollment->save();
-
-    return redirect()->back()->with('success', 'Trạng thái đăng ký đã được cập nhật.');
-}
 }
