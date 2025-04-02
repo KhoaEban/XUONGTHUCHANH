@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Payment;
 
 class Course extends Model
 {
@@ -34,5 +35,13 @@ class Course extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function isPaidByUser($userId)
+    {
+        return Payment::where('user_id', $userId)
+            ->where('course_id', $this->id)
+            ->where('status', 'completed')
+            ->exists();
     }
 }

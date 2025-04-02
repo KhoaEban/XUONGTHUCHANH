@@ -14,6 +14,7 @@ use App\Http\Controllers\User\CourseController;
 use App\Http\Controllers\User\FaqController;
 use App\Http\Controllers\User\SupportController;
 use App\Http\Controllers\User\SimulationController;
+use App\Http\Controllers\User\PaymentController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
@@ -112,6 +113,16 @@ Route::prefix('user')->group(function () {
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
 });
+
+Route::prefix('user')->middleware('auth')->group(function () {
+    Route::get('/course/{slug}/payment', [PaymentController::class, 'showPaymentForm'])->name('course.payment');
+    Route::post('/course/{slug}/payment', [PaymentController::class, 'processPayment'])->name('course.payment.process');
+    Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/payment/failure', [PaymentController::class, 'paymentFailure'])->name('payment.failure');
+});
+
+// VNPay callback
+Route::get('/vnpay/callback', [PaymentController::class, 'vnpayCallback'])->name('vnpay.callback');
 
 // 404
 Route::fallback(function () {
