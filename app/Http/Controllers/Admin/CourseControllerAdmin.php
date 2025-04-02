@@ -86,12 +86,14 @@ class CourseControllerAdmin extends Controller
 
     public function store(Request $request)
     {
+        // Cập nhật validation để trường 'price' không bắt buộc khi là khóa học miễn phí
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric',
             'category_id' => 'required|integer|exists:categories,id',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'is_free' => 'nullable|boolean',
+            'price' => 'nullable|numeric|required_if:is_free,0',  // 'price' chỉ bắt buộc khi khóa học có giá
         ]);
 
         // Xử lý upload ảnh
@@ -116,14 +118,16 @@ class CourseControllerAdmin extends Controller
             'instructor_id' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
-            'price' => $request->price,
+            'price' => $request->has('is_free') ? 0 : $request->price,  // Nếu là khóa học miễn phí thì giá là 0
             'category_id' => $request->category_id,
             'thumbnail' => $thumbnailPath,
-            'slug' => $slug
+            'slug' => $slug,
+            'is_free' => $request->has('is_free') ? true : false,  // Lưu thông tin khóa học miễn phí
         ]);
 
         return redirect()->route('admin.courses.index')->with('success', 'Khóa học đã được tạo!');
     }
+
 
     public function edit($id)
     {

@@ -22,10 +22,10 @@ class CourseEnrollmentMail extends Mailable
     public function build()
     {
         return $this->subject('Xác nhận đăng ký khóa học')
-                    ->view('emails.course_enrollment')
-                    ->with([
-                        'user' => $this->user,
-                        'course' => $this->course,
-                    ]);
+            ->view('emails.course_enrollment')
+            ->with([
+                'user' => $this->user,
+                'course' => $this->course,
+            ]);
     }
 }

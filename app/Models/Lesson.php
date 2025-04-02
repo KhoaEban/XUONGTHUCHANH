@@ -19,18 +19,18 @@ class Lesson extends Model
         'slug'
     ];
 
-    // Mối quan hệ với khóa học
+    // Quan hệ với Course
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
 
-    // Lấy giảng viên từ khóa học
+    // Quan hệ với Instructor thông qua Course (giả sử instructor_id nằm trong bảng courses)
     public function instructor()
     {
-        return $this->course->instructor();
+        return $this->course->belongsTo(User::class, 'instructor_id'); // Liên kết đến bảng users qua trường instructor_id trong bảng courses
     }
-
+    
     // Mỗi quan hệ quizzes với bài kiểm tra
     public function quizzes()
     {

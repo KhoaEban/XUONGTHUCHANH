@@ -18,7 +18,8 @@ class Course extends Model
         'price',
         'category_id',
         'thumbnail',
-        'slug'
+        'slug',
+        'is_free'
     ];
 
 

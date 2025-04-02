@@ -19,7 +19,6 @@
         <div class="slider-btn"><i class="fas fa-angle-right"></i></div>
     </div>
 
-
     <div class="slideshow-container">
         <div class="slides-wrapper">
             <div class="mySlides">
@@ -37,14 +36,10 @@
 
         <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
         <a class="next" onclick="plusSlides(1)">&#10095;</a>
-        {{-- <div style="text-align:center">
-            <span class="dot" onclick="currentSlide(0)"></span>
-            <span class="dot" onclick="currentSlide(1)"></span>
-            <span class="dot" onclick="currentSlide(2)"></span>
-        </div> --}}
     </div>
     <br>
-    {{-- Hiện thị các khóa học mới --}}
+
+    {{-- Hiển thị các khóa học mới --}}
     <div class="row">
         <div class="col-12">
             <div class="card-header d-flex align-items-center" style="background-color: #E7E7E7">
@@ -60,12 +55,26 @@
             <div class="row">
                 @foreach ($courses as $course)
                     <div class="col-3">
-                        <div class="card">
+                        <div class="card mb-3">
                             <a href="{{ route('course.show', $course->slug) }}"
                                 class="card-link text-decoration-none text-dark">
-                                <img class="card-img-top"
-                                    src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}"
-                                    alt="Card image cap">
+
+                                <!-- Phần hiển thị hình ảnh -->
+                                <div class="position-relative">
+                                    <img class="card-img-top"
+                                        src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}"
+                                        alt="Card image cap">
+
+                                    <!-- Nhãn Free/Pro -->
+                                    <div class="badge-overlay">
+                                        @if ($course->is_free)
+                                            <span class="badge-free">Free</span>
+                                        @else
+                                            <span class="badge-pro"><i class="fas fa-crown me-1"></i>Pro</span>
+                                        @endif
+                                    </div>
+                                </div>
+
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $course->name }}</h5>
                                     <p class="card-text text-secondary">{{ $course->instructor->name }}</p>
@@ -74,6 +83,10 @@
                                         <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
                                         <p class="card-text">{{ $course->created_at->format('d/m/Y') }}</p>
                                     </div>
+
+                                    @if (!$course->is_free)
+                                        <p class="card-text">Giá: {{ number_format($course->price, 0, ',', '.') }} VNĐ</p>
+                                    @endif
                                 </div>
                             </a>
                         </div>
@@ -133,15 +146,6 @@
                                     <h5>Giáo viên nâng cao kỹ năng số</h5>
                                 </div>
                             </div>
-                            <!-- Nút điều hướng slider -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel"
-                                data-bs-slide="prev">
-                                {{-- <span class="carousel-control-prev-icon" aria-hidden="false"></span> --}}
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel"
-                                data-bs-slide="next">
-                                {{-- <span class="carousel-control-next-icon" aria-hidden="false"></span> --}}
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -167,9 +171,21 @@
                         <div class="card">
                             <a href="{{ route('course.show', $courses[0]->slug) }}"
                                 class="card-link text-decoration-none text-dark">
-                                <img class="card-img-top"
-                                    src="{{ asset($courses[0]->thumbnail ?? 'images/default-thumbnail.jpg') }}"
-                                    alt="Card image cap">
+                                <!-- Phần hiển thị hình ảnh -->
+                                <div class="position-relative">
+                                    <img class="card-img-top"
+                                        src="{{ asset($courses[0]->thumbnail ?? 'images/default-thumbnail.jpg') }}"
+                                        alt="Card image cap">
+
+                                    {{-- <!-- Nhãn Free/Pro -->
+                                    <div class="badge-overlay">
+                                        @if ($course->is_free)
+                                            <span class="badge-free">Free</span>
+                                        @else
+                                            <span class="badge-pro"><i class="fas fa-crown me-1"></i>Pro</span>
+                                        @endif
+                                    </div> --}}
+                                </div>
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $courses[0]->name }}</h5>
                                     <p class="card-text text-secondary">{{ $courses[0]->instructor->name }}</p>
@@ -178,6 +194,12 @@
                                         <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
                                         <p class="card-text">{{ $courses[0]->created_at->format('d/m/Y') }}</p>
                                     </div>
+
+                                    <!-- Hiển thị giá khóa học nếu không miễn phí -->
+                                    @if (!$courses[0]->is_free)
+                                        <p class="card-text">Giá: {{ number_format($courses[0]->price, 0, ',', '.') }} VNĐ
+                                        </p>
+                                    @endif
                                 </div>
                             </a>
                         </div>
@@ -380,6 +402,25 @@
     }
 
     .carousel_caption h5 {
+        font-size: 15px;
+    }
+
+    .badge-overlay {
+        position: absolute;
+        top: 4px;
+    }
+
+    .badge-pro {
+        background-color: #ff0000;
+        color: #fff;
+        padding: 5px 15px;
+        font-size: 15px;
+    }
+
+    .badge-free {
+        background-color: #0c920c;
+        color: #fff;
+        padding: 5px 15px;
         font-size: 15px;
     }
 </style>

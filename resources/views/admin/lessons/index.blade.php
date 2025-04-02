@@ -85,6 +85,7 @@
                             <td>{{ $lesson->course->title ?? 'N/A' }}</td>
                             <td>{{ $lesson->order_number }}</td>
                             <td>{{ optional($lesson->course->instructor)->name ?? 'N/A' }}</td>
+                            {{-- <td>{{ $lesson->instructor->name }}</td> --}}
 
                             <td>
                                 <div class="d-flex justify-content-between align-items-center">

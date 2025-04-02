@@ -106,7 +106,12 @@
                                     </td>
                                     <td>{{ Str::limit($course->description, 50) }}</td>
                                     <td>{{ $course->category->name ?? 'Chưa có danh mục' }}</td>
-                                    <td class="text-danger fw-bold">{{ number_format($course->price, 0, ',', '.') }} VNĐ
+                                    <td class="text-danger fw-bold">
+                                        @if ($course->is_free)
+                                            <div class="text-success fw-bold">Miễn phí</div>
+                                        @else
+                                            {{ number_format($course->price, 0, ',', '.') }} VNĐ
+                                        @endif
                                     </td>
                                     <td>{{ $course->instructor->name }}</td>
                                     <td>
@@ -116,8 +121,8 @@
                                             <a class="text-warning" href="{{ route('admin.courses.edit', $course->id) }}">
                                                 <i class="fa fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.courses.destroy', $course->id) }}"
-                                                method="POST" class="d-inline">
+                                            <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST"
+                                                class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="border-0 bg-transparent text-danger" type="submit"

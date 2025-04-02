@@ -35,14 +35,42 @@
                 <input type="file" name="thumbnail">
             </div>
 
+            <!-- Checkbox "Khóa học miễn phí" -->
             <div class="mb-3">
+                <label for="is_free" class="form-label">Khóa học miễn phí</label>
+                <input type="checkbox" name="is_free" id="is_free" value="1" {{ old('is_free') ? 'checked' : '' }}
+                    onclick="togglePriceField()">
+            </div>
+
+                <!-- Trường giá sẽ bị ẩn khi "Khóa học miễn phí" được chọn -->
+            <div class="mb-3" id="price-field">
                 <label class="form-label">Giá:</label>
                 <input type="number" name="price" class="form-control" required>
             </div>
+
 
             <div class="text-center">
                 <button type="submit" class="btn btn-success">Thêm Khóa Học</button>
             </div>
         </form>
     </div>
+
+    <script>
+        function togglePriceField() {
+            var isFree = document.getElementById('is_free').checked;
+            var priceField = document.getElementById('price-field');
+            var priceInput = document.getElementsByName('price')[0];
+
+            if (isFree) {
+                priceField.style.display = 'none'; // Ẩn trường giá
+                priceInput.removeAttribute('required'); // Bỏ qua yêu cầu nhập giá khi miễn phí
+            } else {
+                priceField.style.display = 'block'; // Hiển thị lại trường giá
+                priceInput.setAttribute('required', 'required'); // Đặt lại yêu cầu nhập giá
+            }
+        }
+
+        // Gọi hàm khi trang tải để xử lý checkbox đã được chọn hay chưa
+        window.onload = togglePriceField;
+    </script>
 @endsection
