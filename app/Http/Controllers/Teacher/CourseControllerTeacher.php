@@ -131,5 +131,9 @@ class CourseControllerTeacher extends Controller
         $course->delete();
         return redirect()->route('instructor.courses.index')->with('success', 'Khóa học đã bị xóa!');
     }
+    public function show($slug)
+    {
+        $course = Course::where('instructor_id', Auth::id())->where('slug', $slug)->firstOrFail();
+        return view('instructor.courses.show', compact('course'));
+    }
 }
-
