@@ -18,11 +18,6 @@ class Payment extends Model
         'transaction_id',
     ];
 
-    protected $attributes = [
-        'status' => 'pending',
-        'payment_method' => 'credit_card', // Default to a valid enum value
-    ];
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -31,5 +26,14 @@ class Payment extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'course_id', 'course_id')->where('user_id', $this->user_id);
+    }
+    
+    public function latestEnrollment() {
+        return $this->enrollments()->latest()->first();
     }
 }

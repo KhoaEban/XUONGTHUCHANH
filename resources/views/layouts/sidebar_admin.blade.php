@@ -14,6 +14,11 @@
                             <i class="fas fa-home"></i> Dashboard
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('user.payment.history') }}">
+                            <i class="fas fa-home"></i> lịch sử
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu">

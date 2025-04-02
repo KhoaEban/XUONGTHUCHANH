@@ -125,6 +125,8 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::delete('/delete/{answer}', [AnswerControllerAdmin::class, 'destroy'])->name('admin.answers.destroy');
         Route::get('/get-questions/{quizId}', [AnswerControllerAdmin::class, 'getQuestionsByQuiz']);
     });
+    Route::get('/payments', [PaymentController::class, 'adminPaymentHistory'])->name('admin.payment.history');
+    Route::post('/enrollments/{enrollment}/update-status', [PaymentController::class, 'updateEnrollmentStatus'])->name('admin.enrollment.update_status');
 });
 
 
@@ -139,7 +141,7 @@ Route::middleware(['check.role:instructor'])->group(function () {
         Route::get('/courses/create', [CourseControllerTeacher::class, 'create'])->name('instructor.courses.create');
         Route::post('/courses', [CourseControllerTeacher::class, 'store'])->name('instructor.courses.store');
         Route::get('/courses/edit/{course}', [CourseControllerTeacher::class, 'edit'])->name('instructor.courses.edit');
-        Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
+        Route::get('/courses/{slug}', [CourseControllerTeacher::class, 'show'])->name('courses.show');
         Route::put('/courses/{course}', [CourseControllerTeacher::class, 'update'])->name('instructor.courses.update');
         Route::delete('/courses/{course}', [CourseControllerTeacher::class, 'destroy'])->name('instructor.courses.destroy');
     });
@@ -181,6 +183,11 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::post('/course/{slug}/payment', [PaymentController::class, 'processPayment'])->name('course.payment.process');
     Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
     Route::get('/payment/failure', [PaymentController::class, 'paymentFailure'])->name('payment.failure');
+    Route::get('/payment-history', [PaymentController::class, 'userPaymentHistory'])->name('user.payment.history');
+    Route::post('/payment-history/{payment}/cancel', [PaymentController::class, 'cancelPayment'])->name('user.payment.cancel');
+    Route::post('/payment-history/{course}/buy-again', [PaymentController::class, 'buyAgain'])->name('user.payment.buy_again');
+    Route::get('/payment/{slug}', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
+    Route::post('/user/payment/{slug}', [PaymentController::class, 'processPayment'])->name('course.payment.process');
 });
 
 // VNPay callback
