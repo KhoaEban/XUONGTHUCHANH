@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Trang chủ')</title>
+    <title>@yield('title', 'Hồ sơ')</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         /* Định dạng màu gradient nền */
@@ -286,33 +288,76 @@
             width: 30px;
             margin-left: 10px;
         }
+
+        /* Định dạng cho sidebar */
+        .sidebar {
+            height: 100vh;
+            /* Chiều cao 100% của viewport */
+            background-color: #f8f9fa;
+            /* Màu nền cho sidebar */
+            padding: 20px;
+            /* Padding cho sidebar */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            /* Đổ bóng cho sidebar */
+        }
+
+        /* Định dạng cho các liên kết trong sidebar */
+        .sidebar a {
+            color: #333;
+            /* Màu chữ */
+            text-decoration: none;
+            /* Bỏ gạch chân */
+            padding: 10px 15px;
+            /* Padding cho các liên kết */
+            display: block;
+            /* Hiển thị dưới dạng block */
+            border-radius: 5px;
+            /* Bo góc cho các liên kết */
+            transition: background-color 0.3s;
+            /* Hiệu ứng chuyển màu nền */
+        }
+
+        /* Hiệu ứng hover cho các liên kết */
+        .sidebar a:hover {
+            background-color: #e2e6ea;
+            /* Màu nền khi hover */
+        }
+
+        /* Định dạng cho nội dung chính */
+        .content {
+            flex-grow: 1;
+            /* Chiếm không gian còn lại */
+            padding: 20px;
+            /* Padding cho nội dung chính */
+            background-color: #ffffff;
+            /* Màu nền cho nội dung chính */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Đổ bóng cho nội dung chính */
+            border-radius: 5px;
+            /* Bo góc cho nội dung chính */
+        }
     </style>
 </head>
 
 <body>
-    <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
-            {{-- Menu responsive bên trái --}}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <!-- Logo -->
             <a class="navbar-brand m-0" href="{{ url('/') }}">
                 <img class="img-fluid rounded" src="{{ asset('image/images.png') }}" alt="Logo">
             </a>
 
-            <!-- Thanh tìm kiếm -->
             <div class="search-box d-flex justify-content-center gap-5">
                 <div class="d-flex align-items-center" style="width: 1000px">
-                    <input type="text" placeholder="Tìm kiếm">
-                    <button class="search-btn" type="submit"><i class="fas fa-search"></i> Tìm kiếm</button>
+                    <input type="text" placeholder="Tìm kiếm" class="form-control">
+                    <button class="search-btn btn btn-light" type="submit"><i class="fas fa-search"></i> Tìm
+                        kiếm</button>
                 </div>
-                {{-- <button class="search-adv btn btn-light" type="submit">Tìm kiếm nâng cao</button> --}}
             </div>
 
-            <!-- Icon bên phải -->
             <div class="d-flex align-items-center">
                 <div class="icon me-3"><i class="fas fa-th"></i></div>
                 <div class="icon me-3"><i class="fas fa-bell"></i></div>
@@ -329,24 +374,11 @@
                                 <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i
                                             class="fas fa-tachometer-alt"></i> Quản lý</a></li>
                             @else
-                                @if (Auth::user()->role == 'instructor')
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-user-cog"></i> Chức năng
-                                        </a>
-                                        <a class="dropdown-item" href="{{ route('user.payment.history') }}">
-                                            {{-- icon hồ sơ --}}
-                                            <i class="fas fa-user"></i> Hồ sơ
-                                        </a>
-                                    </li>
-                                @else
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('user.payment.history') }}">
-                                            {{-- icon hồ sơ --}}
-                                            <i class="fas fa-user"></i> Hồ sơ
-                                        </a>
-                                    </li>
-                                @endif
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('user.payment.history') }}">
+                                        <i class="fas fa-user"></i> Hồ sơ
+                                    </a>
+                                </li>
                             @endif
                             <li>
                                 <a class="dropdown-item" href="#"
@@ -368,21 +400,49 @@
         </div>
     </nav>
 
-    {{-- @include('layouts.sidebar') --}}
+    <div class="container">
+        <div class="d-flex">
+            <div class="sidebar">
+                <h6 class="text-lg mt-4"><img style="width: 30px; height: 30px; object-fit: cover; border-radius: 50%" src="{{ asset(Auth::user()->avatar) }}" alt="Avatar">
+                    {{ Auth::user()->name }}</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{{ route('user.profile') }}" class="d-block py-2">Hồ sơ</a></li>
+                    <li><a href="{{ route('user.payment.history') }}" class="d-block py-2">Lịch sử đơn hàng</a></li>
+                    <li><a href="{{ route('user.profile.edit') }}" class=" d-block py-2">Cài đặt hồ sơ</a></li>
+                    <li><a href="{{ route('logout') }}" class="d-block py-2 text-danger">Đăng xuất</a></li>
+                </ul>
+            </div>
 
-    @if (request()->is('user/profile'))
-        <!-- Kiểm tra nếu URL là user/profile -->
-        @include('layouts.sidebar_profile')
-    @else
-        @include('layouts.sidebar') <!-- Sidebar mặc định -->
-    @endif
-
-    <div class="flex-1">
-        @yield('content')
+            <div class="flex-grow-1 m-4">
+                @yield('content')
+            </div>
+        </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công!',
+            text: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi!',
+            text: "{{ session('error') }}",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    </script>
+@endif

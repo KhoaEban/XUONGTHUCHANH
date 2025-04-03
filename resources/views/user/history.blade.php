@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.sidebar_profile')
 
 @section('content')
 <div class="container">

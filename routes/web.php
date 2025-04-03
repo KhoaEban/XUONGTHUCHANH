@@ -21,6 +21,7 @@ use App\Http\Controllers\User\SupportController;
 use App\Http\Controllers\User\SimulationController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\QuizController;
+use App\Http\Controllers\User\ProfileController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
@@ -169,9 +170,15 @@ Route::middleware(['check.role:instructor'])->group(function () {
 
 // User
 Route::prefix('user')->group(function () {
+    // Hồ sơ
+    Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user.profile.edit');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+    Route::get('/payment-history', [PaymentController::class, 'userPaymentHistory'])->name('user.payment.history');
     // Danh mục
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
+    // Khóa học
     Route::get('/course', [CourseController::class, 'index'])->name('course');
     Route::get('/course/{slug}', [CourseController::class, 'show'])->name('course.show');
     Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
@@ -179,13 +186,16 @@ Route::prefix('user')->group(function () {
     Route::get('/support', [SupportController::class, 'index'])->name('support');
     Route::post('/support', [SupportController::class, 'submit'])->name('support');
 
+    Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
+    
+    Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+    
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
-
-    Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
-
-    Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+    
 });
+
+
 
 Route::prefix('user')->middleware('auth')->group(function () {
     Route::get('/course/{slug}/payment', [PaymentController::class, 'showPaymentForm'])->name('course.payment');
