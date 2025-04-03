@@ -109,7 +109,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
 
     // Quản lý kết quả bài tập
-    Route::prefix('admin/quiz-results')->group(function () {
+        Route::prefix('admin/quiz-results')->group(function () {
         Route::get('/', [QuizResultControllerAdmin::class, 'index'])->name('admin.quiz_results.index');
         Route::get('/create', [QuizResultControllerAdmin::class, 'create'])->name('admin.quiz_results.create');
         Route::post('/store', [QuizResultControllerAdmin::class, 'store'])->name('admin.quiz_results.store');
