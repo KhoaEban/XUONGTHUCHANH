@@ -65,7 +65,7 @@ class RevenueController extends Controller
             'payments',
             'totalPayments',
             'successfulPayments',
-            'pendingPayments', // Thêm biến pendingPayments
+            // 'pendingPayments', // Thêm biến pendingPayments
             'failedPayments',
             'totalRevenue',
             'revenueByDay'

@@ -6,12 +6,22 @@
     <div class="container-fluid">
         <h2 class="mt-4 mb-3">Thống kê doanh thu</h2>
 
+        
+
+        {{-- Hiển thị khoảng thời gian được chọn (tùy chọn) --}}
+        @if(request('start_date') && request('end_date'))
+            <p class="mb-3">Hiển thị dữ liệu từ <strong>{{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }}</strong> đến <strong>{{ \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') }}</strong></p>
+        @else
+            <p class="mb-3">Hiển thị dữ liệu từ <strong>{{ \Carbon\Carbon::now()->startOfMonth()->format('d/m/Y') }}</strong> đến <strong>{{ \Carbon\Carbon::now()->endOfMonth()->format('d/m/Y') }}</strong></p>
+        @endif
+
         {{-- Bảng tổng hợp doanh thu --}}
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
                     <th>Tổng số giao dịch</th>
                     <th>Giao dịch thành công</th>
+                    {{-- <th>Giao dịch đang chờ</th> --}}
                     <th>Giao dịch thất bại</th>
                     <th>Tổng doanh thu</th>
                 </tr>
@@ -20,6 +30,7 @@
                 <tr>
                     <td>{{ $totalPayments }}</td>
                     <td>{{ $successfulPayments }}</td>
+                    {{-- <td>{{ $pendingPayments }}</td> --}}
                     <td>{{ $failedPayments }}</td>
                     <td>{{ number_format($totalRevenue, 0, ',', '.') }} VNĐ</td>
                 </tr>
@@ -100,7 +111,6 @@
                                 $status = $statusLabels[$payment->status] ?? ['label' => 'Không xác định', 'class' => 'bg-secondary'];
                             @endphp
                             <span class="badge {{ $status['class'] }}">{{ $status['label'] }}</span>
-                        </td>
                         </td>
                         <td>{{ $payment->created_at->format('d/m/Y H:i') }}</td>
                     </tr>
