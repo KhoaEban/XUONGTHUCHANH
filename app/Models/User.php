@@ -25,4 +25,9 @@ class User extends Authenticatable
         // Implement your role checking logic here
         return $this->role === $role;
     }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
 }

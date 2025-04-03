@@ -19,7 +19,8 @@ class Course extends Model
         'category_id',
         'thumbnail',
         'slug',
-        'is_free'
+        'is_free',
+        'views',
     ];
 
 

@@ -12,12 +12,13 @@ use App\Models\Lesson;
 
 class CourseController extends Controller
 {
-
     public function index()
     {
-        $course = Course::all();
-        return view('user.course.index', compact('course'));
+        // Lấy các khóa học được xem nhiều nhất
+        $courses = Course::orderBy('views', 'desc')->take(5)->get();
+        return view('user.course.index', compact('courses'));
     }
+
 
     public function show($slug)
     {

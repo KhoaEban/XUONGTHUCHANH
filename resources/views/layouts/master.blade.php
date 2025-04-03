@@ -300,7 +300,7 @@
             </button>
             <!-- Logo -->
             <a class="navbar-brand m-0" href="{{ url('/') }}">
-                <img class="img-fluid rounded" src="{{ asset('image/images.png') }}" alt="Logo">
+                <img class="img-fluid rounded" src="{{ asset('image/logo.png') }}" alt="Logo">
             </a>
 
             <!-- Thanh tìm kiếm -->
@@ -376,10 +376,6 @@
     @else
         @include('layouts.sidebar') <!-- Sidebar mặc định -->
     @endif
-
-    <div class="flex-1">
-        @yield('content')
-    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
