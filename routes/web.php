@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\QuizControllerAdmin;
 use App\Http\Controllers\Admin\QuestionControllerAdmin;
 use App\Http\Controllers\Admin\QuizResultControllerAdmin;
 use App\Http\Controllers\Admin\AnswerControllerAdmin;
+use App\Http\Controllers\Admin\AdminRevenueController;
+use App\Http\Controllers\Admin\RevenueController;
 
 // User
 use App\Http\Controllers\User\HomeController;
@@ -126,10 +128,23 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::delete('/delete/{answer}', [AnswerControllerAdmin::class, 'destroy'])->name('admin.answers.destroy');
         Route::get('/get-questions/{quizId}', [AnswerControllerAdmin::class, 'getQuestionsByQuiz']);
     });
+
+    
     Route::get('/payments', [PaymentController::class, 'adminPaymentHistory'])->name('admin.payment.history');
     Route::post('/enrollments/{enrollment}/update-status', [PaymentController::class, 'updateEnrollmentStatus'])->name('admin.enrollment.update_status');
+
+    // thống kê doanh thu
+// Routes for Revenue management (Admin)
+    Route::get('/admin/revenue', [RevenueController::class, 'index'])->name('admin.revenue.index');
+    Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
+    Route::get('revenue', [AdminRevenueController::class, 'index'])->name('revenue.index'); // Trang tổng quan doanh thu
+    Route::get('revenue/report', [AdminRevenueController::class, 'report'])->name('revenue.report'); // Báo cáo doanh thu
+    Route::get('revenue/user/{userId}', [AdminRevenueController::class, 'userRevenue'])->name('revenue.user'); // Doanh thu theo người dùng
+    Route::get('revenue/course/{courseId}', [AdminRevenueController::class, 'courseRevenue'])->name('revenue.course'); // Doanh thu theo khóa học
 });
 
+
+});
 
 // Instructor
 Route::middleware(['check.role:instructor'])->group(function () {

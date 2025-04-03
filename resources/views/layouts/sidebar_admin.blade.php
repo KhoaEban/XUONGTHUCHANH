@@ -80,6 +80,12 @@
                             <i class="fas fa-users"></i> Quản lý Người dùng
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('admin.revenue.index') }}">
+                            <i class="fa-regular fa-dollar-sign"></i> Quản lý doanh thu
+                        </a>
+                    </li>
                 </ul>
 
                 {{-- Quay lại trang chủ --}}
