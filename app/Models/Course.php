@@ -4,20 +4,45 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Payment;
 
 class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'image', 'video', 'category_id', 'teacher_id'];
+    protected $fillable = [
+        'id',
+        'instructor_id',
+        'title',
+        'description',
+        'price',
+        'category_id',
+        'thumbnail',
+        'slug',
+        'is_free'
+    ];
+
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
+
+    public function instructor()
+    {
+        return $this->belongsTo(User::class, 'instructor_id');
+    }
 
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function teacher()
+    public function isPaidByUser($userId)
     {
-        return $this->belongsTo(User::class, 'teacher_id');
+        return Payment::where('user_id', $userId)
+            ->where('course_id', $this->id)
+            ->where('status', 'completed')
+            ->exists();
     }
 }

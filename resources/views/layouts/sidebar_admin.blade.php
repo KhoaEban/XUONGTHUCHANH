@@ -6,14 +6,17 @@
                 <div class="p-3 text-center border-bottom">
                     <a href="{{ route('admin.dashboard') }}"><img src="{{ asset('image/images.png') }}"
                             class="img-fluid" /></a>
-
-                    <a href="{{ route('admin.dashboard') }}"><img src="{{ asset('image/images.png') }}" class="img-fluid" /></a>
                 </div>
 
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.dashboard') }}">
                             <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('user.payment.history') }}">
+                            <i class="fas fa-home"></i> lịch sử
                         </a>
                     </li>
 
@@ -23,19 +26,48 @@
                         </a>
                         <div class="collapse" id="courseMenu">
                             <ul class="nav flex-column ps-3">
-                                <li><a class="nav-link text-dark" href="{{ route('admin.course.index') }}">Danh sách
+                                <li><a class="nav-link text-dark" href="{{ route('admin.courses.index') }}">Danh sách
                                         khóa học</a></li>
                             </ul>
+                        </div>
+                        <div class="collapse" id="courseMenu">
                             <ul class="nav flex-column ps-3">
-                                <li><a class="nav-link text-dark" href="{{ route('admin.khoa.index') }}">Khoa</a></li>
-                            </ul>
-                            <ul class="nav flex-column ps-3">
-                                <li><a class="nav-link text-dark" href="{{ route('admin.congnghe.index') }}">Công
-                                        nghê</a></li>
-                                <li><a class="nav-link text-dark" href="{{ route('admin.course.index') }}">Danh sách khóa học</a></li>
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.lessons.index') }}">Danh sách
+                                        Bài học
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu2">
+                            <i class="fas fa-book"></i> Quản lý quizzes <i class="fas fa-chevron-down float-end"></i>
+                        </a>
+                        <div class="collapse" id="courseMenu2">
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.quizzes.index') }}">Quizzes
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.questions.index') }}">Câu hỏi
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="collapse" id="courseMenu2">
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.answers.index') }}">Câu trả lời
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
 
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.category.index') }}">
@@ -48,13 +80,17 @@
                             <i class="fas fa-users"></i> Quản lý Người dùng
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('admin.comments.index') }}">
+                            <i class="fas fa-users"></i> Quản lý Bình luận
+                        </a>
+                    </li>
                 </ul>
 
                 {{-- Quay lại trang chủ --}}
                 <div class="p-3 text-center border-top">
-                    <a class="nav-link text-dark" href="{{ route('home') }}"><i class="fas fa-arrow-left me-2"></i>Quay
+                    <a class="nav-link text-dark" href="{{ url('/') }}"><i class="fas fa-arrow-left me-2"></i>Quay
                         lại trang chủ</a>
-                    <a class="nav-link text-dark" href="{{ route('home') }}"><i class="fas fa-arrow-left me-2"></i>Quay lại trang chủ</a>
                 </div>
             </div>
         </div>
@@ -66,46 +102,21 @@
     </div>
 </div>
 
-<ul>
-    @auth
-        @if (Auth::user()->vaitro == 'admin')
-            <li class="nav-item">
-                <div>
-                    <div><a class="collapse-item" href="{{ route('khoa.index') }}"> <i class="fas fa-university mr-2"></i> Khoa</a></div>
-                </div>
-            </li>
-        @endif
-
-        @if (Auth::user()->vaitro == 'sinhvien')
-            <li class="nav-item">
-                <a><i class="fas fa-fw fa-book"></i>
-                    <span>Chương trình đào tạo</span>
-                </a>
-            </li>
-        @endif
-        @if (Auth::user()->vaitro == 'QL')
-            <span>Quản lý</span>
-            <div>
-                <div> <a class="collapse-item" href="') }}">Phân công</a></div>
-            </div>
-            </li>
-        @endif
-    @endauth
-</ul>
-
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".collapsed").forEach(item => {
-            item.addEventListener("click", function () {
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     document.querySelectorAll(".collapsed").forEach(item => {
+    //         item.addEventListener("click", function() {
+    //             this.nextElementSibling.classList.toggle("show");
+    //             this.querySelector("i.fas.fa-chevron-down").classList.toggle("rotate");
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll(".collapsed").forEach(item => {
-            item.addEventListener("click", function() {
-                this.querySelector("i.fas.fa-chevron-down").classList.toggle("rotate");
-            });
-        });
-    });
+    //             if (this.nextElementSibling.classList.contains("show")) {
+    //                 this.style.color = "#007bff";
+    //             } else {
+    //                 this.style.color = "#000";
+    //             }
+    //         });
+    //     });
+    // });
 </script>
 
 <style>

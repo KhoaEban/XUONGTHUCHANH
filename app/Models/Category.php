@@ -27,6 +27,11 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
+    public function child_categories()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
     // Slug
     public static function boot()
     {

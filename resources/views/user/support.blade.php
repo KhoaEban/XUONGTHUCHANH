@@ -8,7 +8,7 @@
             <p>Bạn đang gặp khó khăn trong việc học tập và giảng dạy trên hệ thống LMS360? Hãy để lại thông tin, đội ngũ
                 CSKH chúng tôi sẽ liên hệ lại sớm nhất.</p>
             <div class="content-container">
-                <form action="{{ route('user.support.submit') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('support') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="text" name="name" placeholder="Họ tên (bắt buộc)" required><br>
                     <input type="tel" name="phone" placeholder="Số điện thoại (bắt buộc)" required><br>

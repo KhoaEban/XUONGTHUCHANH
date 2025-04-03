@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    // 
+    //
     use HasFactory, Notifiable;
 
     protected $fillable = [
@@ -24,5 +24,15 @@ class User extends Authenticatable
     {
         // Implement your role checking logic here
         return $this->role === $role;
+    }
+    public function isAdmin()
+    {
+        return $this->role === 'admin'; // Kiểm tra nếu role là admin
+    }
+    public function isTeacher()
+    {
+        return $this->role === 'instructor';
+
+
     }
 }

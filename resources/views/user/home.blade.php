@@ -1,5 +1,274 @@
 @extends('layouts.master')
 
+@section('content')
+    <ul class="tag-slider slick-slider">
+        <div class="slick-list draggable">
+            <div class="slick-track" style="opacity: 1; width: auto; transform: translate3d(0px, 0px, 0px);">
+                @foreach ($categories as $category)
+                    <li><a href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a></li>
+                @endforeach
+            </div>
+        </div>
+    </ul>
+
+    <!-- Nút điều hướng slider -->
+    <div class="tag-slider-prev">
+        <div class="slider-btn"><i class="fas fa-angle-left"></i></div>
+    </div>
+    <div class="tag-slider-next">
+        <div class="slider-btn"><i class="fas fa-angle-right"></i></div>
+    </div>
+
+    <div class="slideshow-container">
+        <div class="slides-wrapper">
+            <div class="mySlides">
+                <img class="image" src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}">
+            </div>
+
+            <div class="mySlides">
+                <img class="image" src="{{ asset('image/Positive-Behaviour-Support-165667163-1500x438-1.jpg') }}">
+            </div>
+
+            <div class="mySlides">
+                <img class="image" src="{{ asset('image/e-learning-concept-with-online-education-vector-55629215.jpg') }}">
+            </div>
+        </div>
+
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    <br>
+
+    {{-- Hiển thị các khóa học mới --}}
+    <div class="row">
+        <div class="col-12">
+            <div class="card-header d-flex align-items-center" style="background-color: #E7E7E7">
+                <h1 class="text-white h5 bg-success px-3 py-2 m-0 custom-header">
+                    Khóa Học Được Tạo Mới Nhất
+                </h1>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                @foreach ($courses as $course)
+                    <div class="col-3">
+                        <div class="card mb-3">
+                            <a href="{{ route('course.show', $course->slug) }}"
+                                class="card-link text-decoration-none text-dark">
+
+                                <!-- Phần hiển thị hình ảnh -->
+                                <div class="position-relative">
+                                    <img class="card-img-top"
+                                        src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}"
+                                        alt="Card image cap">
+
+                                    <!-- Nhãn Free/Pro -->
+                                    <div class="badge-overlay">
+                                        @if ($course->is_free)
+                                            <span class="badge-free">Free</span>
+                                        @else
+                                            <span class="badge-pro"><i class="fas fa-crown me-1"></i>Pro</span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $course->name }}</h5>
+                                    <p class="card-text text-secondary">{{ $course->instructor->name }}</p>
+                                    <div class="d-flex align-items-center text-secondary">
+                                        <p class="card-text m-0">{{ $course->lessons->count() }} nội dung</p>
+                                        <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
+                                        <p class="card-text">{{ $course->created_at->format('d/m/Y') }}</p>
+                                    </div>
+
+                                    @if (!$course->is_free)
+                                        <p class="card-text">Giá: {{ number_format($course->price, 0, ',', '.') }} VNĐ</p>
+                                    @endif
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
+            <div class="card-header d-flex align-items-center" style="background-color: #E7E7E7">
+                <h1 class="text-white h5 bg-danger px-3 py-2 m-0 custom-header">
+                    Tin tức <i class="fas fa-bell mx-2" style="font-size: 20px"></i>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="news-card d-flex align-items-start">
+                        <div class="news-img-container">
+                            <img class="news-img"
+                                src="https://elearning-hcm-edu-vn.s3.hcm-1.cloud.cmctelecom.vn/h5p/admin-bach-khoa/images/be8c3300-a70c-11ef-9969-83d8c9d000b6.jpeg"
+                                alt="Tin tức">
+                        </div>
+                        <div class="news-content">
+                            <h5 class="fw-bold">NGÀY HỘI "GIÁO DỤC STEM - HÀNH TRÌNH CÔNG DÂN SỐ"</h5>
+                            <p class="text-muted small">20/11/2024 14:12:22</p>
+                            <p>
+                                Sáng ngày 2/11 vừa qua, Bách Khoa Technology đã vinh dự đồng hành cùng Phòng Giáo dục & Đào
+                                tạo Quận Tân Phú tổ chức Ngày hội Giáo dục STEM với chủ đề “Hành trình Công dân Số”...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner" style="width: 478px;">
+                            <div class="carousel-item active">
+                                <div class="">
+                                    <img src="https://cdnc.lms360.edu.vn/2024-03-16/8d5ef512-dc46-4b73-afb7-e4b1df0ea1ef/content/assets/images/h5p/hinh-video0003.png"
+                                        class="d-block w-100" alt="Slide 2">
+                                </div>
+                                <div class="carousel_caption shadow">
+                                    <h5>Học sinh trải nghiệm eLearning</h5>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://cdnc.lms360.edu.vn/2024-03-16/8d5ef512-dc46-4b73-afb7-e4b1df0ea1ef/content/assets/images/h5p/hinh-video0008.png"
+                                    class="d-block w-100" alt="Slide 3">
+                                <div class="carousel_caption">
+                                    <h5>Giáo viên nâng cao kỹ năng số</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
+            <div class="card-header d-flex align-items-center" style="background-color: #E7E7E7">
+                <h1 class="text-white h5 bg-success px-3 py-2 m-0 custom-header">
+                    Khóa Học Được Xem Nhiều Nhất
+                </h1>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                @if (count($courses) > 0)
+                    <div class="col-3">
+                        <div class="card">
+                            <a href="{{ route('course.show', $courses[0]->slug) }}"
+                                class="card-link text-decoration-none text-dark">
+                                <!-- Phần hiển thị hình ảnh -->
+                                <div class="position-relative">
+                                    <img class="card-img-top"
+                                        src="{{ asset($courses[0]->thumbnail ?? 'images/default-thumbnail.jpg') }}"
+                                        alt="Card image cap">
+
+                                    {{-- <!-- Nhãn Free/Pro -->
+                                    <div class="badge-overlay">
+                                        @if ($course->is_free)
+                                            <span class="badge-free">Free</span>
+                                        @else
+                                            <span class="badge-pro"><i class="fas fa-crown me-1"></i>Pro</span>
+                                        @endif
+                                    </div> --}}
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $courses[0]->name }}</h5>
+                                    <p class="card-text text-secondary">{{ $courses[0]->instructor->name }}</p>
+                                    <div class="d-flex align-items-center text-secondary">
+                                        <p class="card-text m-0">{{ $courses[0]->lessons->count() }} nội dung</p>
+                                        <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
+                                        <p class="card-text">{{ $courses[0]->created_at->format('d/m/Y') }}</p>
+                                    </div>
+
+                                    <!-- Hiển thị giá khóa học nếu không miễn phí -->
+                                    @if (!$courses[0]->is_free)
+                                        <p class="card-text">Giá: {{ number_format($courses[0]->price, 0, ',', '.') }} VNĐ
+                                        </p>
+                                    @endif
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+@endsection
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let slideIndex = 0;
+        let slidesWrapper = document.querySelector(".slides-wrapper");
+        let dots = document.getElementsByClassName("dot");
+        let intervalId; // Lưu ID của interval
+
+        function showSlides(n) {
+            slideIndex = (n + 3) % 3;
+            slidesWrapper.style.transform = `translateX(-${slideIndex * 100 / 3}%)`;
+
+            // Cập nhật chấm tròn (nếu có)
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].classList.remove("active");
+            }
+            dots[slideIndex]?.classList.add("active");
+        }
+
+        window.plusSlides = function(n) {
+            showSlides(slideIndex + n);
+        };
+
+        window.currentSlide = function(n) {
+            showSlides(n);
+        };
+
+        function autoplay() {
+            intervalId = setInterval(() => {
+                showSlides(slideIndex + 1);
+            }, 3000); // Giữ ảnh trong 4 giây trước khi chuyển
+        }
+
+        function stopAutoplay() {
+            clearInterval(intervalId);
+        }
+
+        slidesWrapper.addEventListener("mouseenter", stopAutoplay);
+        slidesWrapper.addEventListener("mouseleave", autoplay);
+
+        showSlides(slideIndex);
+        autoplay();
+    });
+
+
+    document.querySelector('.tag-slider-next').addEventListener('click', function() {
+        document.querySelector('.tag-slider').scrollBy({
+            left: 200,
+            behavior: 'smooth'
+        });
+    });
+
+    document.querySelector('.tag-slider-prev').addEventListener('click', function() {
+        document.querySelector('.tag-slider').scrollBy({
+            left: -200,
+            behavior: 'smooth'
+        });
+    });
+</script>
+
 <style>
     * {
         box-sizing: border-box;
@@ -135,344 +404,23 @@
     .carousel_caption h5 {
         font-size: 15px;
     }
+
+    .badge-overlay {
+        position: absolute;
+        top: 4px;
+    }
+
+    .badge-pro {
+        background-color: #ff0000;
+        color: #fff;
+        padding: 5px 15px;
+        font-size: 15px;
+    }
+
+    .badge-free {
+        background-color: #0c920c;
+        color: #fff;
+        padding: 5px 15px;
+        font-size: 15px;
+    }
 </style>
-
-@section('content')
-    <ul class="tag-slider slick-slider">
-        <div class="slick-list draggable">
-            <div class="slick-track" style="opacity: 1; width: auto; transform: translate3d(0px, 0px, 0px);">
-                @foreach ($categories as $category)
-                    <li><a href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a></li>
-                @endforeach
-            </div>
-        </div>
-    </ul>
-
-    <!-- Nút điều hướng slider -->
-    <div class="tag-slider-prev">
-        <div class="slider-btn"><i class="fas fa-angle-left"></i></div>
-    </div>
-    <div class="tag-slider-next">
-        <div class="slider-btn"><i class="fas fa-angle-right"></i></div>
-    </div>
-
-
-    <div class="slideshow-container">
-        <div class="slides-wrapper">
-            <div class="mySlides">
-                <img class="image" src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}">
-            </div>
-
-            <div class="mySlides">
-                <img class="image" src="{{ asset('image/Positive-Behaviour-Support-165667163-1500x438-1.jpg') }}">
-            </div>
-
-            <div class="mySlides">
-                <img class="image" src="{{ asset('image/e-learning-concept-with-online-education-vector-55629215.jpg') }}">
-            </div>
-        </div>
-
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-        {{-- <div style="text-align:center">
-            <span class="dot" onclick="currentSlide(0)"></span>
-            <span class="dot" onclick="currentSlide(1)"></span>
-            <span class="dot" onclick="currentSlide(2)"></span>
-        </div> --}}
-    </div>
-    <br>
-    {{-- Hiện thị các khóa học mới --}}
-    <div class="row">
-        <div class="col-12">
-            <div class="card-header d-flex align-items-center" style="background-color: #E7E7E7">
-                <h1 class="text-white h5 bg-success px-3 py-2 m-0 custom-header">
-                    Khóa Học Được Tạo Mới Nhất
-                </h1>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-3">
-                    <div class="card">
-                        <a href="{{ route('course') }}" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-12">
-            <div class="card-header d-flex align-items-center" style="background-color: #E7E7E7">
-                <h1 class="text-white h5 bg-danger px-3 py-2 m-0 custom-header">
-                    Tin tức <i class="fas fa-bell mx-2" style="font-size: 20px"></i>
-                </h1>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="news-card d-flex align-items-start">
-                        <div class="news-img-container">
-                            <img class="news-img"
-                                src="https://elearning-hcm-edu-vn.s3.hcm-1.cloud.cmctelecom.vn/h5p/admin-bach-khoa/images/be8c3300-a70c-11ef-9969-83d8c9d000b6.jpeg"
-                                alt="Tin tức">
-                        </div>
-                        <div class="news-content">
-                            <h5 class="fw-bold">NGÀY HỘI "GIÁO DỤC STEM - HÀNH TRÌNH CÔNG DÂN SỐ"</h5>
-                            <p class="text-muted small">20/11/2024 14:12:22</p>
-                            <p>
-                                Sáng ngày 2/11 vừa qua, Bách Khoa Technology đã vinh dự đồng hành cùng Phòng Giáo dục & Đào
-                                tạo Quận Tân Phú tổ chức Ngày hội Giáo dục STEM với chủ đề “Hành trình Công dân Số”...
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner" style="width: 478px;">
-                            <div class="carousel-item active">
-                                <div class="">
-                                    <img src="https://cdnc.lms360.edu.vn/2024-03-16/8d5ef512-dc46-4b73-afb7-e4b1df0ea1ef/content/assets/images/h5p/hinh-video0003.png"
-                                        class="d-block w-100" alt="Slide 2">
-                                </div>
-                                <div class="carousel_caption shadow">
-                                    <h5>Học sinh trải nghiệm eLearning</h5>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <img src="https://cdnc.lms360.edu.vn/2024-03-16/8d5ef512-dc46-4b73-afb7-e4b1df0ea1ef/content/assets/images/h5p/hinh-video0008.png"
-                                    class="d-block w-100" alt="Slide 3">
-                                <div class="carousel_caption">
-                                    <h5>Giáo viên nâng cao kỹ năng số</h5>
-                                </div>
-                            </div>
-                            <!-- Nút điều hướng slider -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel"
-                                data-bs-slide="prev">
-                                {{-- <span class="carousel-control-prev-icon" aria-hidden="false"></span> --}}
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel"
-                                data-bs-slide="next">
-                                {{-- <span class="carousel-control-next-icon" aria-hidden="false"></span> --}}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-12">
-            <div class="card-header d-flex align-items-center" style="background-color: #E7E7E7">
-                <h1 class="text-white h5 bg-success px-3 py-2 m-0 custom-header">
-                    Khóa Học Được Xem Nhiều Nhất
-                </h1>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-3">
-                    <div class="card">
-                        <a href="#" class="card-link text-decoration-none text-dark">
-                            <img class="card-img-top"
-                                src="{{ asset('image/Forensic-Disability-1220218285-1500x438-1.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Tên khóa học</h5>
-                                <p class="card-text text-secondary">Tên người tại khóa học</p>
-                                <div class="d-flex align-items-center text-secondary">
-                                    <p class="card-text m-0">4 nội dung</p>
-                                    <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                    <p class="card-text">10/01/2024</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let slideIndex = 0;
-            let slidesWrapper = document.querySelector(".slides-wrapper");
-            let dots = document.getElementsByClassName("dot");
-            let intervalId; // Lưu ID của interval
-
-            function showSlides(n) {
-                slideIndex = (n + 3) % 3;
-                slidesWrapper.style.transform = `translateX(-${slideIndex * 100 / 3}%)`;
-
-                // Cập nhật chấm tròn (nếu có)
-                for (let i = 0; i < dots.length; i++) {
-                    dots[i].classList.remove("active");
-                }
-                dots[slideIndex]?.classList.add("active");
-            }
-
-            window.plusSlides = function(n) {
-                showSlides(slideIndex + n);
-            };
-
-            window.currentSlide = function(n) {
-                showSlides(n);
-            };
-
-            function autoplay() {
-                intervalId = setInterval(() => {
-                    showSlides(slideIndex + 1);
-                }, 3000); // Giữ ảnh trong 4 giây trước khi chuyển
-            }
-
-            function stopAutoplay() {
-                clearInterval(intervalId);
-            }
-
-            slidesWrapper.addEventListener("mouseenter", stopAutoplay);
-            slidesWrapper.addEventListener("mouseleave", autoplay);
-
-            showSlides(slideIndex);
-            autoplay();
-        });
-    </script>
-@endsection
