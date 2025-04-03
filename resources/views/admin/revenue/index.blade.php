@@ -6,7 +6,23 @@
     <div class="container-fluid">
         <h2 class="mt-4 mb-3">Thống kê doanh thu</h2>
 
-        
+        {{-- Form chọn khoảng thời gian --}}
+        <form method="GET" action="{{ route('admin.revenue.index') }}" class="mb-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="start_date">Từ ngày:</label>
+                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="end_date">Đến ngày:</label>
+                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
+                </div>
+                <div class="col-md-3 align-self-end">
+                    <button type="submit" class="btn btn-primary">Lọc</button>
+                    <a href="{{ route('admin.revenue.index') }}" class="btn btn-secondary">Xóa bộ lọc</a>
+                </div>
+            </div>
+        </form>
 
         {{-- Hiển thị khoảng thời gian được chọn (tùy chọn) --}}
         @if(request('start_date') && request('end_date'))
@@ -39,23 +55,6 @@
 
         {{-- Bảng doanh thu theo ngày --}}
         <h3 class="mt-4 mb-3">Doanh thu theo ngày</h3>
-        {{-- Form chọn khoảng thời gian --}}
-        <form method="GET" action="{{ route('admin.revenue.index') }}" class="mb-4">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="start_date">Từ ngày:</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
-                </div>
-                <div class="col-md-3">
-                    <label for="end_date">Đến ngày:</label>
-                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
-                </div>
-                <div class="col-md-3 align-self-end">
-                    <button type="submit" class="btn btn-primary">Lọc</button>
-                    <a href="{{ route('admin.revenue.index') }}" class="btn btn-secondary">Xóa bộ lọc</a>
-                </div>
-            </div>
-        </form>
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
