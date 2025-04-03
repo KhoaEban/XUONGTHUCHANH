@@ -71,7 +71,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
 
     // Quản lý danh mục
-    Route::prefix('admin/category')->group(function () {
+        Route::prefix('admin/category')->group(function () {
         Route::get('/', [CategoryControllerAdmin::class, 'index'])->name('admin.category.index');
         Route::get('/create', [CategoryControllerAdmin::class, 'create'])->name('admin.category.create');
         Route::post('/store', [CategoryControllerAdmin::class, 'store'])->name('admin.category.store');
@@ -87,7 +87,7 @@ Route::middleware(['check.role:admin'])->group(function () {
 
 
     // Quản lý bài tập
-    Route::prefix('admin/quizzes')->group(function () {
+        Route::prefix('admin/quizzes')->group(function () {
         Route::get('/', [QuizControllerAdmin::class, 'index'])->name('admin.quizzes.index');
         Route::get('/create', [QuizControllerAdmin::class, 'create'])->name('admin.quizzes.create');
         Route::post('/store', [QuizControllerAdmin::class, 'store'])->name('admin.quizzes.store');
