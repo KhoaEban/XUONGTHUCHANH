@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\QuizControllerAdmin;
 use App\Http\Controllers\Admin\QuestionControllerAdmin;
 use App\Http\Controllers\Admin\QuizResultControllerAdmin;
 use App\Http\Controllers\Admin\AnswerControllerAdmin;
-use App\Http\Controllers\Admin\AdminCommentController;
+use App\Http\Controllers\Admin\AdminCommentsController;
 // User
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\CategoryController;
@@ -71,10 +71,10 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
     // Quản lý bình luận
     Route::prefix('admin/comments')->group(function ()  {
-        Route::get('/', [AdminCommentController::class, 'index'])->name('admin.comments.index');
-        Route::post('/admin/comments/hide/{id}', [AdminCommentController::class, 'hide'])->name('admin.comments.hide');
-        Route::post('/admin/comments/show/{id}', [AdminCommentController::class, 'show'])->name('admin.comments.show');
-        Route::delete('/admin/comments/{id}', [AdminCommentController::class, 'destroy'])->name('admin.comments.destroy');
+        Route::get('/', [AdminCommentsController::class, 'index'])->name('admin.comments.index');
+        Route::post('/admin/comments/hide/{id}', [AdminCommentsController::class, 'hide'])->name('admin.comments.hide');
+        Route::post('/admin/comments/show/{id}', [AdminCommentsController::class, 'show'])->name('admin.comments.show');
+        Route::delete('/admin/comments/{id}', [AdminCommentsController::class, 'destroy'])->name('admin.comments.destroy');
     });
     // Quản lý danh mục
     Route::prefix('admin/category')->group(function () {
