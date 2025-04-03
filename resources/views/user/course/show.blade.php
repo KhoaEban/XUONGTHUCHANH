@@ -182,7 +182,7 @@
 
                     <ul class="list-group mt-3">
                     <h5 class="mb-3">{{ $course->lessons->first()->comments->count() }} Bình luận</h5>
-                        @foreach ($course->lessons->first()->comments as $comment)
+                    @foreach ($course->lessons->first()->comments->where('parent_id', null)->sortByDesc('created_at') as $comment)
                             <li class="list-group-item @if($comment->user->isTeacher()) comment-teacher @endif">
                                 <div class="card">
                                     <div class="card-body">
@@ -370,12 +370,20 @@
         }
     }
     function showReplyForm(commentId) {
-        var replyForm = document.getElementById('reply-form-' + commentId);
-        if (replyForm.style.display === "none") {
-            replyForm.style.display = "block";
-        } else {
-            replyForm.style.display = "none";
-        }
+    var replyForm = document.getElementById('reply-form-' + commentId);
+    var currentDisplay = replyForm.style.display;
+    // Kiểm tra nếu bình luận đang ẩn, mới cho phép hiển thị
+    if (currentDisplay === "none" || currentDisplay === "") {
+        // Ẩn tất cả các form trả lời khác
+        document.querySelectorAll('.reply-form').forEach(function (form) {
+            form.style.display = "none";
+        });
+        // Hiển thị form trả lời cho bình luận hiện tại
+        replyForm.style.display = "block";
+    } else {
+        // Ẩn form trả lời khi nó đang hiển thị
+        replyForm.style.display = "none";
+    }
     }
 
     function openTab(evt, tabName) {

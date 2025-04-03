@@ -82,11 +82,12 @@ class CommentController extends Controller
         $course = Course::findOrFail($id);
         $lesson = $course->lessons->first();
 
-        // Lấy bình luận mới nhất trước
-        $comments = $lesson->comments()->orderBy('created_at', 'desc')->get();
+        // Lấy bình luận mới nhất trước, với phân trang nếu cần
+        $comments = $lesson->comments()->orderBy('created_at', 'desc')->paginate(10);  // 10 bình luận mỗi trang
 
         return view('courses.show', compact('course', 'comments'));
     }
+
 
 
     // Xóa bình luận
