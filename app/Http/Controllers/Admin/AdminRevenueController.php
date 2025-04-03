@@ -6,7 +6,6 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use App\Models\Courses;
 class AdminRevenueController extends Controller
 {
     // Trang tổng quan doanh thu

@@ -3,44 +3,8 @@
 @section('title', 'Thống kê doanh thu')
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <h2 class="mt-4 mb-3">Thống kê doanh thu</h2>
-
-        {{-- Form lọc doanh thu --}}
-        <form method="GET" action="{{ route('admin.revenue.index') }}">
-            <div class="row">
-                <!-- Lọc theo ngày -->
-                <div class="col-md-3">
-                    <label for="start_date">Từ ngày</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request()->start_date }}">
-                </div>
-                <div class="col-md-3">
-                    <label for="end_date">Đến ngày</label>
-                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request()->end_date }}">
-                </div>
-                
-                <!-- Lọc theo khóa học (sản phẩm) -->
-                <div class="col-md-3">
-                    <label for="course_id">Khóa học</label>
-                    <select name="course_id" id="course_id" class="form-control">
-                        <option value="">Chọn khóa học</option>
-                        @foreach($courses as $course)
-                            <option value="{{ $course->id }}" {{ request()->course_id == $course->id ? 'selected' : '' }}>
-                                {{ $course->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Nút tìm kiếm -->
-                <div class="col-md-3">
-                    <label>&nbsp;</label>
-                    <button type="submit" class="btn btn-primary form-control">Lọc</button>
-                </div>
-            </div>
-        </form>
-
-        <hr>
 
         {{-- Bảng tổng hợp doanh thu --}}
         <table class="table table-bordered table-striped">
@@ -61,6 +25,7 @@
                 </tr>
             </tbody>
         </table>
+
 
         {{-- Bảng chi tiết giao dịch --}}
         <table class="table table-bordered">
