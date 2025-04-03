@@ -119,7 +119,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
     
     // Quản lý câu trả lời
-    Route::prefix('admin/answers')->group(function () {
+        Route::prefix('admin/answers')->group(function () {
         Route::get('/', [AnswerControllerAdmin::class, 'index'])->name('admin.answers.index');
         Route::get('/create', [AnswerControllerAdmin::class, 'create'])->name('admin.answers.create');
         Route::post('/store', [AnswerControllerAdmin::class, 'store'])->name('admin.answers.store');
