@@ -19,6 +19,7 @@ class LessonController extends Controller
 
     public function show($id)
     {
+        $lesson = Lesson::with('comments.user')->findOrFail($id);
         $lesson = Lesson::with('course.instructor')->findOrFail($id);
         $course = $lesson->course;
 

@@ -164,8 +164,52 @@
                     <p>Giảng viên: {{ $course->instructor->name ?? 'Đang cập nhật' }}</p>
                 </div>
                 <div id="danhgia" class="tab-content">
-                    <p>Đánh giá khóa học sẽ cập nhật sau.</p>
-                </div>
+    <h4>Đánh giá khóa học</h4>
+
+    @auth
+    <form action="{{ route('comments.store') }}" method="POST">
+        @csrf
+        <input type="hidden" name="lesson_id" value="{{ $course->lessons->first()->id }}">
+        <div class="mb-3">
+            <textarea name="content" class="form-control" rows="3" placeholder="Viết đánh giá..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+    </form>
+    @else
+    <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để gửi đánh giá.</p>
+    @endauth
+
+    <ul class="list-group mt-3">
+    @foreach ($course->lessons->first()->comments as $comment)
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div>
+            <strong>{{ $comment->user->name }}</strong>
+            <span class="text-muted">{{ $comment->created_at->diffForHumans() }}</span>
+            <p id="comment-content-{{ $comment->id }}">{{ $comment->content }}</p>
+        </div>
+
+        @auth
+        @if (auth()->id() == $comment->user_id)
+        <div class="d-flex">
+            <!-- Nút sửa -->
+            <button class="btn btn-sm btn-warning me-2" onclick="editComment({{ $comment->id }})">Sửa</button>
+
+            <!-- Nút xóa -->
+            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bình luận này?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+            </form>
+        </div>
+        @endif
+        @endauth
+    </li>
+    @endforeach
+</ul>
+
+</div>
+
+
             </div>
         </div>
 
@@ -207,6 +251,32 @@
 @endsection
 
 <script>
+      function editComment(commentId) {
+        let contentElement = document.getElementById(`comment-content-${commentId}`);
+        let oldContent = contentElement.innerText;
+        let newContent = prompt("Chỉnh sửa bình luận:", oldContent);
+
+        if (newContent !== null && newContent.trim() !== "") {
+            fetch(`/comments/${commentId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ content: newContent })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    contentElement.innerText = data.content;
+                    alert("Cập nhật bình luận thành công!");
+                } else {
+                    alert("Có lỗi xảy ra, vui lòng thử lại.");
+                }
+            })
+            .catch(error => console.error("Lỗi:", error));
+        }
+    }
     function openTab(evt, tabName) {
         var i, tabContent, tabButtons;
 

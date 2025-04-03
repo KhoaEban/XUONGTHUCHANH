@@ -22,6 +22,7 @@ use App\Http\Controllers\User\SimulationController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\CommentController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
@@ -187,12 +188,12 @@ Route::prefix('user')->group(function () {
     Route::post('/support', [SupportController::class, 'submit'])->name('support');
 
     Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
-    
+
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
-    
+
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
-    
+
 });
 
 
@@ -209,6 +210,12 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::post('/user/payment/{slug}', [PaymentController::class, 'processPayment'])->name('course.payment.process');
 });
 
+Route::prefix('user')->middleware('auth')->group(function () {
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::get('/comments/{id}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::post('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+});
 // VNPay callback
 Route::get('/vnpay/callback', [PaymentController::class, 'vnpayCallback'])->name('vnpay.callback');
 
