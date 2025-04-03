@@ -5,8 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\User;
 use App\Models\Course;
@@ -40,7 +40,6 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        // Validate input data
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
@@ -48,25 +47,21 @@ class ProfileController extends Controller
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Update user information
         $user->name = $request->name;
         $user->email = $request->email;
 
-        // Update password if provided
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
 
-        // Handle avatar upload
         if ($request->hasFile('avatar')) {
             $image = $request->file('avatar');
             $imageName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/avatars'), $imageName); // Updated upload path
-            $avatarPath = 'uploads/avatars/' . $imageName; // Updated path for saving
-            $user->avatar = $avatarPath; // Store the avatar in the user's profile
+            $image->move(public_path('uploads/avatars'), $imageName);
+            $avatarPath = 'uploads/avatars/' . $imageName;
+            $user->avatar = $avatarPath;
         }
 
-        // Save user information to the database
         $user->save();
 
         return redirect()->route('user.profile.edit')->with('success', 'Cập nhật thông tin thành công');
