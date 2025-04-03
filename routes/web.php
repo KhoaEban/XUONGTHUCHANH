@@ -60,7 +60,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 
     // Quản lý bài học
-    Route::prefix('admin/lessons')->group(function () {
+        Route::prefix('admin/lessons')->group(function () {
         Route::get('/', [LessonControllerAdmin::class, 'index'])->name('admin.lessons.index');
         Route::get('/show/{lesson}', [LessonControllerAdmin::class, 'show'])->name('admin.lessons.show');
         Route::get('/create', [LessonControllerAdmin::class, 'create'])->name('admin.lessons.create');
@@ -134,14 +134,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/enrollments/{enrollment}/update-status', [PaymentController::class, 'updateEnrollmentStatus'])->name('admin.enrollment.update_status');
 
     // thống kê doanh thu
-// Routes for Revenue management (Admin)
-    Route::get('/admin/revenue', [RevenueController::class, 'index'])->name('admin.revenue.index');
-    Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
-    Route::get('revenue', [AdminRevenueController::class, 'index'])->name('revenue.index'); // Trang tổng quan doanh thu
-    Route::get('revenue/report', [AdminRevenueController::class, 'report'])->name('revenue.report'); // Báo cáo doanh thu
-    Route::get('revenue/user/{userId}', [AdminRevenueController::class, 'userRevenue'])->name('revenue.user'); // Doanh thu theo người dùng
-    Route::get('revenue/course/{courseId}', [AdminRevenueController::class, 'courseRevenue'])->name('revenue.course'); // Doanh thu theo khóa học
-});
+    // Routes for Revenue management (Admin)
+        Route::get('/admin/revenue', [RevenueController::class, 'index'])->name('admin.revenue.index');
+        Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
+        Route::get('revenue', [AdminRevenueController::class, 'index'])->name('revenue.index'); // Trang tổng quan doanh thu
+        Route::get('revenue/report', [AdminRevenueController::class, 'report'])->name('revenue.report'); // Báo cáo doanh thu
+        Route::get('revenue/user/{userId}', [AdminRevenueController::class, 'userRevenue'])->name('revenue.user'); // Doanh thu theo người dùng
+        Route::get('revenue/course/{courseId}', [AdminRevenueController::class, 'courseRevenue'])->name('revenue.course'); // Doanh thu theo khóa học
+    });
 
 
 });
