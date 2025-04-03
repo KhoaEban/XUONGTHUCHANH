@@ -91,11 +91,16 @@
                         <td>{{ number_format($payment->amount, 0, ',', '.') }} VNĐ</td>
                         <td>{{ $payment->payment_method }}</td>
                         <td>
-                            @if ($payment->status == 'success')
-                                <span class="badge bg-success">Thành công</span>
-                            @else
-                                <span class="badge bg-danger">Thất bại</span>
-                            @endif
+                            @php
+                                $statusLabels = [
+                                    'completed' => ['label' => 'Thành công', 'class' => 'bg-success'],
+                                    'pending' => ['label' => 'Đang chờ', 'class' => 'bg-warning'],
+                                    'failed' => ['label' => 'Thất bại', 'class' => 'bg-danger'],
+                                ];
+                                $status = $statusLabels[$payment->status] ?? ['label' => 'Không xác định', 'class' => 'bg-secondary'];
+                            @endphp
+                            <span class="badge {{ $status['class'] }}">{{ $status['label'] }}</span>
+                        </td>
                         </td>
                         <td>{{ $payment->created_at->format('d/m/Y H:i') }}</td>
                     </tr>

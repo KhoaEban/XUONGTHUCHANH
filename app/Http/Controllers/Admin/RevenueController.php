@@ -38,16 +38,20 @@ class RevenueController extends Controller
         // Tính toán tổng hợp dữ liệu
         $totalPayments = Payment::whereBetween('created_at', [$startDate, $endDate])->count();
         $successfulPayments = Payment::where('status', 'completed')
-            ->whereBetween('created_at', [$startDate, $endDate])->count();
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+        $pendingPayments = Payment::where('status', 'pending') // Thêm đếm giao dịch pending
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
         $failedPayments = Payment::where('status', 'failed')
-            ->whereBetween('created_at', [$startDate, $endDate])->count();
-        $totalRevenue = Payment::where('status', 'completed')
-            ->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
+        $totalRevenue = Payment::whereBetween('created_at', [$startDate, $endDate]) // Tính doanh thu cho tất cả giao dịch
+            ->sum('amount');
 
         // Lấy doanh thu theo ngày
         $revenueByDay = Payment::selectRaw('DATE(created_at) as transaction_date, SUM(amount) as daily_revenue')
-            ->where('status', 'completed')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('created_at', [$startDate, $endDate]) // Tính doanh thu cho tất cả giao dịch
             ->groupBy('transaction_date')
             ->orderBy('transaction_date', 'asc')
             ->get();
@@ -61,6 +65,7 @@ class RevenueController extends Controller
             'payments',
             'totalPayments',
             'successfulPayments',
+            'pendingPayments', // Thêm biến pendingPayments
             'failedPayments',
             'totalRevenue',
             'revenueByDay'
