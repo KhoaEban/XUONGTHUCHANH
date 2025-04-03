@@ -27,6 +27,7 @@ class AdminCommentsController extends Controller
         return back()->with('success', 'Bình luận đã hiển thị lại.');
     }
 
+
     public function destroy($id)
     {
         Comment::findOrFail($id)->delete();

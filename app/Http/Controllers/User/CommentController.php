@@ -12,17 +12,19 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'content' => 'required|string|max:500',
             'lesson_id' => 'required|exists:lessons,id',
-            'content' => 'required|string|max:1000',
+            'parent_id' => 'nullable|exists:comments,id', // cho phép bình luận trả lời
         ]);
 
-        Comment::create([
-            'user_id' => Auth::id(),
-            'lesson_id' => $request->lesson_id,
-            'content' => $request->content,
-        ]);
+        $comment = new Comment();
+        $comment->content = $request->content;
+        $comment->user_id = Auth::id();
+        $comment->lesson_id = $request->lesson_id;
+        $comment->parent_id = $request->parent_id;
+        $comment->save();
 
-        return back()->with('success', 'Bình luận đã được thêm.');
+        return redirect()->back()->with('success', 'Bình luận đã được đăng!');
     }
 
     // Hiển thị form sửa bình luận
@@ -33,23 +35,30 @@ class CommentController extends Controller
     }
 
     // Cập nhật bình luận
-    public function update(Request $request, Comment $comment)
-{
-    // Kiểm tra quyền sở hữu bình luận
-    if ($comment->user_id !== Auth::id())        {
-        return response()->json(['message' => 'Bạn không có quyền sửa bình luận này.'], 403);
+    // Cập nhật bình luận
+    public function update(Request $request, $id)
+    {
+        // Lấy bình luận theo id và kiểm tra quyền của người dùng
+        $comment = Comment::where('id', $id)->where('user_id', Auth::id())->first();
+
+        if (!$comment) {
+            return redirect()->back()->with('error', 'Không tìm thấy bình luận hoặc bạn không có quyền sửa.');
+        }
+
+        // Validate nội dung bình luận
+        $request->validate([
+            'content' => 'required|string|max:500',
+        ]);
+
+        // Cập nhật bình luận
+        $comment->content = $request->content;
+        $comment->save();
+
+        // Quay lại trang và thông báo thành công
+        return redirect()->back()->with('success', 'Bình luận đã được cập nhật.');
     }
 
-    $request->validate([
-        'content' => 'required|string|max:500',
-    ]);
 
-    $comment->update([
-        'content' => $request->content,
-    ]);
-
-    return response()->json(['message' => 'Cập nhật bình luận thành công!', 'content' => $comment->content]);
-}
 
 
     // Xóa bình luận

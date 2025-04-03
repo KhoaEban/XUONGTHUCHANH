@@ -214,6 +214,7 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::get('/comments/{id}/edit', [CommentController::class, 'edit'])->name('comments.edit');
     Route::post('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+    Route::patch('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 // VNPay callback

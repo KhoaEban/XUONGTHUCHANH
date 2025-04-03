@@ -181,31 +181,75 @@
 
     <ul class="list-group mt-3">
     @foreach ($course->lessons->first()->comments as $comment)
-    <li class="list-group-item d-flex justify-content-between align-items-start">
-        <div>
-            <strong>{{ $comment->user->name }}</strong>
-            <span class="text-muted">{{ $comment->created_at->diffForHumans() }}</span>
-            <p id="comment-content-{{ $comment->id }}">{{ $comment->content }}</p>
-        </div>
+    <li class="list-group-item">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <strong>{{ $comment->user->name }}</strong>
+                        <span class="text-muted ms-2">{{ $comment->created_at->diffForHumans() }}</span>
+                    </div>
+                    @auth
+                    @if (auth()->id() == $comment->user_id)
+                    <div>
+                        <button class="btn btn-sm btn-outline-warning me-2" onclick="openEditForm({{ $comment->id }})">✏️ Sửa</button>
+                        <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bình luận này?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-outline-danger">🗑️ Xóa</button>
+                        </form>
+                    </div>
+                    @endif
+                    @endauth
+                </div>
 
-        @auth
-        @if (auth()->id() == $comment->user_id)
-        <div class="d-flex">
-            <!-- Nút sửa -->
-            <button class="btn btn-sm btn-warning me-2" onclick="editComment({{ $comment->id }})">Sửa</button>
+                <p id="comment-content-{{ $comment->id }}" class="mt-2">{{ $comment->content }}</p>
 
-            <!-- Nút xóa -->
-            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bình luận này?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-            </form>
+                <!-- Form sửa bình luận (ẩn khi không sửa) -->
+                @auth
+                @if (auth()->id() == $comment->user_id)
+                <div id="edit-form-{{ $comment->id }}" class="mt-2" style="display: none;">
+                    <form action="{{ route('comments.update', $comment->id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <textarea name="content" class="form-control" rows="3">{{ $comment->content }}</textarea>
+                        <button type="submit" class="btn btn-primary mt-2">Cập nhật</button>
+                        <button type="button" class="btn btn-secondary mt-2" onclick="closeEditForm({{ $comment->id }})">Hủy</button>
+                    </form>
+                </div>
+                @endif
+                @endauth
+
+                <!-- Nút trả lời -->
+                @auth
+                <button class="btn btn-sm btn-outline-info mt-2" onclick="showReplyForm({{ $comment->id }})">💬 Trả lời</button>
+
+                <div id="reply-form-{{ $comment->id }}" class="mt-2" style="display:none;">
+                    <form action="{{ route('comments.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="lesson_id" value="{{ $course->lessons->first()->id }}">
+                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                        <textarea name="content" class="form-control" rows="3" placeholder="Nhập câu trả lời của bạn..." required></textarea>
+                        <button type="submit" class="btn btn-success mt-2">Gửi trả lời</button>
+                    </form>
+                </div>
+                @endauth
+
+                <!-- Hiển thị danh sách phản hồi -->
+                @foreach ($comment->replies as $reply)
+                <div class="mt-3 ps-4 border-start border-2">
+                    <strong>{{ $reply->user->name }}</strong>
+                    <span class="text-muted ms-2">{{ $reply->created_at->diffForHumans() }}</span>
+                    <p class="mt-1">{{ $reply->content }}</p>
+                </div>
+                @endforeach
+
+            </div>
         </div>
-        @endif
-        @endauth
     </li>
     @endforeach
 </ul>
+
 
 </div>
 
@@ -251,32 +295,27 @@
 @endsection
 
 <script>
-      function editComment(commentId) {
-        let contentElement = document.getElementById(`comment-content-${commentId}`);
-        let oldContent = contentElement.innerText;
-        let newContent = prompt("Chỉnh sửa bình luận:", oldContent);
+ function openEditForm(commentId) {
+    // Ẩn tất cả form sửa
+    document.querySelectorAll('.edit-form').forEach(function(form) {
+        form.style.display = 'none';
+    });
 
-        if (newContent !== null && newContent.trim() !== "") {
-            fetch(`/comments/${commentId}`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({ content: newContent })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    contentElement.innerText = data.content;
-                    alert("Cập nhật bình luận thành công!");
-                } else {
-                    alert("Có lỗi xảy ra, vui lòng thử lại.");
-                }
-            })
-            .catch(error => console.error("Lỗi:", error));
-        }
+    // Hiển thị form sửa của bình luận đã chọn
+    let form = document.getElementById(`edit-form-${commentId}`);
+    if (form) {
+        form.style.display = 'block';
     }
+}
+function showReplyForm(commentId) {
+    var replyForm = document.getElementById('reply-form-' + commentId);
+    if (replyForm.style.display === "none") {
+        replyForm.style.display = "block";
+    } else {
+        replyForm.style.display = "none";
+    }
+}
+
     function openTab(evt, tabName) {
         var i, tabContent, tabButtons;
 
