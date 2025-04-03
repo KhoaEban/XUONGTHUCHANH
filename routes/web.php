@@ -182,8 +182,10 @@ Route::prefix('user')->group(function () {
     // Khóa học
     Route::get('/course', [CourseController::class, 'index'])->name('course');
     Route::get('/course/{slug}', [CourseController::class, 'show'])->name('course.show');
+    Route::get('/courses/{slug}/lessons', [LessonController::class, 'getLessons'])->name('courses.lessons');
     Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
-    Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lessons.show');
+    Route::get('/lesson/{id}', [LessonController::class, 'getLesson'])->name('lessons.show');
+    
     Route::get('/support', [SupportController::class, 'index'])->name('support');
     Route::post('/support', [SupportController::class, 'submit'])->name('support');
 
@@ -194,11 +196,6 @@ Route::prefix('user')->group(function () {
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
 
-});
-
-
-
-Route::prefix('user')->middleware('auth')->group(function () {
     Route::get('/course/{slug}/payment', [PaymentController::class, 'showPaymentForm'])->name('course.payment');
     Route::post('/course/{slug}/payment', [PaymentController::class, 'processPayment'])->name('course.payment.process');
     Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
@@ -208,9 +205,8 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::post('/payment-history/{course}/buy-again', [PaymentController::class, 'buyAgain'])->name('user.payment.buy_again');
     Route::get('/payment/{slug}', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
     Route::post('/user/payment/{slug}', [PaymentController::class, 'processPayment'])->name('course.payment.process');
-});
-
-Route::prefix('user')->middleware('auth')->group(function () {
+    
+    
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     //like
     Route::post('/comments/{id}/like', [CommentController::class, 'like'])->name('comments.like');
@@ -218,7 +214,10 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::post('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
     Route::patch('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    
+    Route::get('/comments/{lesson_id}', [CommentController::class, 'getComments'])->name('comments.get');
 });
+
 // VNPay callback
 Route::get('/vnpay/callback', [PaymentController::class, 'vnpayCallback'])->name('vnpay.callback');
 
