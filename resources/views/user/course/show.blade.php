@@ -212,7 +212,7 @@
                                                                 <li>
                                                                     <button class="dropdown-item"
                                                                         onclick="openEditForm({{ $comment->id }})">
-                                                                        ✏️ Sửa
+                                                                       <i class="fas fa-edit"></i> Sửa
                                                                     </button>
                                                                 </li>
                                                                 <!-- Nút xóa -->
@@ -223,8 +223,8 @@
                                                                         onsubmit="return confirm('Bạn có chắc chắn muốn xóa bình luận này?');">
                                                                         @csrf
                                                                         @method('DELETE')
-                                                                        <button type="submit" class="dropdown-item">🗑️
-                                                                            Xóa</button>
+                                                                        <button type="submit" class="dropdown-item">
+                                                                           <i class="fas fa-trash"></i> Xóa</button>
                                                                     </form>
                                                                 </li>
                                                             </ul>

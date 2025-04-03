@@ -39,8 +39,6 @@ class CommentController extends Controller
     {
         $comment = Comment::findOrFail($id);
 
-        // Kiểm tra nếu người dùng chưa thích bình luận này (thêm logic lưu người dùng thích nếu cần)
-
         $comment->like();
 
         return back()->with('success', 'Đã thích bình luận!');
