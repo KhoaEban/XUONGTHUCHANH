@@ -11,11 +11,13 @@
             <div class="row">
                 <div class="col-md-3">
                     <label for="start_date">Từ ngày:</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
+                    <input type="date" name="start_date" id="start_date" class="form-control"
+                        value="{{ request('start_date') }}">
                 </div>
                 <div class="col-md-3">
                     <label for="end_date">Đến ngày:</label>
-                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
+                    <input type="date" name="end_date" id="end_date" class="form-control"
+                        value="{{ request('end_date') }}">
                 </div>
                 <div class="col-md-3 align-self-end">
                     <button type="submit" class="btn btn-primary">Lọc</button>
@@ -25,10 +27,14 @@
         </form>
 
         {{-- Hiển thị khoảng thời gian được chọn (tùy chọn) --}}
-        @if(request('start_date') && request('end_date'))
-            <p class="mb-3">Hiển thị dữ liệu từ <strong>{{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }}</strong> đến <strong>{{ \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') }}</strong></p>
+        @if (request('start_date') && request('end_date'))
+            <p class="mb-3">Hiển thị dữ liệu từ
+                <strong>{{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }}</strong> đến
+                <strong>{{ \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') }}</strong></p>
         @else
-            <p class="mb-3">Hiển thị dữ liệu từ <strong>{{ \Carbon\Carbon::now()->startOfMonth()->format('d/m/Y') }}</strong> đến <strong>{{ \Carbon\Carbon::now()->endOfMonth()->format('d/m/Y') }}</strong></p>
+            <p class="mb-3">Hiển thị dữ liệu từ
+                <strong>{{ \Carbon\Carbon::now()->startOfMonth()->format('d/m/Y') }}</strong> đến
+                <strong>{{ \Carbon\Carbon::now()->endOfMonth()->format('d/m/Y') }}</strong></p>
         @endif
 
         {{-- Bảng tổng hợp doanh thu --}}
@@ -63,8 +69,8 @@
                 </tr>
             </thead>
             <tbody>
-                @if(isset($revenueByDay) && !$revenueByDay->isEmpty())
-                    @foreach($revenueByDay as $revenue)
+                @if (isset($revenueByDay) && !$revenueByDay->isEmpty())
+                    @foreach ($revenueByDay as $revenue)
                         <tr>
                             <td>{{ \Carbon\Carbon::parse($revenue->transaction_date)->format('d/m/Y') }}</td>
                             <td>{{ number_format($revenue->daily_revenue, 0, ',', '.') }} VNĐ</td>
@@ -107,7 +113,10 @@
                                     'pending' => ['label' => 'Đang chờ', 'class' => 'bg-warning'],
                                     'failed' => ['label' => 'Thất bại', 'class' => 'bg-danger'],
                                 ];
-                                $status = $statusLabels[$payment->status] ?? ['label' => 'Không xác định', 'class' => 'bg-secondary'];
+                                $status = $statusLabels[$payment->status] ?? [
+                                    'label' => 'Không xác định',
+                                    'class' => 'bg-secondary',
+                                ];
                             @endphp
                             <span class="badge {{ $status['class'] }}">{{ $status['label'] }}</span>
                         </td>
