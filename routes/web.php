@@ -41,8 +41,8 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Admin
-Route::middleware(['check.role:admin'])->group(function () {
+    // Admin
+    Route::middleware(['check.role:admin'])->group(function () {
     // Trang chủ Admin
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
     // Quản lý người dùng
