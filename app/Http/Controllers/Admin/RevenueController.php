@@ -6,24 +6,25 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-
+use App\Models\Courses;
 class RevenueController extends Controller // <--- Bổ sung class
 {
     public function index(Request $request)
     {
         $query = Payment::query();
+        
+        // Lấy danh sách tất cả khóa học
+        $courses = Course::all();  // Lấy tất cả khóa học
     
-        // Tìm kiếm theo người dùng
+        // Lọc theo người dùng, khóa học, và ngày
         if ($request->has('user_id') && $request->user_id != '') {
             $query->where('user_id', $request->user_id);
         }
     
-        // Tìm kiếm theo khóa học
         if ($request->has('course_id') && $request->course_id != '') {
             $query->where('course_id', $request->course_id);
         }
     
-        // Tìm kiếm theo ngày (từ ngày đến ngày)
         if ($request->has('start_date') && $request->has('end_date')) {
             $startDate = Carbon::parse($request->start_date)->startOfDay();
             $endDate = Carbon::parse($request->end_date)->endOfDay();
@@ -44,12 +45,15 @@ class RevenueController extends Controller // <--- Bổ sung class
         $totalRevenue = Payment::where('status', 'success')
             ->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
     
+        // Truyền dữ liệu vào view
         return view('admin.revenue.index', compact(
             'payments',
             'totalPayments',
             'successfulPayments',
             'failedPayments',
-            'totalRevenue'
+            'totalRevenue',
+            'courses'  // Truyền danh sách khóa học vào view
         ));
     }
-}    
+    
+}
