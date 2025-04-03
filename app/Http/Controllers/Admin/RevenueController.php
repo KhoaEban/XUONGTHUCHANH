@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 
-class RevenueController extends Controller // <--- Bổ sung class
+class RevenueController extends Controller
 {
     public function index(Request $request)
     {
@@ -37,19 +37,33 @@ class RevenueController extends Controller // <--- Bổ sung class
     
         // Tính toán tổng hợp dữ liệu
         $totalPayments = Payment::whereBetween('created_at', [$startDate, $endDate])->count();
-        $successfulPayments = Payment::where('status', 'success')
+        $successfulPayments = Payment::where('status', 'completed')
             ->whereBetween('created_at', [$startDate, $endDate])->count();
         $failedPayments = Payment::where('status', 'failed')
             ->whereBetween('created_at', [$startDate, $endDate])->count();
-        $totalRevenue = Payment::where('status', 'success')
+        $totalRevenue = Payment::where('status', 'completed')
             ->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
+
+        // Lấy doanh thu theo ngày
+        $revenueByDay = Payment::selectRaw('DATE(created_at) as transaction_date, SUM(amount) as daily_revenue')
+            ->where('status', 'completed')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('transaction_date')
+            ->orderBy('transaction_date', 'asc')
+            ->get();
+
+        // Kiểm tra nếu $revenueByDay không tồn tại
+        if (!isset($revenueByDay)) {
+            $revenueByDay = collect([]); // Gán một collection rỗng để tránh lỗi
+        }
     
         return view('admin.revenue.index', compact(
             'payments',
             'totalPayments',
             'successfulPayments',
             'failedPayments',
-            'totalRevenue'
+            'totalRevenue',
+            'revenueByDay'
         ));
     }
-}    
+}

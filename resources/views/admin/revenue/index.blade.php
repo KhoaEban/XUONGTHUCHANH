@@ -26,8 +26,50 @@
             </tbody>
         </table>
 
+        {{-- Bảng doanh thu theo ngày --}}
+        <h3 class="mt-4 mb-3">Doanh thu theo ngày</h3>
+        {{-- Form chọn khoảng thời gian --}}
+        <form method="GET" action="{{ route('admin.revenue.index') }}" class="mb-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="start_date">Từ ngày:</label>
+                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="end_date">Đến ngày:</label>
+                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
+                </div>
+                <div class="col-md-3 align-self-end">
+                    <button type="submit" class="btn btn-primary">Lọc</button>
+                    <a href="{{ route('admin.revenue.index') }}" class="btn btn-secondary">Xóa bộ lọc</a>
+                </div>
+            </div>
+        </form>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Ngày</th>
+                    <th>Doanh thu</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(isset($revenueByDay) && !$revenueByDay->isEmpty())
+                    @foreach($revenueByDay as $revenue)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($revenue->transaction_date)->format('d/m/Y') }}</td>
+                            <td>{{ number_format($revenue->daily_revenue, 0, ',', '.') }} VNĐ</td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="2" class="text-center">Không có dữ liệu doanh thu trong khoảng thời gian này.</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
 
         {{-- Bảng chi tiết giao dịch --}}
+        <h3 class="mt-4 mb-3">Chi tiết giao dịch</h3>
         <table class="table table-bordered">
             <thead>
                 <tr>
