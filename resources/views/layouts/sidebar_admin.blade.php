@@ -14,6 +14,14 @@
                             <i class="fas fa-home"></i> Dashboard
                         </a>
                     </li>
+<<<<<<< Updated upstream
+=======
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('admin.orders.index') }}">
+                            <i class="fas fa-home"></i> lịch sử
+                        </a>
+                    </li>
+>>>>>>> Stashed changes
 
                     <li class="nav-item">
                         <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu">

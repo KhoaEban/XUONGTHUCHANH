@@ -6,6 +6,18 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\Dashboard;
 use App\Http\Controllers\Admin\CourseControllerAdmin;
 use App\Http\Controllers\Admin\CategoryControllerAdmin;
+<<<<<<< Updated upstream
+=======
+use App\Http\Controllers\Admin\LessonControllerAdmin;
+use App\Http\Controllers\Admin\QuizControllerAdmin;
+use App\Http\Controllers\Admin\QuestionControllerAdmin;
+use App\Http\Controllers\Admin\QuizResultControllerAdmin;
+use App\Http\Controllers\Admin\AnswerControllerAdmin;
+use App\Http\Controllers\Admin\AdminRevenueController;
+use App\Http\Controllers\Admin\RevenueController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\EnrollmentController;
+>>>>>>> Stashed changes
 
 // User
 use App\Http\Controllers\User\HomeController;
@@ -77,7 +89,9 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::delete('/unlink/{id}', [CategoryControllerAdmin::class, 'unlinkCategory'])->name('admin.category.unlink');
     });
 });
-
+Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+Route::put('/admin/orders/{payment}/update-status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+Route::put('/admin/enrollments/{payment}/update-status', [EnrollmentController::class, 'updateStatus'])->name('admin.enrollments.updateStatus'); // Thêm route này
 
 
 
