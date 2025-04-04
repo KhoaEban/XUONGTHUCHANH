@@ -25,7 +25,6 @@
                 <div class="menu-item has-submenu">
                     <a href="{{ route('admin.dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
                 </div>
-
                 <div class="menu-item has-submenu">
                     <a href="#courseMenu" class="" data-bs-toggle="collapse" aria-expanded="false">
                         <i class="fas fa-book"></i> Khóa học
@@ -431,3 +430,4 @@
         });
     </script>
 @endif
+

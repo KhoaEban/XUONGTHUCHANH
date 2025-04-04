@@ -52,3 +52,4 @@ class Course extends Model
             ->exists();
     }
 }
+
