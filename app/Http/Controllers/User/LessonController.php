@@ -23,12 +23,17 @@ class LessonController extends Controller
         $lesson = Lesson::with('course.instructor')->findOrFail($id);
         $course = $lesson->course;
 
-        // Lấy các khóa học liên quan trong cùng danh mục nhưng không bao gồm khóa học hiện tại
         $relatedCourses = Course::where('category_id', $course->category_id)
             ->where('id', '!=', $course->id)
             ->take(3)
             ->get();
 
         return view('lesson.show', compact('lesson', 'course', 'relatedCourses'));
+    }
+
+    public function getLessons($slug)
+    {
+        $lessons = Lesson::where('course_id', $slug)->orderBy('order_number')->get();
+        return response()->json($lessons);
     }
 }
