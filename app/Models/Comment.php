@@ -28,17 +28,19 @@ class Comment extends Model
     {
         return $this->belongsTo(Comment::class, 'parent_id');
     }
-    public function like()
-{
-    // Tăng số lượt thích lên 1
-    $this->increment('likes_count');
-}
+    // App\Models\Comment.php
 
-public function unlike()
-{
-    // Giảm số lên thích xuong 1
-    $this->decrement('likes_count');
-}
+    public function likes()
+    {
+        return $this->hasMany(CommentLike::class);
+    }
+
+
+    public function unlike()
+    {
+        // Giảm số lên thích xuong 1
+        $this->decrement('likes_count');
+    }
 
 }
 

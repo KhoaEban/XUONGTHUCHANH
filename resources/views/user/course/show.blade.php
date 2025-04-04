@@ -254,9 +254,15 @@
                                         <form action="{{ route('comments.like', $comment->id) }}" method="POST"
                                             class="d-inline like-form">
                                             @csrf
-                                            <button type="submit" class="btn btn-sm btn-outline-primary like-btn">
-                                                <i class="far fa-thumbs-up"></i> Thích ({{ $comment->likes_count }})
-                                            </button>
+                                            @if ($comment->likes()->where('user_id', auth()->id())->exists())
+                                                <button type="submit" class="btn btn-sm btn-outline-primary like-btn">
+                                                    <i class="fas fa-thumbs-up"></i> Thích ({{ $comment->likes_count }})
+                                                </button>
+                                            @else
+                                                <button type="submit" class="btn btn-sm btn-outline-primary like-btn">
+                                                    <i class="far fa-thumbs-up"></i> Thích ({{ $comment->likes_count }})
+                                                </button>
+                                            @endif
                                         </form>
 
                                         <!-- Nút trả lời -->

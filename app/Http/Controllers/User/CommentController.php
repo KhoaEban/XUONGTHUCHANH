@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comment;
-
+use App\Models\CommentLike;
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,16 +35,32 @@ class CommentController extends Controller
         return redirect()->back()->with('success', 'Bình luận đã được đăng!');
     }
 
+
     public function like($id)
     {
         $comment = Comment::findOrFail($id);
 
-        // Kiểm tra nếu người dùng chưa thích bình luận này (thêm logic lưu người dùng thích nếu cần)
+        // Kiểm tra nếu người dùng đã like bình luận này
+        $like = CommentLike::where('comment_id', $id)
+            ->where('user_id', auth()->id())
+            ->first();
 
-        $comment->like();
-
-        return back()->with('success', 'Đã thích bình luận!');
+        if ($like) {
+            // Nếu đã like, bỏ like
+            $like->delete();
+            $comment->decrement('likes_count');
+            return back()->with('success', 'Bạn đã bỏ like bình luận này.');
+        } else {
+            // Nếu chưa like, thêm like
+            CommentLike::create([
+                'user_id' => auth()->id(),
+                'comment_id' => $id,
+            ]);
+            $comment->increment('likes_count');
+            return back()->with('success', 'Đã thích bình luận!');
+        }
     }
+
 
 
     // Hiển thị form sửa bình luận
