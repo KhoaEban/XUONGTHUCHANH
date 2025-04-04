@@ -17,18 +17,30 @@ class LessonController extends Controller
         return view('user.lesson.index', compact('lesson'));
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $lesson = Lesson::with('comments.user')->findOrFail($id);
-        $lesson = Lesson::with('course.instructor')->findOrFail($id);
-        $course = $lesson->course;
+        $lesson = Lesson::with(['comments.user', 'course.instructor'])->findOrFail($id);
 
-        $relatedCourses = Course::where('category_id', $course->category_id)
-            ->where('id', '!=', $course->id)
-            ->take(3)
-            ->get();
+        if ($request->ajax()) {
+            return response()->json([
+                'title' => $lesson->title,
+                'video_url' => $lesson->video_url,
+                'content' => $lesson->content,
+                'comments' => $lesson->comments->map(function ($comment) {
+                    return [
+                        'id' => $comment->id,
+                        'content' => $comment->content,
+                        'created_at' => $comment->created_at,
+                        'user' => [
+                            'name' => $comment->user->name,
+                            'is_teacher' => $comment->user->isTeacher(),
+                        ],
+                    ];
+                })->toArray(),
+            ]);
+        }
 
-        return view('lesson.show', compact('lesson', 'course', 'relatedCourses'));
+        return view('lesson.show', compact('lesson'));
     }
 
     public function getLessons($slug)
