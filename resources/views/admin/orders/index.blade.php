@@ -47,8 +47,7 @@
                         </td>
                         <td>
                             @if ($payment->enrollment)
-                                <form action="{{ route('admin.enrollments.updateStatus', $payment->enrollment->id) }}"
-                                    method="POST">
+                                <form action="{{ route('admin.enrollments.updateStatus', $payment) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <select name="enrollment_status" class="form-control form-control-sm">
@@ -69,7 +68,6 @@
                                 </form>
                             @else
                                 <form action="{{ route('admin.enrollments.store') }}" method="POST">
-                                    <!-- Sử dụng route để tạo mới -->
                                     @csrf
                                     <select name="enrollment_status" class="form-control form-control-sm">
                                         <option value="active">Đã đăng ký</option>

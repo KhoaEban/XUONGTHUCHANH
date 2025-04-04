@@ -2,7 +2,7 @@
 
 @section('content')
     <h2>Quản lý bình luận</h2>
-    @if(session('success'))
+    @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
@@ -18,30 +18,31 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($comments as $comment)
+                @foreach ($comments as $comment)
                     <tr>
                         <td>{{ $comment->user->name }}</td>
                         <td>{{ $comment->lesson->title }}</td>
                         <td>{{ $comment->content }}</td>
                         <td>
-                            <span class="badge {{ $comment->status == 'visible' ? 'bg-success' : 'bg-warning' }}">
-                                {{ $comment->status == 'visible' ? 'Hiển thị' : 'Ẩn' }}
-                            </span>
+                            <form action="{{ route('admin.comments.updateStatus', $comment->id) }}" method="POST"
+                                class="d-inline">
+                                @csrf
+                                @method('PUT')
+                                <select name="status" class="form-control form-control-sm d-inline-block w-auto"
+                                    onchange="this.form.submit()">
+                                    <option value="active" {{ $comment->status == 'active' ? 'selected' : '' }}> Hiển thị
+                                    </option>
+                                    <option value="pending" {{ $comment->status == 'pending' ? 'selected' : '' }}>Chờ duyệt
+                                    </option>
+                                    <option value="spam" {{ $comment->status == 'spam' ? 'selected' : '' }}>Spam</option>
+                                    <option value="deleted" {{ $comment->status == 'deleted' ? 'selected' : '' }}>Đã xóa
+                                    </option>
+                                </select>
+                            </form>
                         </td>
                         <td>
-                            @if($comment->status == 'visible')
-                                <form action="{{ route('admin.comments.hide', $comment->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="btn btn-warning btn-sm">Ẩn</button>
-                                </form>
-                            @else
-                                <form action="{{ route('admin.comments.show', $comment->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success btn-sm">Hiện</button>
-                                </form>
-                            @endif
-
-                            <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Xóa bình luận này?')">
+                            <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="POST"
+                                class="d-inline" onsubmit="return confirm('Xóa bình luận này?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Xóa</button>

@@ -31,7 +31,7 @@ class Payment extends Model
 
     public function enrollment()
     {
-        return $this->hasOne(Enrollment::class, 'payment_id');
+        return $this->hasOne(Enrollment::class, 'payment_id', 'id');
     }
 
     // Nếu bạn vẫn muốn có danh sách các enrollments liên quan đến user và course
@@ -41,7 +41,8 @@ class Payment extends Model
     }
 
     // Nếu bạn vẫn muốn có latest Enrollment
-    public function latestEnrollment() {
+    public function latestEnrollment()
+    {
         return $this->enrollments()->latest()->first();
     }
 }

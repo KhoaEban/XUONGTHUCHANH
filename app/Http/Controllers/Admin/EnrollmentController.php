@@ -37,20 +37,21 @@ class EnrollmentController extends Controller
             'enrollment_status' => 'required|in:active,pending,cancelled,failed',
         ]);
 
-        // Tìm enrollment dựa trên user_id và course_id
         $enrollment = Enrollment::where('user_id', $payment->user_id)
             ->where('course_id', $payment->course_id)
             ->first();
 
+        if (!$payment->course_id) {
+            return redirect()->back()->with('error', 'Payment không có course_id.');
+        }
+
         if ($enrollment) {
-            // Cập nhật trạng thái nếu enrollment đã tồn tại
             $enrollment->status = $request->enrollment_status;
             $enrollment->enrolled_at = now();
             $enrollment->save();
 
             return redirect()->route('admin.orders.index')->with('success', 'Trạng thái đăng ký bài học đã được cập nhật thành công.');
         } else {
-            // Tạo mới nếu không tồn tại
             Enrollment::create([
                 'user_id' => $payment->user_id,
                 'course_id' => $payment->course_id,

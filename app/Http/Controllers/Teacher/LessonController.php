@@ -61,11 +61,15 @@ class LessonController extends Controller
 
     public function destroy(Lesson $lesson)
     {
+        if (!$lesson) {
+            return redirect()->route('instructor.lesson.index')->with('error', 'Bài học không tồn tại.');
+        }
+
         if (Auth::user()->role !== 'admin' && Auth::user()->id !== $lesson->instructor_id) {
-            return redirect()->route('admin.lessons.index')->with('error', 'Bạn không có quyền xóa bài học này.');
+            return redirect()->route('instructor.lesson.index')->with('error', 'Bạn không có quyền xóa bài học này.');
         }
 
         $lesson->delete();
-        return redirect()->route('admin.lessons.index')->with('success', 'Bài học đã được xóa thành công.');
+        return redirect()->route('instructor.lesson.index')->with('success', 'Bài học đã được xóa thành công.');
     }
 }

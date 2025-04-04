@@ -69,7 +69,7 @@
                                             Xem danh mục con
                                         </button>
                                     @else
-                                        <a class="btn btn-warning btn-sm"
+                                        <a class="t"
                                             href="{{ route('admin.category.create.child', ['parent_id' => $category->id]) }}">
                                             Thêm danh mục con
                                         </a>
