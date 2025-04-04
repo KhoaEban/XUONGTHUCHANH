@@ -83,6 +83,7 @@ class CourseControllerTeacher extends Controller
             'price'       => 'required|numeric',
             'category_id' => 'required|integer|exists:categories,id',
             'thumbnail'   => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048'
+
         ]);
 
         // Tìm khóa học của giảng viên hiện tại
@@ -137,3 +138,4 @@ class CourseControllerTeacher extends Controller
         return view('instructor.courses.show', compact('course'));
     }
 }
+

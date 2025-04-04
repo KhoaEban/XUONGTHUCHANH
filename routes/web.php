@@ -28,6 +28,7 @@ use App\Http\Controllers\Teacher\HomeControllerInstructor;
 use App\Http\Controllers\Teacher\CourseControllerTeacher;
 use App\Http\Controllers\Teacher\LessonController;
 
+
 // Trang chủ
 Route::get('/', [HomeController::class, 'index']);
 
@@ -68,6 +69,9 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::delete('/delete/{lesson}', [LessonControllerAdmin::class, 'destroy'])->name('admin.lessons.destroy');
     });
 
+
+
+
     // Quản lý danh mục
     Route::prefix('admin/category')->group(function () {
         Route::get('/', [CategoryControllerAdmin::class, 'index'])->name('admin.category.index');
@@ -82,7 +86,6 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::post('/assignChild', [CategoryControllerAdmin::class, 'assignChild'])->name('admin.category.assignChild');
         Route::delete('/unlink/{id}', [CategoryControllerAdmin::class, 'unlinkCategory'])->name('admin.category.unlink');
     });
-
 
     // Quản lý bài tập
     Route::prefix('admin/quizzes')->group(function () {
@@ -131,6 +134,9 @@ Route::middleware(['check.role:admin'])->group(function () {
 });
 
 
+
+
+
 // Instructor
 Route::middleware(['check.role:instructor'])->group(function () {
     Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
@@ -166,6 +172,7 @@ Route::prefix('user')->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
     Route::get('/payment-history', [PaymentController::class, 'userPaymentHistory'])->name('user.payment.history');
+
     // Danh mục
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 

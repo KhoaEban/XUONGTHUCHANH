@@ -96,7 +96,6 @@ class CourseControllerAdmin extends Controller
             'price' => 'nullable|numeric|required_if:is_free,0',  // 'price' chỉ bắt buộc khi khóa học có giá
         ]);
 
-        // Xử lý upload ảnh
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
             $imageName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
@@ -128,7 +127,6 @@ class CourseControllerAdmin extends Controller
         return redirect()->route('admin.courses.index')->with('success', 'Khóa học đã được tạo!');
     }
 
-
     public function edit($id)
     {
         $course = Course::findOrFail($id);
@@ -149,6 +147,7 @@ class CourseControllerAdmin extends Controller
 
         // Tìm khóa học của giảng viên hiện tại
         $course = Course::findOrFail($id);
+
 
         // Kiểm tra nếu người dùng không phải là admin hoặc không phải giảng viên sở hữu khóa học
         if (Auth::user()->role !== 'admin' && Auth::id() !== $course->instructor_id) {
@@ -192,6 +191,9 @@ class CourseControllerAdmin extends Controller
         return redirect()->route('admin.courses.index')->with('success', 'Khóa học đã được cập nhật!');
     }
 
+
+
+    
     public function destroy($id)
     {
         $course = Course::where('instructor_id', Auth::id())->findOrFail($id);

@@ -369,7 +369,6 @@
     </nav>
 
     {{-- @include('layouts.sidebar') --}}
-
     @if (request()->is('user/profile'))
         <!-- Kiểm tra nếu URL là user/profile -->
         @include('layouts.sidebar_profile')
