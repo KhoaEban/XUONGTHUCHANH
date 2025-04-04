@@ -171,23 +171,21 @@ Route::prefix('user')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+
     // Danh mục
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
     // Khóa học
     Route::get('/course', [CourseController::class, 'index'])->name('course');
     Route::get('/course/{slug}', [CourseController::class, 'show'])->name('course.show');
+
+    // Bài học
     Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
     Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lessons.show');
-    Route::get('/support', [SupportController::class, 'index'])->name('support');
-    Route::post('/support', [SupportController::class, 'submit'])->name('support');
 
+    // Quizzes
     Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
-
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
-
-    Route::get('/faq', [FaqController::class, 'index'])->name('faq');
-    Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
 
     // Thanh toán
     Route::get('/course/{slug}/payment', [PaymentController::class, 'showPaymentForm'])->name('course.payment');
@@ -199,6 +197,13 @@ Route::prefix('user')->group(function () {
     Route::post('/payment-history/{course}/buy-again', [PaymentController::class, 'buyAgain'])->name('user.payment.buy_again');
     Route::get('/payment/{slug}', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
     Route::post('/user/payment/{slug}', [PaymentController::class, 'processPayment'])->name('course.payment.process');
+
+
+    // các route khác
+    Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+    Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
+    Route::get('/support', [SupportController::class, 'index'])->name('support');
+    Route::post('/support', [SupportController::class, 'submit'])->name('support');
 });
 
 // VNPay callback
