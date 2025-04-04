@@ -14,11 +14,6 @@
                             <i class="fas fa-home"></i> Dashboard
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="{{ route('user.payment.history') }}">
-                            <i class="fas fa-home"></i> lịch sử
-                        </a>
-                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu">
@@ -40,6 +35,7 @@
                             </ul>
                         </div>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu2">
                             <i class="fas fa-book"></i> Quản lý quizzes <i class="fas fa-chevron-down float-end"></i>
@@ -68,7 +64,6 @@
                         </div>
                     </li>
 
-
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.category.index') }}">
                             <i class="fas fa-folder"></i> Quản lý Danh mục
@@ -78,6 +73,12 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.user.index') }}">
                             <i class="fas fa-users"></i> Quản lý Người dùng
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('admin.orders.index') }}">
+                            <i class="fas fa-home"></i> lịch sử thanh toán
                         </a>
                     </li>
                 </ul>

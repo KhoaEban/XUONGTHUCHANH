@@ -11,7 +11,8 @@ use App\Http\Controllers\Admin\QuizControllerAdmin;
 use App\Http\Controllers\Admin\QuestionControllerAdmin;
 use App\Http\Controllers\Admin\QuizResultControllerAdmin;
 use App\Http\Controllers\Admin\AnswerControllerAdmin;
-
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\EnrollmentController;
 // User
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\CategoryController;
@@ -69,9 +70,6 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::delete('/delete/{lesson}', [LessonControllerAdmin::class, 'destroy'])->name('admin.lessons.destroy');
     });
 
-
-
-
     // Quản lý danh mục
     Route::prefix('admin/category')->group(function () {
         Route::get('/', [CategoryControllerAdmin::class, 'index'])->name('admin.category.index');
@@ -118,7 +116,7 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::put('/update/{quizResult}', [QuizResultControllerAdmin::class, 'update'])->name('admin.quiz_results.update');
         Route::delete('/delete/{quizResult}', [QuizResultControllerAdmin::class, 'destroy'])->name('admin.quiz_results.destroy');
     });
-    
+
     // Quản lý câu trả lời
     Route::prefix('admin/answers')->group(function () {
         Route::get('/', [AnswerControllerAdmin::class, 'index'])->name('admin.answers.index');
@@ -129,12 +127,14 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::delete('/delete/{answer}', [AnswerControllerAdmin::class, 'destroy'])->name('admin.answers.destroy');
         Route::get('/get-questions/{quizId}', [AnswerControllerAdmin::class, 'getQuestionsByQuiz']);
     });
-    Route::get('/payments', [PaymentController::class, 'adminPaymentHistory'])->name('admin.payment.history');
-    Route::post('/enrollments/{enrollment}/update-status', [PaymentController::class, 'updateEnrollmentStatus'])->name('admin.enrollment.update_status');
+    // Quản lý thanh toán
+    Route::prefix('admin/orders')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('admin.orders.index');
+        Route::put('/{payment}/update-status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+    });
+    Route::post('/admin/enrollments/store', [EnrollmentController::class, 'store'])->name('admin.enrollments.store');
+    Route::put('/admin/enrollments/{payment}/updateStatus', [EnrollmentController::class, 'updateStatus'])->name('admin.enrollments.updateStatus');
 });
-
-
-
 
 
 // Instructor
@@ -171,8 +171,6 @@ Route::prefix('user')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
-    Route::get('/payment-history', [PaymentController::class, 'userPaymentHistory'])->name('user.payment.history');
-
     // Danh mục
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
@@ -185,17 +183,13 @@ Route::prefix('user')->group(function () {
     Route::post('/support', [SupportController::class, 'submit'])->name('support');
 
     Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
-    
+
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
-    
+
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
-    
-});
 
-
-
-Route::prefix('user')->middleware('auth')->group(function () {
+    // Thanh toán
     Route::get('/course/{slug}/payment', [PaymentController::class, 'showPaymentForm'])->name('course.payment');
     Route::post('/course/{slug}/payment', [PaymentController::class, 'processPayment'])->name('course.payment.process');
     Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');

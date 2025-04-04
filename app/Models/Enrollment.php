@@ -9,43 +9,44 @@ class Enrollment extends Model
 {
     use HasFactory;
 
-    public $timestamps = false; // Disable timestamp management
+    public $timestamps = false;
 
     protected $fillable = [
         'user_id',
         'course_id',
-        'status',       // Add status field
-        'enrolled_at',  // Add enrolled_at field
-        'slug',         // Add slug field
+        'payment_id',
+        'status',
+        'enrolled_at',
+        'slug'
     ];
 
-    // Relationship with User
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relationship with Course
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
 
-    // Check if enrollment is active
     public function isActive()
     {
         return $this->status === 'active';
     }
 
-    // Check if enrollment is completed
     public function isCompleted()
     {
         return $this->status === 'completed';
     }
 
-    // Get formatted enrollment date
     public function getFormattedEnrollmentDate()
     {
-        return $this->enrolled_at ? $this->enrolled_at->format('d/m/Y H:i') : null;
+        // Chuyển đổi enrolled_at thành Carbon nếu nó không phải là một đối tượng Carbon
+        return $this->enrolled_at ? \Carbon\Carbon::parse($this->enrolled_at)->format('d/m/Y H:i') : null;
     }
+
+    protected $dates = [
+        'enrolled_at',
+    ];
 }
