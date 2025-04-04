@@ -286,6 +286,7 @@
             width: 30px;
             margin-left: 10px;
         }
+        
     </style>
 </head>
 

@@ -23,6 +23,7 @@ class CourseController extends Controller
     public function show($slug)
     {
         $course = Course::with('lessons', 'instructor')->where('slug', $slug)->firstOrFail();
+        $course->increment('views');
 
         if (!$course->isPaidByUser(Auth::id())) {
             return redirect()->route('course.payment', ['slug' => $slug]);

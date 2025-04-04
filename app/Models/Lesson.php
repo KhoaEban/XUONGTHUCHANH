@@ -25,11 +25,17 @@ class Lesson extends Model
         return $this->belongsTo(Course::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     // Quan hệ với Instructor thông qua Course (giả sử instructor_id nằm trong bảng courses)
     public function instructor()
     {
         return $this->course->belongsTo(User::class, 'instructor_id'); // Liên kết đến bảng users qua trường instructor_id trong bảng courses
     }
+
     
     // Mỗi quan hệ quizzes với bài kiểm tra
     public function quizzes()

@@ -69,6 +69,7 @@
                                     <div class="badge-overlay">
                                         @if ($course->is_free)
                                             <span class="badge-free">Free</span>
+
                                         @elseif (in_array($course->id, $purchasedCourses))
                                             <span class="badge-purchased">Đã mua</span>
                                             <!-- New badge for purchased courses -->
@@ -91,7 +92,6 @@
                                         <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
                                         <p class="card-text">{{ $course->created_at->format('d/m/Y') }}</p>
                                     </div>
-
                                     <p class="card-text text-secondary mt-2" style="font-size: 12px">Tác giả:
                                         {{ $course->instructor->name }}</p>
                                 </div>

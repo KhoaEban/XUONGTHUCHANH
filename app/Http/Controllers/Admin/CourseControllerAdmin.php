@@ -66,16 +66,19 @@ class CourseControllerAdmin extends Controller
     {
         $course = Course::with([
             'instructor',
+            'lessons', // Nạp danh sách bài học
             'category',
             'lessons.quizzes' // Nạp danh sách quiz của từng bài học
         ])->findOrFail($id);
-
+        $lessons = $course->lessons;
+        $lessons->load('quizzes'); // Nạp danh sách quiz của từng bài học
         // Kiểm tra quyền truy cập
         if (Auth::user()->role !== 'admin' && Auth::user()->id !== $course->instructor_id) {
             abort(403, 'Bạn không có quyền truy cập khóa học này.');
         }
 
-        return view('admin.courses.show', compact('course'));
+
+        return view('admin.courses.show', compact('course' , 'lessons'));
     }
 
     public function create()
@@ -95,6 +98,7 @@ class CourseControllerAdmin extends Controller
             'is_free' => 'nullable|boolean',
             'price' => 'nullable|numeric|required_if:is_free,0',  // 'price' chỉ bắt buộc khi khóa học có giá
         ]);
+
 
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
@@ -191,9 +195,6 @@ class CourseControllerAdmin extends Controller
         return redirect()->route('admin.courses.index')->with('success', 'Khóa học đã được cập nhật!');
     }
 
-
-
-    
     public function destroy($id)
     {
         $course = Course::where('instructor_id', Auth::id())->findOrFail($id);

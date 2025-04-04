@@ -11,6 +11,7 @@ class Enrollment extends Model
 
     public $timestamps = false;
 
+
     protected $fillable = [
         'user_id',
         'course_id',
@@ -20,6 +21,7 @@ class Enrollment extends Model
         'slug'
     ];
 
+    // Relationship with User
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -30,10 +32,12 @@ class Enrollment extends Model
         return $this->belongsTo(Course::class);
     }
 
+
     public function isActive()
     {
         return $this->status === 'active';
     }
+
 
     public function isCompleted()
     {

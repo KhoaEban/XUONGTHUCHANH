@@ -14,6 +14,11 @@
                             <i class="fas fa-home"></i> Dashboard
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('user.payment.history') }}">
+                            <i class="fas fa-home"></i> lịch sử
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu">
@@ -63,6 +68,34 @@
                             </ul>
                         </div>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu2">
+                            <i class="fas fa-book"></i> Quản lý quizzes <i class="fas fa-chevron-down float-end"></i>
+                        </a>
+                        <div class="collapse" id="courseMenu2">
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.quizzes.index') }}">Quizzes
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.questions.index') }}">Câu hỏi
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="collapse" id="courseMenu2">
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.answers.index') }}">Câu trả lời
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
 
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.category.index') }}">
@@ -75,10 +108,14 @@
                             <i class="fas fa-users"></i> Quản lý Người dùng
                         </a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.orders.index') }}">
                             <i class="fas fa-home"></i> lịch sử thanh toán
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('admin.comments.index') }}">
+                            <i class="fas fa-users"></i> Quản lý Bình luận
                         </a>
                     </li>
                 </ul>

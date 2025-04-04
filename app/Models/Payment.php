@@ -28,6 +28,7 @@ class Payment extends Model
         return $this->belongsTo(Course::class);
     }
 
+
     public function enrollment()
     {
         return $this->hasOne(Enrollment::class, 'payment_id');
