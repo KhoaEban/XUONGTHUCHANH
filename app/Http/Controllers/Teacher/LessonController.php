@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 // Import the model
 use App\Models\Lesson;
@@ -60,7 +61,11 @@ class LessonController extends Controller
 
     public function destroy(Lesson $lesson)
     {
+        if (Auth::user()->role !== 'admin' && Auth::user()->id !== $lesson->instructor_id) {
+            return redirect()->route('admin.lessons.index')->with('error', 'Bạn không có quyền xóa bài học này.');
+        }
+
         $lesson->delete();
-        return redirect()->route('instructor.lesson.index')->with('success', 'Lesson deleted successfully.');
+        return redirect()->route('admin.lessons.index')->with('success', 'Bài học đã được xóa thành công.');
     }
 }

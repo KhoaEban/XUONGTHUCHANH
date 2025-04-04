@@ -14,6 +14,11 @@
                             <i class="fas fa-home"></i> Dashboard
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('user.payment.history') }}">
+                            <i class="fas fa-home"></i> lịch sử
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu">
@@ -21,11 +26,48 @@
                         </a>
                         <div class="collapse" id="courseMenu">
                             <ul class="nav flex-column ps-3">
-                                <li><a class="nav-link text-dark" href="{{ route('admin.course.index') }}">Danh sách
+                                <li><a class="nav-link text-dark" href="{{ route('admin.courses.index') }}">Danh sách
                                         khóa học</a></li>
                             </ul>
                         </div>
+                        <div class="collapse" id="courseMenu">
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.lessons.index') }}">Danh sách
+                                        Bài học
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark collapsed" data-bs-toggle="collapse" href="#courseMenu2">
+                            <i class="fas fa-book"></i> Quản lý quizzes <i class="fas fa-chevron-down float-end"></i>
+                        </a>
+                        <div class="collapse" id="courseMenu2">
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.quizzes.index') }}">Quizzes
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.questions.index') }}">Câu hỏi
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="collapse" id="courseMenu2">
+                            <ul class="nav flex-column ps-3">
+                                <li>
+                                    <a class="nav-link text-dark" href="{{ route('admin.answers.index') }}">Câu trả lời
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    
 
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.category.index') }}">
@@ -36,6 +78,12 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="{{ route('admin.user.index') }}">
                             <i class="fas fa-users"></i> Quản lý Người dùng
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('admin.revenue.index') }}">
+                            <i class="fa-regular fa-dollar-sign"></i> Quản lý doanh thu
                         </a>
                     </li>
                 </ul>

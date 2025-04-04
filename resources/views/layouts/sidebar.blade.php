@@ -10,17 +10,23 @@
                         </a>
                     </li>
                     @if (Auth::check() && Auth::user()->role == 'instructor')
-                        <li>
-                            <a href="{{ route('instructor.dashboard') }}" class="menu-item">
-                                <i class="fa fa-user-cog"></i>
-                                <div>Chức năng</div>
-                            </a>
-                        </li>
+                    <li>
+                        <a href="{{ route('instructor.dashboard') }}" class="menu-item">
+                            <i class="fa fa-user-cog"></i>
+                            <div>Chức năng</div>
+                        </a>
+                    </li>
                     @endif
                     <li>
                         <a href="{{ route('support') }}" class="menu-item">
                             <i class="fa fa-life-ring"></i>
                             <div>Hỗ trợ</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('user.payment.history') }}" class="menu-item">
+                            <i class="fa fa-life-ring"></i>
+                            <div>lịch sử</div>
                         </a>
                     </li>
                     <li>

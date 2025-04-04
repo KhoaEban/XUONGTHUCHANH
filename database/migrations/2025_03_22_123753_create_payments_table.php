@@ -12,7 +12,8 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
             $table->decimal('amount', 10, 2);
-            $table->enum('payment_method', ['credit_card', 'paypal', 'momo']);
+            // Thêm 'vnpay' vào enum payment_method
+            $table->enum('payment_method', ['credit_card', 'paypal', 'momo', 'vnpay']);
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
             $table->string('transaction_id')->unique();
             $table->timestamps();

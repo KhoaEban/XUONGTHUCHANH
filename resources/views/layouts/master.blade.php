@@ -334,14 +334,14 @@
                                         <a class="dropdown-item" href="#">
                                             <i class="fas fa-user-cog"></i> Chức năng
                                         </a>
-                                        <a class="dropdown-item" href="#">
+                                        <a class="dropdown-item" href="{{ route('user.payment.history') }}">
                                             {{-- icon hồ sơ --}}
                                             <i class="fas fa-user"></i> Hồ sơ
                                         </a>
                                     </li>
                                 @else
                                     <li>
-                                        <a class="dropdown-item" href="#">
+                                        <a class="dropdown-item" href="{{ route('user.payment.history') }}">
                                             {{-- icon hồ sơ --}}
                                             <i class="fas fa-user"></i> Hồ sơ
                                         </a>
@@ -368,8 +368,18 @@
         </div>
     </nav>
 
-    @include('layouts.sidebar')
+    {{-- @include('layouts.sidebar') --}}
 
+    @if (request()->is('user/profile'))
+        <!-- Kiểm tra nếu URL là user/profile -->
+        @include('layouts.sidebar_profile')
+    @else
+        @include('layouts.sidebar') <!-- Sidebar mặc định -->
+    @endif
+
+    <div class="flex-1">
+        @yield('content')
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
