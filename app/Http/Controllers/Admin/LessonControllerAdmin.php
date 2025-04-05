@@ -74,6 +74,8 @@ class LessonControllerAdmin extends Controller
             'title' => 'required|string|max:255',
             'course_id' => 'required|integer|exists:courses,id',
             'order_number' => 'required|integer',
+            'video_url' => 'nullable|url',
+            'content' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -93,6 +95,8 @@ class LessonControllerAdmin extends Controller
             'title' => $request->title,
             'course_id' => $request->course_id,
             'order_number' => $request->order_number,
+            'video_url' => $request->video_url,
+            'content' => $request->content,
             'thumbnail' => $thumbnailPath
         ]);
 
@@ -112,6 +116,8 @@ class LessonControllerAdmin extends Controller
             'title' => 'required|string|max:255',
             'course_id' => 'required|integer|exists:courses,id',
             'order_number' => 'required|integer',
+            'video_url' => 'nullable|url',
+            'content' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048',
         ]);
 
@@ -126,6 +132,8 @@ class LessonControllerAdmin extends Controller
         $lesson->title = $request->title;
         $lesson->course_id = $request->course_id;
         $lesson->order_number = $request->order_number;
+        $lesson->video_url = $request->video_url;
+        $lesson->content = $request->content;
 
         // Xử lý cập nhật ảnh nếu có
         if ($request->hasFile('thumbnail')) {
