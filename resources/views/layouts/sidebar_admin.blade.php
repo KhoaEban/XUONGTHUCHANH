@@ -94,8 +94,16 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item text-danger" href="{{ route('logout') }}">Đăng xuất</a>
+                            <li>
+                                <a class="dropdown-item" href="#"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                </a>
                             </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                style="display: none;">
+                                @csrf
+                            </form>
                         </ul>
                     </div>
                 </div>
@@ -284,7 +292,7 @@
         padding: 5px;
         border: 1px solid white;
     }
-    
+
     .sidebar.collapsed .footer-icon:hover {
         background: white;
         color: #34495e;
@@ -431,4 +439,3 @@
         });
     </script>
 @endif
-
