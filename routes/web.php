@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\AnswerControllerAdmin;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\EnrollmentController;
 use App\Http\Controllers\Admin\AdminCommentsController;
+use App\Http\Controllers\Admin\AdminRevenueController;
+use App\Http\Controllers\Admin\RevenueController;
 
 // User
 use App\Http\Controllers\User\HomeController;
@@ -46,8 +48,8 @@ Route::get('/admin/instructors/{instructorId}/courses', [CourseController::class
     ->name('admin.instructors.courses');
 
 
-// Admin
-Route::middleware(['check.role:admin'])->group(function () {
+    // Admin
+    Route::middleware(['check.role:admin'])->group(function () {
     // Trang chủ Admin
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
     // Quản lý người dùng
@@ -65,7 +67,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
 
     // Quản lý bài học
-    Route::prefix('admin/lessons')->group(function () {
+        Route::prefix('admin/lessons')->group(function () {
         Route::get('/', [LessonControllerAdmin::class, 'index'])->name('admin.lessons.index');
         Route::get('/show/{lesson}', [LessonControllerAdmin::class, 'show'])->name('admin.lessons.show');
         Route::get('/create', [LessonControllerAdmin::class, 'create'])->name('admin.lessons.create');
@@ -83,7 +85,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
 
     // Quản lý danh mục
-    Route::prefix('admin/category')->group(function () {
+        Route::prefix('admin/category')->group(function () {
         Route::get('/', [CategoryControllerAdmin::class, 'index'])->name('admin.category.index');
         Route::get('/create', [CategoryControllerAdmin::class, 'create'])->name('admin.category.create');
         Route::post('/store', [CategoryControllerAdmin::class, 'store'])->name('admin.category.store');
@@ -98,7 +100,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
 
     // Quản lý bài tập
-    Route::prefix('admin/quizzes')->group(function () {
+        Route::prefix('admin/quizzes')->group(function () {
         Route::get('/', [QuizControllerAdmin::class, 'index'])->name('admin.quizzes.index');
         Route::get('/create', [QuizControllerAdmin::class, 'create'])->name('admin.quizzes.create');
         Route::post('/store', [QuizControllerAdmin::class, 'store'])->name('admin.quizzes.store');
@@ -109,7 +111,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
 
     // Quản lý câu hỏi
-    Route::prefix('admin/questions')->group(function () {
+        Route::prefix('admin/questions')->group(function () {
         Route::get('/', [QuestionControllerAdmin::class, 'index'])->name('admin.questions.index');
         Route::get('/create', [QuestionControllerAdmin::class, 'create'])->name('admin.questions.create');
         Route::post('/store', [QuestionControllerAdmin::class, 'store'])->name('admin.questions.store');
@@ -120,7 +122,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
 
     // Quản lý kết quả bài tập
-    Route::prefix('admin/quiz-results')->group(function () {
+        Route::prefix('admin/quiz-results')->group(function () {
         Route::get('/', [QuizResultControllerAdmin::class, 'index'])->name('admin.quiz_results.index');
         Route::get('/create', [QuizResultControllerAdmin::class, 'create'])->name('admin.quiz_results.create');
         Route::post('/store', [QuizResultControllerAdmin::class, 'store'])->name('admin.quiz_results.store');
@@ -130,7 +132,7 @@ Route::middleware(['check.role:admin'])->group(function () {
     });
 
     // Quản lý câu trả lời
-    Route::prefix('admin/answers')->group(function () {
+        Route::prefix('admin/answers')->group(function () {
         Route::get('/', [AnswerControllerAdmin::class, 'index'])->name('admin.answers.index');
         Route::get('/create', [AnswerControllerAdmin::class, 'create'])->name('admin.answers.create');
         Route::post('/store', [AnswerControllerAdmin::class, 'store'])->name('admin.answers.store');
@@ -148,8 +150,22 @@ Route::middleware(['check.role:admin'])->group(function () {
 
     Route::post('/admin/enrollments/store', [EnrollmentController::class, 'store'])->name('admin.enrollments.store');
     Route::put('/admin/enrollments/{payment}/updateStatus', [EnrollmentController::class, 'updateStatus'])->name('admin.enrollments.updateStatus');
+
     Route::get('/payments', [PaymentController::class, 'adminPaymentHistory'])->name('admin.payment.history');
     Route::post('/enrollments/{enrollment}/update-status', [PaymentController::class, 'updateEnrollmentStatus'])->name('admin.enrollment.update_status');
+
+
+    // thống kê doanh thu
+    // Routes for Revenue management (Admin)
+        Route::get('/admin/revenue', [RevenueController::class, 'index'])->name('admin.revenue.index');
+        Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
+        Route::get('revenue', [AdminRevenueController::class, 'index'])->name('revenue.index'); // Trang tổng quan doanh thu
+        Route::get('revenue/report', [AdminRevenueController::class, 'report'])->name('revenue.report'); // Báo cáo doanh thu
+        Route::get('revenue/user/{userId}', [AdminRevenueController::class, 'userRevenue'])->name('revenue.user'); // Doanh thu theo người dùng
+        Route::get('revenue/course/{courseId}', [AdminRevenueController::class, 'courseRevenue'])->name('revenue.course'); // Doanh thu theo khóa học
+    });
+
+
 });
 
 // Instructor
