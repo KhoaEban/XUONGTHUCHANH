@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
+
 class Comment extends Model
 {
     protected $fillable = [
@@ -11,7 +13,8 @@ class Comment extends Model
         'user_id',
         'lesson_id',
         'parent_id',
-        'status'
+        'status',
+        'comments_count'
     ];
 
     public function user()
@@ -35,10 +38,9 @@ class Comment extends Model
     {
         return $this->belongsTo(Comment::class, 'parent_id');
     }
-    public function like()
+    public function likes()
     {
-        // Tăng số lượt thích lên 1
-        $this->increment('likes_count');
+        return $this->hasMany(CommentLike::class);
     }
 
     public function unlike()

@@ -212,7 +212,7 @@
                                                                 <li>
                                                                     <button class="dropdown-item"
                                                                         onclick="openEditForm({{ $comment->id }})">
-                                                                       <i class="fas fa-edit"></i> Sửa
+                                                                        <i class="fas fa-edit"></i> Sửa
                                                                     </button>
                                                                 </li>
                                                                 <!-- Nút xóa -->
@@ -224,7 +224,7 @@
                                                                         @csrf
                                                                         @method('DELETE')
                                                                         <button type="submit" class="dropdown-item">
-                                                                           <i class="fas fa-trash"></i> Xóa</button>
+                                                                            <i class="fas fa-trash"></i> Xóa</button>
                                                                     </form>
                                                                 </li>
                                                             </ul>
@@ -258,9 +258,18 @@
                                         <form action="{{ route('comments.like', $comment->id) }}" method="POST"
                                             class="d-inline like-form">
                                             @csrf
-                                            <button type="submit" class="btn btn-sm btn-outline-primary like-btn">
-                                                <i class="far fa-thumbs-up"></i> Thích ({{ $comment->likes_count }})
-                                            </button>
+                                            @if ($comment->likes()->where('user_id', Auth::id())->exists())
+                                                <!-- Nếu người dùng đã like -->
+                                                <button type="submit" class="btn btn-sm btn-outline-primary like-btn">
+                                                    <i class="fas fa-thumbs-up"></i> Đã Thích
+                                                    ({{ $comment->likes_count }})
+                                                </button>
+                                            @else
+                                                <!-- Nếu người dùng chưa like -->
+                                                <button type="submit" class="btn btn-sm btn-outline-primary like-btn">
+                                                    <i class="far fa-thumbs-up"></i> Thích ({{ $comment->likes_count }})
+                                                </button>
+                                            @endif
                                         </form>
 
                                         <!-- Nút trả lời -->
@@ -438,6 +447,24 @@
             replyForm.style.display = "none";
         }
     }
+
+    function showReplyForm(commentId) {
+        var replyForm = document.getElementById('reply-form-' + commentId);
+        var currentDisplay = replyForm.style.display;
+        // Kiểm tra nếu bình luận đang ẩn, mới cho phép hiển thị
+        if (currentDisplay === "none" || currentDisplay === "") {
+            // Ẩn tất cả các form trả lời khác
+            document.querySelectorAll('.reply-form').forEach(function(form) {
+                form.style.display = "none";
+            });
+            // Hiển thị form trả lời cho bình luận hiện tại
+            replyForm.style.display = "block";
+        } else {
+            // Ẩn form trả lời khi nó đang hiển thị
+            replyForm.style.display = "none";
+        }
+    }
+
 
     function openTab(evt, tabName) {
         var i, tabContent, tabButtons;

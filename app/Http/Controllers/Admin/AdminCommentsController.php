@@ -30,6 +30,7 @@ class AdminCommentsController extends Controller
     {
         $comment = Comment::findOrFail($id);
         $comment->update(['status' => 'deleted']);
+        $comment->delete();
 
         return back()->with('success', 'Bình luận đã được đánh dấu là xóa.');
     }

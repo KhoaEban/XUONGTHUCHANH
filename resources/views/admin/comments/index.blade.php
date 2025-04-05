@@ -2,9 +2,6 @@
 
 @section('content')
     <h2>Quản lý bình luận</h2>
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
 
     <div class="table-responsive">
         <table class="table table-bordered">

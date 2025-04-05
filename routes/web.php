@@ -154,7 +154,6 @@ Route::middleware(['check.role:admin'])->group(function () {
     Route::get('/payments', [PaymentController::class, 'adminPaymentHistory'])->name('admin.payment.history');
     Route::post('/enrollments/{enrollment}/update-status', [PaymentController::class, 'updateEnrollmentStatus'])->name('admin.enrollment.update_status');
 
-
     // thống kê doanh thu
     Route::prefix('admin/revenue')->group(function () {
         Route::get('/', [AdminRevenueController::class, 'index'])->name('revenue.index'); // Trang tổng quan doanh thu

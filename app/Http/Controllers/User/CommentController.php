@@ -4,10 +4,11 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Comment;
-
-use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Comment;
+use App\Models\CommentLike;
+use App\Models\Course;
+
 
 class CommentController extends Controller
 {
@@ -31,19 +32,47 @@ class CommentController extends Controller
         }
 
         // Trả về kết quả bình thường khi không phải AJAX
-        return redirect()->back()->with('success', 'Bình luận đã được thêm!');
+        return redirect()->back();
     }
-
 
     public function like($id)
     {
         $comment = Comment::findOrFail($id);
 
-        $comment->like();
+        // Kiểm tra nếu người dùng đã like bình luận này
+        $like = CommentLike::where('comment_id', $id)
+            ->where('user_id', Auth::id())
+            ->first();
 
-        return back()->with('success', 'Đã thích bình luận!');
+        if ($like) {
+            // Nếu đã like, bỏ like
+            $like->delete();
+            $comment->decrement('likes_count');
+            return back();
+        } else {
+            // Nếu chưa like, thêm like
+            CommentLike::create([
+                'user_id' => Auth::id(),
+                'comment_id' => $id,
+            ]);
+            $comment->increment('likes_count');
+
+            // Kiểm tra xem người dùng có phải là giảng viên không
+            if (Auth::user()->role == 'instructor') {
+                // Kiểm tra xem bình luận đã có lượt thích từ giảng viên chưa
+                $existingLike = CommentLike::where('comment_id', $id)
+                    ->where('user_id', Auth::id())
+                    ->first();
+
+                if (!$existingLike) {
+                    // Nếu chưa có lượt thích từ giảng viên, tăng số bình luận
+                    $comment->increment('comments_count'); // Bạn cần thêm trường 'comments_count' vào bảng comments
+                }
+            }
+
+            return back();
+        }
     }
-
 
     // Hiển thị form sửa bình luận
     public function edit($id)
