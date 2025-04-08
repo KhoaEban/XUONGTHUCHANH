@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->text('content');
-            $table->enum('status', ['visible', 'hidden'])->default('visible'); // Trạng thái bình luận
+            $table->enum('status', ['visible', 'hidden'])->default('visible');
             $table->timestamps();
         });
     }
