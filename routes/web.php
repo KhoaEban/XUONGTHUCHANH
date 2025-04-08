@@ -17,6 +17,9 @@ use App\Http\Controllers\Admin\AdminRevenueController;
 use App\Http\Controllers\Admin\RevenueController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\EnrollmentController;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 // User
@@ -92,8 +95,11 @@ Route::middleware(['check.role:admin'])->group(function () {
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
 Route::put('/admin/orders/{payment}/update-status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
 Route::put('/admin/enrollments/{payment}/update-status', [EnrollmentController::class, 'updateStatus'])->name('admin.enrollments.updateStatus'); // Thêm route này
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
 
 
 // Instructor
