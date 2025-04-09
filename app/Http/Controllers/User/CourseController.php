@@ -28,22 +28,27 @@ class CourseController extends Controller
             return redirect()->route('course.payment', ['slug' => $slug]);
         }
 
-        // Lấy bài học đầu tiên và bình luận của nó
         $firstLesson = $course->lessons->first();
-        $comments = $firstLesson ? $firstLesson->comments()->with('user')->orderBy('created_at', 'desc')->get() : collect([]);
+        $comments = $firstLesson
+            ? $firstLesson->comments()
+            ->with(['user', 'replies.user', 'replies.likes']) // Không cần nạp quan hệ likes cho comment chính
+            ->orderBy('created_at', 'desc')
+            ->get()
+            : collect([]);
 
-        // Chuyển đổi comments thành định dạng JSON phù hợp
-        $comments = $comments->map(function ($comment) {
-            return [
-                'id' => $comment->id,
-                'content' => $comment->content,
-                'created_at' => $comment->created_at->toDateTimeString(),
-                'user' => [
-                    'name' => $comment->user->name,
-                    'is_teacher' => $comment->user->isTeacher(),
-                ],
-            ];
-        })->toArray();
+        $userId = Auth::id();
+
+        foreach ($comments as $comment) {
+            // Gán trạng thái like cho comment chính
+            $comment->liked_by_user = $comment->likes()->where('user_id', $userId)->exists();
+            // $comment->likes_count đã có sẵn trong cơ sở dữ liệu, không cần tính lại
+
+            foreach ($comment->replies as $reply) {
+                // Gán trạng thái like cho từng reply
+                $reply->liked_by_user = $reply->likes->contains('user_id', $userId);
+                $reply->likes_count = $reply->likes->count();
+            }
+        }
 
         return view('user.course.show', compact('course', 'comments'));
     }

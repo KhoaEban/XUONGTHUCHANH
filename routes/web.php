@@ -230,6 +230,8 @@ Route::prefix('user')->group(function () {
     Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
 
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+    Route::get('/quiz/{quizId}/do', [QuizController::class, 'doQuiz'])->name('user.quiz.do');
+    Route::post('/quiz/{quizId}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
 
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');

@@ -33,15 +33,31 @@ class Comment extends Model
         return $this->hasMany(Comment::class, 'parent_id');
     }
 
+    public function isLikedBy($userId)
+    {
+        return $this->likes()->where('user_id', $userId)->exists();
+    }
+
     // Quan hệ bình luận gốc
     public function parent()
     {
         return $this->belongsTo(Comment::class, 'parent_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($comment) {
+            $comment->replies()->delete(); // Xóa tất cả bình luận con khi xóa bình luận cha
+        });
+    }
+
     public function likes()
     {
-        return $this->hasMany(CommentLike::class);
+        return $this->hasMany(CommentLike::class, 'comment_id');
     }
+
 
     public function unlike()
     {
