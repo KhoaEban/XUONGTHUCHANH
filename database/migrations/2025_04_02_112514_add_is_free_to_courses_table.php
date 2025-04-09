@@ -8,11 +8,9 @@ return new class extends Migration
 {
     public function up()
     {
-        if (!Schema::hasColumn('courses', 'is_free')) {
-            Schema::table('courses', function (Blueprint $table) {
-                $table->boolean('is_free')->default(0);
-            });
-        }
+        Schema::table('courses', function (Blueprint $table) {
+            $table->boolean('is_free')->default(false);  // Thêm trường is_free
+        });
     }
 
     public function down()

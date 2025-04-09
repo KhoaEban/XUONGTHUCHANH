@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\EnrollmentController;
 use App\Http\Controllers\Admin\AdminCommentsController;
 use App\Http\Controllers\Admin\AdminRevenueController;
 use App\Http\Controllers\Admin\RevenueController;
-
+use App\Http\Controllers\Admin\ReviewControllerAdmin;
 // User
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\CategoryController;
@@ -28,6 +28,7 @@ use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\CommentController;
+use App\Http\Controllers\User\ReviewController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
@@ -89,6 +90,13 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::put('/{id}/status', [AdminCommentsController::class, 'updateStatus'])->name('admin.comments.updateStatus');
         Route::delete('/{id}', [AdminCommentsController::class, 'destroy'])->name('admin.comments.destroy');
     });
+    // Quản lí đánh giá 
+    Route::get('/admin/reviews', [ReviewControllerAdmin::class, 'index'])->name('admin.reviews.index');
+    Route::patch('/admin/reviews/{review}/toggle-visibility', [ReviewControllerAdmin::class, 'toggleVisibility'])
+    ->name('reviews.toggle_visibility');
+    Route::delete('/admin/reviews/{review}', [ReviewControllerAdmin::class, 'destroy'])->name('reviews.destroy');
+
+
 
     // Quản lý danh mục
     Route::prefix('admin/category')->group(function () {
@@ -129,7 +137,8 @@ Route::middleware(['check.role:admin'])->group(function () {
 
     // Quản lý kết quả bài tập
     Route::prefix('admin/quiz-results')->group(function () {
-        Route::get('/', [QuizResultControllerAdmin::class, 'index'])->name('admin.quiz_results.index');
+        Route::get('/quiz_results', [QuizResultControllerAdmin::class, 'index'])->name('quiz_results.index');
+        Route::get('/quiz_results/completed', [QuizResultControllerAdmin::class, 'completed'])->name('quiz_results.completed');
         Route::get('/create', [QuizResultControllerAdmin::class, 'create'])->name('admin.quiz_results.create');
         Route::post('/store', [QuizResultControllerAdmin::class, 'store'])->name('admin.quiz_results.store');
         Route::get('/edit/{quizResult}', [QuizResultControllerAdmin::class, 'edit'])->name('admin.quiz_results.edit');
@@ -218,6 +227,7 @@ Route::prefix('user')->group(function () {
     // Quizzes
     Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+    Route::post('quiz/{id}/submit', [QuizController::class, 'submit'])->name('user.quizzes.submit');
 
     // Thanh toán
     Route::get('/courses/{slug}/lessons', [LessonController::class, 'getLessons'])->name('courses.lessons');
@@ -230,8 +240,6 @@ Route::prefix('user')->group(function () {
     Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
 
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
-    Route::get('/quiz/{quizId}/do', [QuizController::class, 'doQuiz'])->name('user.quiz.do');
-    Route::post('/quiz/{quizId}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
 
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
@@ -261,6 +269,8 @@ Route::prefix('user')->group(function () {
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::get('/comments/{lesson_id}', [CommentController::class, 'getComments'])->name('comments.get');
+    Route::post('/ratings', [ReviewController::class, 'store'])->name('ratings.store');
+
 });
 
 // VNPay callback

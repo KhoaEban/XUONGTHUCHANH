@@ -1,29 +1,33 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="container mt-4">
-        <h3 class="mb-4">Làm bài kiểm tra: {{ $quiz->title }}</h3>
+<div class="container">
+    <h2>{{ $quiz->title }}</h2>
+    <p>{{ $quiz->description }}</p>
 
-        <form action="{{ route('user.quiz.submit', $quiz->id) }}" method="POST">
-            @csrf
+    <form action="{{ route('user.quizzes.submit', $quiz->id) }}" method="POST">
+    @csrf
+    @foreach ($quiz->questions as $question)
+        <div class="question mb-4">
+            <h4>{{ $question->question_text }}</h4>
 
-            @foreach ($quiz->questions as $index => $question)
-                <div class="mb-4 border p-3 rounded shadow-sm bg-light">
-                    <h5>Câu {{ $index + 1 }}: {{ $question->content }}</h5>
-
-                    @foreach ($question->answers as $answer)
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="answers[{{ $question->id }}]"
-                                id="answer_{{ $answer->id }}" value="{{ $answer->id }}" required>
-                            <label class="form-check-label" for="answer_{{ $answer->id }}">
-                                {{ $answer->content }}
-                            </label>
-                        </div>
-                    @endforeach
+            @foreach ($question->answers as $answer)
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="radio"
+                           name="answers[{{ $question->id }}]"
+                           value="{{ $answer->id }}"
+                           id="answer_{{ $answer->id }}">
+                    <label class="form-check-label" for="answer_{{ $answer->id }}">
+                        {{ $answer->answer_text }}
+                    </label>
                 </div>
             @endforeach
+        </div>
+    @endforeach
 
-            <button type="submit" class="btn btn-success mt-3">Nộp bài</button>
-        </form>
-    </div>
+    <button type="submit" class="btn btn-primary">Nộp bài</button>
+</form>
+
+</div>
 @endsection
