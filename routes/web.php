@@ -34,9 +34,11 @@ use App\Http\Controllers\Teacher\HomeControllerInstructor;
 use App\Http\Controllers\Teacher\CourseControllerTeacher;
 use App\Http\Controllers\Teacher\LessonController;
 
+// Gemini Chat
+use App\Http\Controllers\GeminiChatController;
+
 // Trang chủ
 Route::get('/', [HomeController::class, 'index']);
-
 
 // Đăng nhập, đăng ký
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -47,6 +49,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/admin/instructors/{instructorId}/courses', [CourseController::class, 'coursesByInstructor'])
     ->name('admin.instructors.courses');
+
+// Gemini Chat
+Route::get('/chat', [GeminiChatController::class, 'index'])->name('chat.index');
+Route::post('/chat/send', [GeminiChatController::class, 'send'])->name('chat.send');
 
 // Admin
 Route::middleware(['check.role:admin'])->group(function () {
