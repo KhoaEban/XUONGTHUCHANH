@@ -27,7 +27,7 @@ class Course extends Model
     {
         return $this->hasMany(Lesson::class);
     }
-    
+
     // Định nghĩa khóa chính bằng slug để tự động tìm kiếm theo slug thay vì id
     public function getRouteKeyName()
     {
@@ -44,6 +44,11 @@ class Course extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function isPaidByUser($userId)
     {
         return Payment::where('user_id', $userId)
@@ -52,4 +57,3 @@ class Course extends Model
             ->exists();
     }
 }
-

@@ -94,7 +94,7 @@ class CourseControllerAdmin extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|integer|exists:categories,id',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048',
             'is_free' => 'nullable|boolean',
             'price' => 'nullable|numeric|required_if:is_free,0',  // 'price' chỉ bắt buộc khi khóa học có giá
         ]);

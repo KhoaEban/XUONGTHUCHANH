@@ -28,6 +28,7 @@ use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\CommentController;
+use App\Http\Controllers\User\ReviewController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
@@ -228,6 +229,8 @@ Route::prefix('user')->group(function () {
     Route::post('/support', [SupportController::class, 'submit'])->name('support');
 
     Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
+    Route::get('/lessons/{lesson_id}', [CourseController::class, 'getLesson'])
+        ->name('lesson.get');
 
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
     Route::get('/quiz/{quizId}/do', [QuizController::class, 'doQuiz'])->name('user.quiz.do');
@@ -238,6 +241,10 @@ Route::prefix('user')->group(function () {
 
     Route::get('/course/{slug}/payment', [PaymentController::class, 'showPaymentForm'])->name('course.payment');
     Route::post('/course/{slug}/payment', [PaymentController::class, 'processPayment'])->name('course.payment.process');
+    // Thanh tiến độ bài học
+    Route::get('/courses/{course}/progress', [CourseController::class, 'getCourseProgress'])->name('user.courses.progress');
+    Route::post('/courses/{course}/lessons/{lesson}/complete', [CourseController::class, 'markLessonAsComplete'])->name('user.courses.lessons.complete');
+
     Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
     Route::get('/payment/failure', [PaymentController::class, 'paymentFailure'])->name('payment.failure');
     Route::get('/payment-history', [PaymentController::class, 'userPaymentHistory'])->name('user.payment.history');
@@ -261,6 +268,7 @@ Route::prefix('user')->group(function () {
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::get('/comments/{lesson_id}', [CommentController::class, 'getComments'])->name('comments.get');
+    Route::post('/ratings', [ReviewController::class, 'store'])->name('ratings.store');
 });
 
 // VNPay callback

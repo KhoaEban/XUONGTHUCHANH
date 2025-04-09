@@ -31,13 +31,36 @@
                     <h1 class="m-0" style="font-size: 20px;">Khóa học {{ $course->title }}</h1>
                 </div>
                 <p style="font-size: 14px;">{{ $course->description }}</p>
+
                 <h2 style="font-size: 14px;">Bạn nhận được gì từ khóa học này?</h2>
                 <ul class="px-4">
                     @foreach ($course->lessons as $lesson)
-                        <li style="font-size: 14px; list-style-type: disc;">{{ $lesson->title }}</li>
+                    <li style="font-size: 14px; list-style-type: disc;">{{ $lesson->title }}</li>
                     @endforeach
                 </ul>
+                <h2 style="font-size: 16px;" class="mt-4">Đánh giá khóa học</h2>
+                @if ($course->reviews->count() > 0)
+                @foreach ($course->reviews as $review)
+                <div class="border p-2 rounded mb-2">
+                    <strong>{{ $review->user->name }}</strong>
+                    <span class="ms-2 text-warning">
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if ($i <=$review->rating)
+                            ★
+                            @else
+                            ☆
+                            @endif
+                            @endfor
+                    </span>
+                    <p class="mb-0">{{ $review->comment }}</p>
+                    <small class="text-muted">{{ $review->created_at->diffForHumans() }}</small>
+                </div>
+                @endforeach
+                @else
+                <p class="text-muted">Chưa có đánh giá nào cho khóa học này.</p>
+                @endif
             </div>
+
         </div>
         <div class="right-section" style="padding: 20px;">
             <h2>Chi tiết thanh toán</h2>
