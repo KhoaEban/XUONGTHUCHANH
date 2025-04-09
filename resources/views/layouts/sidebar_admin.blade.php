@@ -60,7 +60,11 @@
                         <a href="{{ route('revenue.index') }}">Quản lý doanh thu</a>
                     </div>
                 </div>
-
+                <div class="menu-item has-submenu">
+                    <a href="{{ route('quiz_results.index') }}">
+                        <i class="fas fa-check-circle"></i> Học viên hoàn thành
+                    </a>
+                </div>
                 <div class="menu-item has-submenu">
                     <a href="{{ route('admin.category.index') }}"><i class="fas fa-folder"></i> Quản lý danh mục</a>
                 </div>
@@ -111,17 +115,17 @@
 
             <div class="content">
                 @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 @endif
 
                 @if (session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 @endif
 
                 @yield('content')
@@ -417,25 +421,25 @@
 </style>
 
 @if (session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Thành công!',
-            text: "{{ session('success') }}",
-            showConfirmButton: false,
-            timer: 2000
-        });
-    </script>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Thành công!',
+        text: "{{ session('success') }}",
+        showConfirmButton: false,
+        timer: 2000
+    });
+</script>
 @endif
 
 @if (session('error'))
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Lỗi!',
-            text: "{{ session('error') }}",
-            showConfirmButton: false,
-            timer: 2000
-        });
-    </script>
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Lỗi!',
+        text: "{{ session('error') }}",
+        showConfirmButton: false,
+        timer: 2000
+    });
+</script>
 @endif

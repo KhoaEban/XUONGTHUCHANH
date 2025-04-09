@@ -11,7 +11,7 @@ class Answer extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['question_id', 'selected_answer', 'is_correct'];
+    protected $fillable = ['question_id','answer_text', 'selected_answer', 'is_correct'];
 
     public function quizResult()
     {

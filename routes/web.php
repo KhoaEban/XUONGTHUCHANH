@@ -129,7 +129,8 @@ Route::middleware(['check.role:admin'])->group(function () {
 
     // Quản lý kết quả bài tập
     Route::prefix('admin/quiz-results')->group(function () {
-        Route::get('/', [QuizResultControllerAdmin::class, 'index'])->name('admin.quiz_results.index');
+        Route::get('/quiz_results', [QuizResultControllerAdmin::class, 'index'])->name('quiz_results.index');
+        Route::get('/quiz_results/completed', [QuizResultControllerAdmin::class, 'completed'])->name('quiz_results.completed');
         Route::get('/create', [QuizResultControllerAdmin::class, 'create'])->name('admin.quiz_results.create');
         Route::post('/store', [QuizResultControllerAdmin::class, 'store'])->name('admin.quiz_results.store');
         Route::get('/edit/{quizResult}', [QuizResultControllerAdmin::class, 'edit'])->name('admin.quiz_results.edit');
@@ -218,6 +219,7 @@ Route::prefix('user')->group(function () {
     // Quizzes
     Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+    Route::post('quiz/{id}/submit', [QuizController::class, 'submit'])->name('user.quizzes.submit');
 
     // Thanh toán
     Route::get('/courses/{slug}/lessons', [LessonController::class, 'getLessons'])->name('courses.lessons');
