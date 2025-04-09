@@ -1,30 +1,77 @@
 <?php
 
 namespace App\Http\Controllers\User;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Comment;
+use App\Models\CommentLike;
+use App\Models\Course;
+
 
 class CommentController extends Controller
 {
     // Thêm bình luận
     public function store(Request $request)
     {
-        $request->validate([
-            'content' => 'required|string|max:500',
-            'lesson_id' => 'required|exists:lessons,id',
-            'parent_id' => 'nullable|exists:comments,id', // cho phép bình luận trả lời
+        $comment = Comment::create([
+            'user_id' => Auth::id(),
+            'lesson_id' => $request->lesson_id,
+            'content' => $request->content,
+            'parent_id' => $request->parent_id
         ]);
 
-        $comment = new Comment();
-        $comment->content = $request->content;
-        $comment->user_id = Auth::id();
-        $comment->lesson_id = $request->lesson_id;
-        $comment->parent_id = $request->parent_id;
-        $comment->save();
+        if ($request->ajax()) {
+            return response()->json([
+                'id' => $comment->id,
+                'content' => $comment->content,
+                'user' => ['name' => Auth::user()->name],
+                'created_at' => $comment->created_at->diffForHumans()
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+        }
 
-        return redirect()->back()->with('success', 'Bình luận đã được đăng!');
+        // Trả về kết quả bình thường khi không phải AJAX
+        return redirect()->back();
+    }
+
+    public function like($id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        // Kiểm tra nếu người dùng đã like bình luận này
+        $like = CommentLike::where('comment_id', $id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if ($like) {
+            // Nếu đã like, bỏ like
+            $like->delete();
+            $comment->decrement('likes_count');
+            return back();
+        } else {
+            // Nếu chưa like, thêm like
+            CommentLike::create([
+                'user_id' => Auth::id(),
+                'comment_id' => $id,
+            ]);
+            $comment->increment('likes_count');
+
+            // Kiểm tra xem người dùng có phải là giảng viên không
+            if (Auth::user()->role == 'instructor') {
+                // Kiểm tra xem bình luận đã có lượt thích từ giảng viên chưa
+                $existingLike = CommentLike::where('comment_id', $id)
+                    ->where('user_id', Auth::id())
+                    ->first();
+
+                if (!$existingLike) {
+                    // Nếu chưa có lượt thích từ giảng viên, tăng số bình luận
+                    $comment->increment('comments_count'); // Bạn cần thêm trường 'comments_count' vào bảng comments
+                }
+            }
+
+            return back();
+        }
     }
 
     // Hiển thị form sửa bình luận
@@ -34,7 +81,6 @@ class CommentController extends Controller
         return view('comments.edit', compact('comment'));
     }
 
-    // Cập nhật bình luận
     // Cập nhật bình luận
     public function update(Request $request, $id)
     {
@@ -50,6 +96,7 @@ class CommentController extends Controller
             'content' => 'required|string|max:500',
         ]);
 
+
         // Cập nhật bình luận
         $comment->content = $request->content;
         $comment->save();
@@ -57,9 +104,26 @@ class CommentController extends Controller
         // Quay lại trang và thông báo thành công
         return redirect()->back()->with('success', 'Bình luận đã được cập nhật.');
     }
+    public function show($id)
+    {
+        $course = Course::findOrFail($id);
+        $lesson = $course->lessons->first();
 
+        // Lấy bình luận mới nhất trước, với phân trang nếu cần
+        $comments = $lesson->comments()->orderBy('created_at', 'desc')->paginate(10);  // 10 bình luận mỗi trang
 
+        return view('courses.show', compact('course', 'comments'));
+    }
 
+    public function getComments($lesson_id)
+    {
+        $comments = Comment::where('lesson_id', $lesson_id)
+            ->orderBy('created_at', 'desc')
+            ->with('user') // Lấy thông tin người dùng để hiển thị
+            ->get();
+
+        return response()->json($comments);
+    }
 
     // Xóa bình luận
     public function destroy($id)

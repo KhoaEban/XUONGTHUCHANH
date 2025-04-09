@@ -95,6 +95,7 @@ class PaymentController extends Controller
         Enrollment::create([
             'user_id' => Auth::id(),
             'course_id' => $course->id,
+            'payment_id' => $payment->id,
             'status' => 'active',
             'enrolled_at' => now(),
         ]);

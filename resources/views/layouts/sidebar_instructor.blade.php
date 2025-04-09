@@ -85,7 +85,6 @@
     </div>
 </div>
 
-
 <style>
     .edu-sidebar {
         width: 317.484px;

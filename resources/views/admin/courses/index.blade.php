@@ -84,7 +84,7 @@
                             <th>Danh mục</th>
                             <th>Giá</th>
                             <th>Người tạo</th>
-                            <th>Hành động</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody class="align-middle text-center">
