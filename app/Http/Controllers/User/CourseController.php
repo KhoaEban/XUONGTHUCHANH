@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Category;
 use App\Models\Lesson;
-
+use App\Models\Review;
 class CourseController extends Controller
 {
     public function index()
@@ -23,10 +23,17 @@ class CourseController extends Controller
     {
         $course = Course::with(['lessons', 'instructor'])->where('slug', $slug)->firstOrFail();
         $course->increment('views');
+    
 
         if (!$course->isPaidByUser(Auth::id())) {
             return redirect()->route('course.payment', ['slug' => $slug]);
         }
+        $reviews = Review::where('course_id', $course->id)
+                 ->where('visible', 1) // chỉ lấy review được hiển thị
+                 ->with('user')
+                 ->latest()
+                 ->get();
+
 
         // Lấy bài học đầu tiên và bình luận của nó
         $firstLesson = $course->lessons->first();
@@ -45,6 +52,7 @@ class CourseController extends Controller
             ];
         })->toArray();
 
-        return view('user.course.show', compact('course', 'comments'));
+        return view('user.course.show', compact('course', 'comments', 'reviews'));
+
     }
 }

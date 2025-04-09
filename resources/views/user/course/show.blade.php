@@ -391,49 +391,58 @@
             </div>
             <div id="binhluan" class="tab-content container my-4">
                 <h4>Đánh giá khóa học</h4>
+            
                 <!-- Form đánh giá -->
                 @auth
-                @php
-                // Kiểm tra xem người dùng đã đánh giá khóa học chưa
-                $reviewed = $course->reviews->where('user_id', auth()->id())->first();
-                @endphp
-                @if (!$reviewed)
-                <form id="rating-form" action="{{ route('ratings.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="course_id" value="{{ $course->id }}">
-                    <div class="mb-3">
-                        <label for="rating" class="form-label">Chọn số sao:</label>
-                        <div class="star-rating mb-2">
-                            @for ($i = 5; $i >= 1; $i--)
-                            <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required />
-                            <label for="star{{ $i }}">★</label>
-                            @endfor
+                    @php
+                        $reviewed = $course->reviews->where('user_id', auth()->id())->first();
+                    @endphp
+            
+                    @if (!$reviewed)
+                        <form id="rating-form" action="{{ route('ratings.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="course_id" value="{{ $course->id }}">
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Chọn số sao:</label>
+                                <div class="star-rating mb-2">
+                                    @for ($i = 5; $i >= 1; $i--)
+                                        <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required />
+                                        <label for="star{{ $i }}">★</label>
+                                    @endfor
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="comment" class="form-control" rows="3" placeholder="Chia sẻ cảm nhận của bạn về khóa học..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-submit">Gửi đánh giá</button>
+                        </form>
+                    @else
+                        <p class="text-success">Bạn đã đánh giá khóa học này.</p>
+                    @endif
+            
+                    <!-- Hiển thị các đánh giá -->
+                    @if ($reviews->count())
+                        <div class="mt-4">
+                            @foreach ($reviews as $review)
+                                <div class="review-item mb-3 p-3 border rounded bg-light">
+                                    <strong>{{ $review->user->name }}</strong>
+                                    <div class="stars mb-1">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <span style="color: {{ $i <= $review->rating ? '#f39c12' : '#ccc' }}">★</span>
+                                        @endfor
+                                    </div>
+                                    <p class="mb-0">{{ $review->comment }}</p>
+                                </div>
+                            @endforeach
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <textarea name="comment" class="form-control" rows="3" placeholder="Chia sẻ cảm nhận của bạn về khóa học..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-submit">Gửi đánh giá</button>
-                </form>
+                    @else
+                        <p class="mt-3">Chưa có đánh giá nào.</p>
+                    @endif
                 @else
-                    <p class="text-success">Bạn đã đánh giá khóa học này.</p>
-                @endif
-                <!-- Hiển thị các đánh giá -->
-                @foreach ($course->reviews as $review)
-                <div class="review-item">
-                    <strong>{{ $review->user->name }}</strong>
-                    <div class="stars">
-                        @for ($i = 1; $i <= 5; $i++)
-                            <span>{{ $i <= $review->rating ? '★' : '☆' }}</span>
-                            @endfor
-                    </div>
-                    <p>{{ $review->comment }}</p>
-                </div>
-                @endforeach
-                @else
-                <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để gửi đánh giá.</p>
+                    <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để gửi đánh giá.</p>
                 @endauth
             </div>
+            
 
         </div>
     </div>

@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\EnrollmentController;
 use App\Http\Controllers\Admin\AdminCommentsController;
 use App\Http\Controllers\Admin\AdminRevenueController;
 use App\Http\Controllers\Admin\RevenueController;
-
+use App\Http\Controllers\Admin\ReviewControllerAdmin;
 // User
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\CategoryController;
@@ -90,6 +90,13 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::put('/{id}/status', [AdminCommentsController::class, 'updateStatus'])->name('admin.comments.updateStatus');
         Route::delete('/{id}', [AdminCommentsController::class, 'destroy'])->name('admin.comments.destroy');
     });
+    // Quản lí đánh giá 
+    Route::get('/admin/reviews', [ReviewControllerAdmin::class, 'index'])->name('admin.reviews.index');
+    Route::patch('/admin/reviews/{review}/toggle-visibility', [ReviewControllerAdmin::class, 'toggleVisibility'])
+    ->name('reviews.toggle_visibility');
+    Route::delete('/admin/reviews/{review}', [ReviewControllerAdmin::class, 'destroy'])->name('reviews.destroy');
+
+
 
     // Quản lý danh mục
     Route::prefix('admin/category')->group(function () {

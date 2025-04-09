@@ -58,6 +58,7 @@
                         <a href="{{ route('admin.orders.index') }}">Quản lý đơn hàng</a>
                         <a href="{{ route('admin.comments.index') }}">Quản lý bình luận</a>
                         <a href="{{ route('revenue.index') }}">Quản lý doanh thu</a>
+                        <a href="{{ route('admin.reviews.index') }}">Quản lí đánh giá</a>
                     </div>
                 </div>
                 <div class="menu-item has-submenu">

@@ -11,6 +11,7 @@ class Review extends Model
         'course_id',
         'rating',
         'comment',
+        'visible',
     ];
 
     public function user() {
