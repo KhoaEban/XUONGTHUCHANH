@@ -27,4 +27,5 @@ class User extends Authenticatable
         // Implement your role checking logic here
         return $this->role === $role;
     }
+    
 }

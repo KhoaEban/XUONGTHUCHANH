@@ -91,6 +91,67 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::post('/assignChild', [CategoryControllerAdmin::class, 'assignChild'])->name('admin.category.assignChild');
         Route::delete('/unlink/{id}', [CategoryControllerAdmin::class, 'unlinkCategory'])->name('admin.category.unlink');
     });
+<<<<<<< Updated upstream
+=======
+
+
+    // Quản lý bài tập
+    Route::prefix('admin/quizzes')->group(function () {
+        Route::get('/', [QuizControllerAdmin::class, 'index'])->name('admin.quizzes.index');
+        Route::get('/create', [QuizControllerAdmin::class, 'create'])->name('admin.quizzes.create');
+        Route::post('/store', [QuizControllerAdmin::class, 'store'])->name('admin.quizzes.store');
+        Route::get('/edit/{quiz}', [QuizControllerAdmin::class, 'edit'])->name('admin.quizzes.edit');
+        Route::put('/update/{quiz}', [QuizControllerAdmin::class, 'update'])->name('admin.quizzes.update');
+        Route::delete('/delete/{quiz}', [QuizControllerAdmin::class, 'destroy'])->name('admin.quizzes.destroy');
+        Route::get('/get-lessons/{courseId}', [QuizControllerAdmin::class, 'getLessons']);
+    });
+
+    // Quản lý câu hỏi
+    Route::prefix('admin/questions')->group(function () {
+        Route::get('/', [QuestionControllerAdmin::class, 'index'])->name('admin.questions.index');
+        Route::get('/create', [QuestionControllerAdmin::class, 'create'])->name('admin.questions.create');
+        Route::post('/store', [QuestionControllerAdmin::class, 'store'])->name('admin.questions.store');
+        Route::get('/edit/{question}', [QuestionControllerAdmin::class, 'edit'])->name('admin.questions.edit');
+        Route::put('/update/{question}', [QuestionControllerAdmin::class, 'update'])->name('admin.questions.update');
+        Route::delete('/delete/{question}', [QuestionControllerAdmin::class, 'destroy'])->name('admin.questions.destroy');
+        Route::get('/get-quizzes/{lessonId}', [QuestionControllerAdmin::class, 'getQuizzesByLesson']);
+    });
+
+    // Quản lý kết quả bài tập
+    Route::prefix('admin/quiz-results')->group(function () {
+        Route::get('/', [QuizResultControllerAdmin::class, 'index'])->name('admin.quiz_results.index');
+        Route::get('/create', [QuizResultControllerAdmin::class, 'create'])->name('admin.quiz_results.create');
+        Route::post('/store', [QuizResultControllerAdmin::class, 'store'])->name('admin.quiz_results.store');
+        Route::get('/edit/{quizResult}', [QuizResultControllerAdmin::class, 'edit'])->name('admin.quiz_results.edit');
+        Route::put('/update/{quizResult}', [QuizResultControllerAdmin::class, 'update'])->name('admin.quiz_results.update');
+        Route::delete('/delete/{quizResult}', [QuizResultControllerAdmin::class, 'destroy'])->name('admin.quiz_results.destroy');
+    });
+    
+    // Quản lý câu trả lời
+    Route::prefix('admin/answers')->group(function () {
+        Route::get('/', [AnswerControllerAdmin::class, 'index'])->name('admin.answers.index');
+        Route::get('/create', [AnswerControllerAdmin::class, 'create'])->name('admin.answers.create');
+        Route::post('/store', [AnswerControllerAdmin::class, 'store'])->name('admin.answers.store');
+        Route::get('/edit/{answer}', [AnswerControllerAdmin::class, 'edit'])->name('admin.answers.edit');
+        Route::put('/update/{answer}', [AnswerControllerAdmin::class, 'update'])->name('admin.answers.update');
+        Route::delete('/delete/{answer}', [AnswerControllerAdmin::class, 'destroy'])->name('admin.answers.destroy');
+        Route::get('/get-questions/{quizId}', [AnswerControllerAdmin::class, 'getQuestionsByQuiz']);
+    });
+
+    
+    Route::get('/payments', [PaymentController::class, 'adminPaymentHistory'])->name('admin.payment.history');
+    Route::post('/enrollments/{enrollment}/update-status', [PaymentController::class, 'updateEnrollmentStatus'])->name('admin.enrollment.update_status');
+
+    // thống kê doanh thu
+// Routes for Revenue management (Admin)
+    Route::get('/admin/revenue', [RevenueController::class, 'index'])->name('admin.revenue.index');
+    Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
+    Route::get('revenue', [AdminRevenueController::class, 'index'])->name('revenue.index'); // Trang tổng quan doanh thu
+    Route::get('revenue/report', [AdminRevenueController::class, 'report'])->name('revenue.report'); // Báo cáo doanh thu
+    Route::get('revenue/user/{userId}', [AdminRevenueController::class, 'userRevenue'])->name('revenue.user'); // Doanh thu theo người dùng
+    Route::get('revenue/course/{courseId}', [AdminRevenueController::class, 'courseRevenue'])->name('revenue.course'); // Doanh thu theo khóa học
+    
+>>>>>>> Stashed changes
 });
 Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
 Route::put('/admin/orders/{payment}/update-status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
@@ -132,6 +193,14 @@ Route::prefix('user')->group(function () {
 
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
+<<<<<<< Updated upstream
+=======
+
+    
+    
+    Route::get('/courses/{course}/progress', [CourseController::class, 'getCourseProgress'])->name('user.courses.progress');
+    Route::post('/courses/{course}/lessons/{lesson}/complete', [CourseController::class, 'markLessonAsComplete'])->name('user.courses.lessons.complete');
+>>>>>>> Stashed changes
 });
 
 // 404

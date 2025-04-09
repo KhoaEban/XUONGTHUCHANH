@@ -34,4 +34,17 @@ class Course extends Model
     {
         return $this->belongsTo(Category::class);
     }
+<<<<<<< Updated upstream
+=======
+
+    public function isPaidByUser($userId)
+    {
+        
+        return Payment::where('user_id', $userId)
+            ->where('course_id', $this->id)
+            ->where('status', 'completed')
+            ->exists();
+    }
+    
+>>>>>>> Stashed changes
 }

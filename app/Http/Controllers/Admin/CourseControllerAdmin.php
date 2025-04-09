@@ -103,4 +103,5 @@ class CourseControllerAdmin extends Controller
         $course->delete();
         return redirect()->route('admin.course.index')->with('success', 'Khóa học đã bị xóa!');
     }
+   
 }
