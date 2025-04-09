@@ -416,7 +416,7 @@
                     <button type="submit" class="btn btn-submit">Gửi đánh giá</button>
                 </form>
                 @else
-                    <p class="text-success">Bạn đã đánh giá khóa học này.</p>
+                <p class="text-success">Bạn đã đánh giá khóa học này.</p>
                 @endif
                 <!-- Hiển thị các đánh giá -->
                 @foreach ($course->reviews as $review)
