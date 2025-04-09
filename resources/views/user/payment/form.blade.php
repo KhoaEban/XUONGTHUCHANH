@@ -52,7 +52,7 @@
                             @endif
                             @endfor
                     </span>
-                    <p class="mb-0">{{ $review->content }}</p>
+                    <p class="mb-0">{{ $review->comment }}</p>
                     <small class="text-muted">{{ $review->created_at->diffForHumans() }}</small>
                 </div>
                 @endforeach

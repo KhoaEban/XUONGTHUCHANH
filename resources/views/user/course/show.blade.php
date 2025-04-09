@@ -439,7 +439,8 @@
                         <p class="mt-3">Chưa có đánh giá nào.</p>
                     @endif
                 @else
-                    <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để gửi đánh giá.</p>
+                    <p class="mt-3">Vui lồng đăng nhập để đánh giá khóa học.</p>
+                    
                 @endauth
             </div>
             
