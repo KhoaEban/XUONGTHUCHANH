@@ -18,7 +18,8 @@ class PaymentController extends Controller
             return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để thanh toán.');
         }
 
-        $course = Course::where('slug', $slug)->firstOrFail();
+        $course = Course::with(['lessons', 'reviews.user'])->where('slug', $slug)->firstOrFail();
+
         return view('user.payment.form', compact('course'));
     }
 

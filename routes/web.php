@@ -28,6 +28,7 @@ use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\CommentController;
+use App\Http\Controllers\User\ReviewController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
@@ -261,6 +262,8 @@ Route::prefix('user')->group(function () {
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::get('/comments/{lesson_id}', [CommentController::class, 'getComments'])->name('comments.get');
+    Route::post('/ratings', [ReviewController::class, 'store'])->name('ratings.store');
+
 });
 
 // VNPay callback
