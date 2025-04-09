@@ -52,52 +52,114 @@
         display: block;
     }
 
-    .sidebar-course {
-        flex: 1;
-        margin-left: 20px;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
+    /* Sidebar Container */
+    .sidebar-course .card {
+        border: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-height: 500px;
+        /* Set a fixed maximum height for the sidebar */
+        overflow-y: auto;
+        /* Enable scrolling if content exceeds height */
     }
 
+    /* Card Body */
+    .sidebar-course .card-body {
+        padding: 15px;
+        /* Reduce padding to save space */
+    }
+
+    /* Heading */
+    .sidebar-course h3 {
+        font-size: 20px;
+        /* Slightly smaller heading */
+        margin-bottom: 10px;
+        /* Reduce margin */
+    }
+
+    /* Video List */
     .video-list {
         list-style: none;
         padding: 0;
         margin: 0;
-        overflow-y: scroll;
-        max-height: 500px;
-        scrollbar-width: thin;
-        scrollbar-color: #000000;
-        background: #f1f1f1;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding: 10px;
-        border-radius: 5px;
+        /* Remove default margin */
     }
 
     .video-list li {
         display: flex;
         align-items: center;
+        padding: 8px;
+        /* Reduce padding for compactness */
         cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .video-list li:hover {
+        background: #f1f1f1;
     }
 
     .video-list img {
-        width: 100px;
-        /* height: 60px; */
-        border-radius: 5px;
+        width: 50px;
+        /* Smaller thumbnail */
+        height: 30px;
+        /* Reduced height */
+        object-fit: cover;
         margin-right: 10px;
+        border-radius: 4px;
     }
 
-    .video-list h4,
-    span {
+    .video-list .d-flex {
+        flex: 1;
+        gap: 5px;
+        /* Reduce spacing between elements */
+    }
+
+    .video-list span {
         font-size: 14px;
-        margin-right: 5px;
+        /* Smaller order number */
+    }
+
+    .video-list h4 {
+        font-size: 14px;
+        /* Smaller title */
+        margin: 0;
+        line-height: 1.2;
+        /* Tighten line height */
     }
 
     .video-list p {
+        margin: 0;
         font-size: 12px;
-        color: #777;
+        /* Smaller checkmark */
+    }
+
+    /* Quiz List */
+    .quiz-list {
+        list-style: none;
+        padding-left: 20px;
+        /* Indent slightly */
+        margin: 0;
+        display: none;
+        /* Hidden by default, shown via JS */
+    }
+
+    .quiz-list li {
+        padding: 5px 0;
+        /* Reduce padding */
+        font-size: 13px;
+        /* Smaller text */
+    }
+
+    .quiz-item {
+        border-bottom: 1px solid #eee;
+    }
+
+    .quiz-link {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .quiz-link:hover {
+        color: #007bff;
     }
 </style>
 
@@ -111,20 +173,6 @@
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy">
                     </iframe>
-                    {{-- @if ($course->lessons->first()->video_url)
-                        <iframe id="lesson-video" width="100%" height="500"
-                            src="{{ preg_replace('/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', 'https://www.youtube.com/embed/$1', $course->lessons->first()->video_url) }}?controls=0&rel=0&showinfo=0&modestbranding=1&iv_load_policy=3&fs=1"
-                            title="{{ $course->lessons->first()->title }}" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
-                    @else
-                        <iframe id="lesson-video" width="100%" height="500"
-                            src="{{ asset('images/default-thumbnail.jpg') }}" title="YouTube video player" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
-                    @endif --}}
                 </div>
 
                 <div class="video-info">
@@ -139,7 +187,6 @@
                     <button class="tab-button" onclick="openTab(event, 'thongtin')">Thông tin giảng viên</button>
                     <button class="tab-button" onclick="openTab(event, 'danhgia')">Đánh giá</button>
                 </div>
-
                 <div id="gioithieu" class="tab-content active">
                     <p class="px-3">{!! nl2br(e($course->lessons->first()->content)) !!}</p>
                 </div>
@@ -150,7 +197,7 @@
                                 <a href="#" onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}')">
                                     {{ $lesson->title }} - ({{ gmdate('H:i:s', $lesson->duration) }})
                                     {{-- @if ($lesson->completed)
-                                        ✅
+                                    ✅
                                     @endif --}}
                                 </a>
                             </li>
@@ -164,7 +211,253 @@
                     <p>Giảng viên: {{ $course->instructor->name ?? 'Đang cập nhật' }}</p>
                 </div>
                 <div id="danhgia" class="tab-content">
-                    <p>Đánh giá khóa học sẽ cập nhật sau.</p>
+                    <h4>Đánh giá khóa học</h4>
+
+                    @auth
+                        <form id="comment-form" action="{{ route('comments.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="lesson_id" value="{{ $course->lessons->first()->id }}">
+                            <div class="mb-3">
+                                <textarea name="content" class="form-control" rows="3" placeholder="Viết đánh giá..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                        </form>
+                    @else
+                        <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để gửi đánh giá.</p>
+                    @endauth
+
+                    <ul class="list-group mt-3">
+                        <h5 class="mb-3">{{ $course->lessons->first()->comments->count() }} Bình luận</h5>
+                        @foreach ($course->lessons->first()->comments->where('parent_id', null)->sortByDesc('created_at') as $comment)
+                            <li class="list-group-item @if ($comment->user->isTeacher()) comment-teacher @endif">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="user-info d-flex align-items-center">
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->name) }}&background=random"
+                                                class="avatar rounded-circle me-2" alt="{{ $comment->user->name }}">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <strong>{{ $comment->user->name }}</strong>
+                                                    @if ($comment->user->isTeacher())
+                                                        <span class="badge bg-primary ms-2">Giảng viên</span>
+                                                    @elseif ($comment->user->isAdmin())
+                                                        <span class="badge bg-danger ms-2">Quản trị viên</span>
+                                                    @endif
+                                                    <span
+                                                        class="text-muted ms-2">{{ $comment->created_at->diffForHumans() }}</span>
+                                                </div>
+
+                                                @auth
+                                                    @if (auth()->id() == $comment->user_id)
+                                                        <!-- Icon 3 chấm và Dropdown -->
+                                                        <div class="dropdown d-end">
+                                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                                                type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
+                                                                &#x2026; <!-- Ba chấm icon -->
+                                                            </button>
+                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                <!-- Nút sửa -->
+                                                                <li>
+                                                                    <button class="dropdown-item"
+                                                                        onclick="openEditForm({{ $comment->id }})">
+                                                                        <i class="fas fa-edit"></i> Sửa
+                                                                    </button>
+                                                                </li>
+                                                                <!-- Nút xóa -->
+                                                                <li>
+                                                                    <form
+                                                                        action="{{ route('comments.destroy', $comment->id) }}"
+                                                                        method="POST" class="d-inline"
+                                                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa bình luận này?');">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="dropdown-item">
+                                                                            <i class="fas fa-trash"></i> Xóa</button>
+                                                                    </form>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    @endif
+                                                @endauth
+                                            </div>
+                                        </div>
+
+                                        <p id="comment-content-{{ $comment->id }}" class="mt-2">{{ $comment->content }}
+                                        </p>
+
+                                        <!-- Form sửa bình luận -->
+                                        @auth
+                                            <div id="edit-form-{{ $comment->id }}" class="mt-2" style="display: none;">
+                                                <form action="{{ route('comments.update', $comment->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <textarea name="content" class="form-control" rows="3">{{ $comment->content }}</textarea>
+                                                    <button type="submit" class="btn btn-primary mt-2">Cập nhật</button>
+                                                    <button type="button" class="btn btn-secondary mt-2"
+                                                        onclick="closeEditForm({{ $comment->id }})">Hủy</button>
+                                                </form>
+                                            </div>
+                                        @endauth
+
+
+                                        <form action="{{ route('comments.like', $comment->id) }}" method="POST"
+                                            class="d-inline like-form">
+                                            @csrf
+                                            @if ($comment->liked_by_user)
+                                                <button type="submit" class="btn btn-sm btn-outline-primary like-btn">
+                                                    <i class="fas fa-thumbs-up"></i> Thích
+                                                    ({{ $comment->likes_count }})
+                                                </button>
+                                            @else
+                                                <button type="submit" class="btn btn-sm btn-primary like-btn">
+                                                    <i class="far fa-thumbs-up"></i> Đã Thích
+                                                    ({{ $comment->likes_count }})
+                                                </button>
+                                            @endif
+                                        </form>
+
+                                        <!-- Nút trả lời -->
+                                        @auth
+                                            <button class="btn btn-sm btn-outline-primary like-btn"
+                                                onclick="showReplyForm({{ $comment->id }})"><i
+                                                    class="far fa-comment-dots"></i> Trả
+                                                lời</button>
+
+                                            <div id="reply-form-{{ $comment->id }}" class="mt-2" style="display:none;">
+                                                <form action="{{ route('comments.store') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="lesson_id"
+                                                        value="{{ $course->lessons->first()->id }}">
+                                                    <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                                    <textarea name="content" class="form-control" rows="3" placeholder="Nhập câu trả lời của bạn..." required></textarea>
+                                                    <button type="submit" class="btn btn-sm btn-outline-primary like-btn">Gửi
+                                                        trả
+                                                        lời</button>
+                                                </form>
+                                            </div>
+                                        @endauth
+                                        <div id="replies-{{ $comment->id }}"
+                                            class="replies-list ms-4 ps-2 border-start">
+                                            @foreach ($comment->replies as $reply)
+                                                <div class="reply-item mt-3">
+                                                    <div class="d-flex">
+                                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($reply->user->name) }}&background=random"
+                                                            class="avatar rounded-circle me-2" width="32"
+                                                            height="32" alt="{{ $reply->user->name }}">
+                                                        <div class="reply-content">
+                                                            <div class="d-flex align-items-center">
+                                                                <strong class="me-2">{{ $reply->user->name }}</strong>
+
+                                                                @if ($reply->user->isTeacher())
+                                                                    <span class="badge bg-primary">Giảng viên</span>
+                                                                @elseif ($reply->user->isAdmin())
+                                                                    <span class="badge bg-danger">Quản trị viên</span>
+                                                                @endif
+
+                                                                <small
+                                                                    class="text-muted ms-2 me-2">{{ $reply->created_at->diffForHumans() }}
+                                                                </small>
+                                                                <div>
+                                                                    @if (auth()->id() == $reply->user_id)
+                                                                        <div class="dropdown d-end">
+                                                                            <button
+                                                                                class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                                                                type="button" id="dropdownMenuButton"
+                                                                                data-bs-toggle="dropdown"
+                                                                                aria-expanded="false">
+                                                                                &#x2026; <!-- Ba chấm icon -->
+                                                                            </button>
+                                                                            <ul class="dropdown-menu"
+                                                                                aria-labelledby="dropdownMenuButton">
+                                                                                <!-- Nút sửa -->
+                                                                                <li>
+                                                                                    <button class="dropdown-item"
+                                                                                        onclick="openEditForm({{ $reply->id }})">
+                                                                                        <i class="fas fa-edit"></i> Sửa
+                                                                                    </button>
+                                                                                </li>
+                                                                                <!-- Nút xóa -->
+                                                                                <li>
+                                                                                    <div class="comment-actions">
+                                                                                        <form
+                                                                                            action="{{ route('comments.destroy', $reply->id) }}"
+                                                                                            method="POST"
+                                                                                            class="d-inline">
+                                                                                            @csrf
+                                                                                            @method('DELETE')
+                                                                                            <button type="submit"
+                                                                                                class="dropdown-item"><i class="fas fa-trash"></i> Xóa</button>
+                                                                                        </form>
+                                                                                    </div>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            @auth
+                                                                <div id="edit-form-{{ $reply->id }}" class="mt-2"
+                                                                    style="display: none;">
+                                                                    <form action="{{ route('comments.update', $reply->id) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('PATCH')
+                                                                        <textarea name="content" class="form-control" rows="3">{{ $reply->content }}</textarea>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary mt-2">Cập nhật</button>
+                                                                        <button type="button" class="btn btn-secondary mt-2"
+                                                                            onclick="closeEditForm({{ $reply->id }})">Hủy</button>
+                                                                    </form>
+                                                                </div>
+                                                            @endauth
+
+                                                            <div class="d-flex align-items-center gap-2 mt-1 mb-2">
+                                                                @if ($reply->parent && $reply->parent->user)
+                                                                    <p class="text-muted small">
+                                                                        <i class="fas fa-reply me-1"></i> Trả lời
+                                                                        <strong>{{ $reply->parent->user->name }}: </strong>
+                                                                    </p>
+                                                                @endif
+                                                                <p class="markdown-content">
+                                                                    {{ $reply->content }}
+                                                                </p>
+                                                            </div>
+
+
+                                                            <div class="reply-actions">
+                                                                <form action="{{ route('comments.like', $reply->id) }}"
+                                                                    method="POST" class="d-inline like-form">
+                                                                    @csrf
+                                                                    @if ($reply->liked_by_user)
+                                                                        <button type="submit"
+                                                                            class="btn btn-sm btn-primary like-btn">
+                                                                            <i class="fas fa-thumbs-up"></i> Đã Thích
+                                                                            @if ($reply->likes_count > 0)
+                                                                                ({{ $reply->likes_count }})
+                                                                            @endif
+                                                                        </button>
+                                                                    @else
+                                                                        <button type="submit"
+                                                                            class="btn btn-sm btn-outline-primary like-btn">
+                                                                            <i class="far fa-thumbs-up"></i> Thích
+                                                                            @if ($reply->likes_count > 0)
+                                                                                ({{ $reply->likes_count }})
+                                                                            @endif
+                                                                        </button>
+                                                                    @endif
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
@@ -188,12 +481,12 @@
                                         @endif
                                     </div>
                                 </li>
-
                                 <!-- Danh sách bài kiểm tra -->
                                 <ul class="quiz-list" id="quiz-list-{{ $lesson->id }}" class="quiz-list">
                                     @foreach ($lesson->quizzes as $quiz)
                                         <li class="quiz-item border-bottom">
-                                            <a class="quiz-link text-decoration-none text-dark" href="{{ route('quizzes.show', $quiz->id) }}">{{ $quiz->title }}</a>
+                                            <a class="quiz-link text-decoration-none text-dark"
+                                                href="{{ route('quizzes.show', $quiz->id) }}">{{ $quiz->title }}</a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -206,7 +499,77 @@
     </div>
 @endsection
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function loadCourseLessons(courseId) {
+        $.ajax({
+            url: `/courses/${courseId}/lessons`,
+            type: "GET",
+            success: function(data) {
+                let lessonList = $(".video-list");
+                lessonList.empty(); // Xóa danh sách cũ
+
+                data.forEach(lesson => {
+                    lessonList.append(`
+                    <li onclick="loadLesson('${lesson.video_url}', '${lesson.title}', ${lesson.id})">
+                        <img src="${lesson.thumbnail || 'images/default-thumbnail.jpg'}" alt="Video">
+                        <div class="d-flex align-items-center">
+                            <span>${lesson.order_number}.</span>
+                            <h4 class="m-0">${lesson.title}</h4>
+                        </div>
+                    </li>
+                `);
+                });
+            }
+        });
+    }
+
+    function loadLesson(videoUrl, title, lessonId) {
+        $.ajax({
+            url: `/lessons/${lessonId}`,
+            type: "GET",
+            success: function(lesson) {
+                $("#lesson-title").text(lesson.title);
+                $("#lesson-video").attr("src", lesson.video_url);
+                $("#gioithieu p").html(lesson.content);
+            }
+        });
+    }
+
+    function openEditForm(id) {
+        document.getElementById('edit-form-' + id).style.display = 'block';
+        const content = document.getElementById('comment-content-' + id);
+        if (content) {
+            content.style.display = 'none';
+        }
+    }
+
+    function closeEditForm(id) {
+        document.getElementById('edit-form-' + id).style.display = 'none';
+        const content = document.getElementById('comment-content-' + id);
+        if (content) {
+            content.style.display = 'block';
+        }
+    }
+
+    function showReplyForm(commentId) {
+        var replyForm = document.getElementById('reply-form-' + commentId);
+        var currentDisplay = replyForm.style.display;
+        // Kiểm tra nếu bình luận đang ẩn, mới cho phép hiển thị
+        if (currentDisplay === "none" || currentDisplay === "") {
+            // Ẩn tất cả các form trả lời khác
+            document.querySelectorAll('.reply-form').forEach(function(form) {
+                form.style.display = "none";
+            });
+            // Hiển thị form trả lời cho bình luận hiện tại
+            replyForm.style.display = "block";
+        } else {
+            // Ẩn form trả lời khi nó đang hiển thị
+            replyForm.style.display = "none";
+        }
+    }
+
+
     function openTab(evt, tabName) {
         var i, tabContent, tabButtons;
 
@@ -222,11 +585,6 @@
 
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
-    }
-
-    function loadLesson(videoUrl, title) {
-        document.getElementById("lesson-title").innerText = title;
-        document.getElementById("lesson-video").src = videoUrl;
     }
 
     function loadLesson(videoUrl, title, lessonId) {

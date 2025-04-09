@@ -11,7 +11,6 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
         'instructor_id',
         'title',
         'description',
@@ -19,13 +18,20 @@ class Course extends Model
         'category_id',
         'thumbnail',
         'slug',
-        'is_free'
+        'is_free',
+        'views',
     ];
 
 
     public function lessons()
     {
         return $this->hasMany(Lesson::class);
+    }
+    
+    // Định nghĩa khóa chính bằng slug để tự động tìm kiếm theo slug thay vì id
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 
     public function instructor()
@@ -46,3 +52,4 @@ class Course extends Model
             ->exists();
     }
 }
+

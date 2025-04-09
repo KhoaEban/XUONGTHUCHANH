@@ -11,6 +11,9 @@ use App\Http\Controllers\Admin\QuizControllerAdmin;
 use App\Http\Controllers\Admin\QuestionControllerAdmin;
 use App\Http\Controllers\Admin\QuizResultControllerAdmin;
 use App\Http\Controllers\Admin\AnswerControllerAdmin;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\EnrollmentController;
+use App\Http\Controllers\Admin\AdminCommentsController;
 use App\Http\Controllers\Admin\AdminRevenueController;
 use App\Http\Controllers\Admin\RevenueController;
 
@@ -24,15 +27,18 @@ use App\Http\Controllers\User\SimulationController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\CommentController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
 use App\Http\Controllers\Teacher\CourseControllerTeacher;
 use App\Http\Controllers\Teacher\LessonController;
 
+// Gemini Chat
+use App\Http\Controllers\GeminiChatController;
+
 // Trang chủ
 Route::get('/', [HomeController::class, 'index']);
-
 
 // Đăng nhập, đăng ký
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -41,8 +47,15 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Admin
-    Route::middleware(['check.role:admin'])->group(function () {
+Route::get('/admin/instructors/{instructorId}/courses', [CourseController::class, 'coursesByInstructor'])
+    ->name('admin.instructors.courses');
+
+// Gemini Chat
+Route::get('/chat', [GeminiChatController::class, 'index'])->name('chat.index');
+Route::post('/chat/send', [GeminiChatController::class, 'send'])->name('chat.send');
+
+// Admin
+Route::middleware(['check.role:admin'])->group(function () {
     // Trang chủ Admin
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
     // Quản lý người dùng
@@ -60,7 +73,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 
     // Quản lý bài học
-        Route::prefix('admin/lessons')->group(function () {
+    Route::prefix('admin/lessons')->group(function () {
         Route::get('/', [LessonControllerAdmin::class, 'index'])->name('admin.lessons.index');
         Route::get('/show/{lesson}', [LessonControllerAdmin::class, 'show'])->name('admin.lessons.show');
         Route::get('/create', [LessonControllerAdmin::class, 'create'])->name('admin.lessons.create');
@@ -70,8 +83,15 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::delete('/delete/{lesson}', [LessonControllerAdmin::class, 'destroy'])->name('admin.lessons.destroy');
     });
 
+    // Quản lý bình luận
+    Route::prefix('admin/comments')->group(function () {
+        Route::get('/', [AdminCommentsController::class, 'index'])->name('admin.comments.index');
+        Route::put('/{id}/status', [AdminCommentsController::class, 'updateStatus'])->name('admin.comments.updateStatus');
+        Route::delete('/{id}', [AdminCommentsController::class, 'destroy'])->name('admin.comments.destroy');
+    });
+
     // Quản lý danh mục
-        Route::prefix('admin/category')->group(function () {
+    Route::prefix('admin/category')->group(function () {
         Route::get('/', [CategoryControllerAdmin::class, 'index'])->name('admin.category.index');
         Route::get('/create', [CategoryControllerAdmin::class, 'create'])->name('admin.category.create');
         Route::post('/store', [CategoryControllerAdmin::class, 'store'])->name('admin.category.store');
@@ -85,9 +105,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::delete('/unlink/{id}', [CategoryControllerAdmin::class, 'unlinkCategory'])->name('admin.category.unlink');
     });
 
-
     // Quản lý bài tập
-        Route::prefix('admin/quizzes')->group(function () {
+    Route::prefix('admin/quizzes')->group(function () {
         Route::get('/', [QuizControllerAdmin::class, 'index'])->name('admin.quizzes.index');
         Route::get('/create', [QuizControllerAdmin::class, 'create'])->name('admin.quizzes.create');
         Route::post('/store', [QuizControllerAdmin::class, 'store'])->name('admin.quizzes.store');
@@ -98,7 +117,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 
     // Quản lý câu hỏi
-        Route::prefix('admin/questions')->group(function () {
+    Route::prefix('admin/questions')->group(function () {
         Route::get('/', [QuestionControllerAdmin::class, 'index'])->name('admin.questions.index');
         Route::get('/create', [QuestionControllerAdmin::class, 'create'])->name('admin.questions.create');
         Route::post('/store', [QuestionControllerAdmin::class, 'store'])->name('admin.questions.store');
@@ -109,7 +128,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 
     // Quản lý kết quả bài tập
-        Route::prefix('admin/quiz-results')->group(function () {
+    Route::prefix('admin/quiz-results')->group(function () {
         Route::get('/', [QuizResultControllerAdmin::class, 'index'])->name('admin.quiz_results.index');
         Route::get('/create', [QuizResultControllerAdmin::class, 'create'])->name('admin.quiz_results.create');
         Route::post('/store', [QuizResultControllerAdmin::class, 'store'])->name('admin.quiz_results.store');
@@ -117,9 +136,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::put('/update/{quizResult}', [QuizResultControllerAdmin::class, 'update'])->name('admin.quiz_results.update');
         Route::delete('/delete/{quizResult}', [QuizResultControllerAdmin::class, 'destroy'])->name('admin.quiz_results.destroy');
     });
-    
+
     // Quản lý câu trả lời
-        Route::prefix('admin/answers')->group(function () {
+    Route::prefix('admin/answers')->group(function () {
         Route::get('/', [AnswerControllerAdmin::class, 'index'])->name('admin.answers.index');
         Route::get('/create', [AnswerControllerAdmin::class, 'create'])->name('admin.answers.create');
         Route::post('/store', [AnswerControllerAdmin::class, 'store'])->name('admin.answers.store');
@@ -129,21 +148,25 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/get-questions/{quizId}', [AnswerControllerAdmin::class, 'getQuestionsByQuiz']);
     });
 
-    
+    // Quản lý thanh toán
+    Route::prefix('admin/orders')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('admin.orders.index');
+        Route::put('/{payment}/update-status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+    });
+
+    Route::post('/admin/enrollments/store', [EnrollmentController::class, 'store'])->name('admin.enrollments.store');
+    Route::put('/admin/enrollments/{payment}/updateStatus', [EnrollmentController::class, 'updateStatus'])->name('admin.enrollments.updateStatus');
+
     Route::get('/payments', [PaymentController::class, 'adminPaymentHistory'])->name('admin.payment.history');
     Route::post('/enrollments/{enrollment}/update-status', [PaymentController::class, 'updateEnrollmentStatus'])->name('admin.enrollment.update_status');
 
     // thống kê doanh thu
-    // Routes for Revenue management (Admin)
-        Route::get('/admin/revenue', [RevenueController::class, 'index'])->name('admin.revenue.index');
-        Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
-        Route::get('revenue', [AdminRevenueController::class, 'index'])->name('revenue.index'); // Trang tổng quan doanh thu
-        Route::get('revenue/report', [AdminRevenueController::class, 'report'])->name('revenue.report'); // Báo cáo doanh thu
-        Route::get('revenue/user/{userId}', [AdminRevenueController::class, 'userRevenue'])->name('revenue.user'); // Doanh thu theo người dùng
-        Route::get('revenue/course/{courseId}', [AdminRevenueController::class, 'courseRevenue'])->name('revenue.course'); // Doanh thu theo khóa học
+    Route::prefix('admin/revenue')->group(function () {
+        Route::get('/', [AdminRevenueController::class, 'index'])->name('revenue.index'); // Trang tổng quan doanh thu
+        Route::get('/report', [AdminRevenueController::class, 'report'])->name('revenue.report'); // Báo cáo doanh thu
+        Route::get('/user/{userId}', [AdminRevenueController::class, 'userRevenue'])->name('revenue.user'); // Doanh thu theo người dùng
+        Route::get('/course/{courseId}', [AdminRevenueController::class, 'courseRevenue'])->name('revenue.course'); // Doanh thu theo khóa học
     });
-
-
 });
 
 // Instructor
@@ -172,38 +195,47 @@ Route::middleware(['check.role:instructor'])->group(function () {
     });
 });
 
-
-
 // User
 Route::prefix('user')->group(function () {
     // Hồ sơ
     Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+
     Route::get('/payment-history', [PaymentController::class, 'userPaymentHistory'])->name('user.payment.history');
+
     // Danh mục
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
     // Khóa học
     Route::get('/course', [CourseController::class, 'index'])->name('course');
     Route::get('/course/{slug}', [CourseController::class, 'show'])->name('course.show');
+
+    // Bài học
     Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
     Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lessons.show');
+
+    // Quizzes
+    Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
+    Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+
+    // Thanh toán
+    Route::get('/courses/{slug}/lessons', [LessonController::class, 'getLessons'])->name('courses.lessons');
+    Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
+    Route::get('/lesson/{id}', [LessonController::class, 'getLesson'])->name('lessons.show');
+
     Route::get('/support', [SupportController::class, 'index'])->name('support');
     Route::post('/support', [SupportController::class, 'submit'])->name('support');
 
     Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
-    
+
     Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
-    
+    Route::get('/quiz/{quizId}/do', [QuizController::class, 'doQuiz'])->name('user.quiz.do');
+    Route::post('/quiz/{quizId}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
+
     Route::get('/faq', [FaqController::class, 'index'])->name('faq');
     Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
-    
-});
 
-
-
-Route::prefix('user')->middleware('auth')->group(function () {
     Route::get('/course/{slug}/payment', [PaymentController::class, 'showPaymentForm'])->name('course.payment');
     Route::post('/course/{slug}/payment', [PaymentController::class, 'processPayment'])->name('course.payment.process');
     Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
@@ -213,6 +245,22 @@ Route::prefix('user')->middleware('auth')->group(function () {
     Route::post('/payment-history/{course}/buy-again', [PaymentController::class, 'buyAgain'])->name('user.payment.buy_again');
     Route::get('/payment/{slug}', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
     Route::post('/user/payment/{slug}', [PaymentController::class, 'processPayment'])->name('course.payment.process');
+
+    // các route khác
+    Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+    Route::get('/simulation', [SimulationController::class, 'index'])->name('simulation');
+    Route::get('/support', [SupportController::class, 'index'])->name('support');
+    Route::post('/support', [SupportController::class, 'submit'])->name('support');
+
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    //like
+    Route::post('/comments/{id}/like', [CommentController::class, 'like'])->name('comments.like');
+    Route::get('/comments/{id}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::post('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+    Route::patch('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    Route::get('/comments/{lesson_id}', [CommentController::class, 'getComments'])->name('comments.get');
 });
 
 // VNPay callback

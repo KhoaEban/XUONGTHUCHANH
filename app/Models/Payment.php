@@ -28,12 +28,21 @@ class Payment extends Model
         return $this->belongsTo(Course::class);
     }
 
+
+    public function enrollment()
+    {
+        return $this->hasOne(Enrollment::class, 'payment_id', 'id');
+    }
+
+    // Nếu bạn vẫn muốn có danh sách các enrollments liên quan đến user và course
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class, 'course_id', 'course_id')->where('user_id', $this->user_id);
     }
-    
-    public function latestEnrollment() {
+
+    // Nếu bạn vẫn muốn có latest Enrollment
+    public function latestEnrollment()
+    {
         return $this->enrollments()->latest()->first();
     }
 }

@@ -9,10 +9,16 @@
         </div>
         <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+
+
+            
             <div class="form-group mb-3">
                 <label for="name">Tên danh mục:</label>
                 <input type="text" name="name" id="name" class="form-control" required>
             </div>
+
+
+
 
             <div class="form-group mb-3">
                 <label for="parent_id">Danh mục cha:</label>
@@ -23,6 +29,9 @@
                     @endforeach
                 </select>
             </div>
+
+
+
 
             <div class="form-group mb-3">
                 <label for="image">Hình ảnh danh mục:</label>

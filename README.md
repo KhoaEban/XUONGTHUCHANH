@@ -29,9 +29,9 @@ php artisan storage:link
 php artisan serve
 ```
 
-# up git lên
-# git add .
-# git commit -m "Initial commit"
-# git push origin Branch-cua-khoa
-
-# đổi nhánh git checkout < tên nhánh >
+	
+Ngân hàng: NCB
+Số thẻ: 9704198526191432198
+Tên chủ thẻ:NGUYEN VAN A
+Ngày phát hành:07/15
+Mật khẩu OTP:123456

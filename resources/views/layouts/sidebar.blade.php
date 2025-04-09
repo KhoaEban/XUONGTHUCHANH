@@ -24,12 +24,6 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('user.payment.history') }}" class="menu-item">
-                            <i class="fa fa-life-ring"></i>
-                            <div>lịch sử</div>
-                        </a>
-                    </li>
-                    <li>
                         <a href="{{ route('faq') }}" class="menu-item">
                             <i class="fa fa-question-circle"></i>
                             <div>Câu hỏi thường gặp</div>
@@ -42,7 +36,6 @@
             <main class="main-content px-3" style="min-height: 50vh">
                 @yield('content')
             </main>
-
             <br>
             <br>
             <br>
@@ -142,6 +135,29 @@
     }
 </style>
 
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công!',
+            text: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi!',
+            text: "{{ session('error') }}",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    </script>
+@endif
 
 <script>
     window.addEventListener("scroll", function() {
