@@ -25,10 +25,11 @@ class Course extends Model
         return 'slug';
     }
 
-    public function instructor()
-    {
-        return $this->belongsTo(User::class, 'instructor_id');
-    }
+  // In App\Models\Course.php
+public function instructor()
+{
+    return $this->belongsTo(User::class, 'instructor_id'); // Assuming you have an 'instructor_id' foreign key in your 'courses' table
+}
 
     public function category()
     {
@@ -45,6 +46,17 @@ class Course extends Model
             ->where('status', 'completed')
             ->exists();
     }
+<<<<<<< Updated upstream
     
+>>>>>>> Stashed changes
+=======
+    public function enrollments()
+{
+    return $this->belongsToMany(User::class, 'enrollments', 'course_id', 'user_id');
+}
+public function progress()
+{
+    return $this->hasMany(CourseProgress::class);
+}
 >>>>>>> Stashed changes
 }

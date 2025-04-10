@@ -30,6 +30,7 @@ use App\Http\Controllers\User\FaqController;
 use App\Http\Controllers\User\SupportController;
 use App\Http\Controllers\User\SimulationController;
 
+
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
 use App\Http\Controllers\Teacher\CourseControllerTeacher;
@@ -188,6 +189,26 @@ Route::prefix('user')->group(function () {
     Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
     Route::get('/course', [CourseController::class, 'index'])->name('course');
+<<<<<<< Updated upstream
+=======
+    Route::get('/course/{slug}', [CourseController::class, 'show'])->name('course.show');
+    Route::get('/courses/incomplete', [HomeController::class, 'getIncompleteCourses'])->name('courses.incomplete');
+   
+
+    // Bài học
+    Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
+    Route::get('/course/lesson/{slug}', [LessonController::class, 'show'])->name('course.lessons.show');
+
+    // Quizzes
+    Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);
+    Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+
+    // Thanh toán
+    Route::get('/courses/{slug}/lessons', [LessonController::class, 'getLessons'])->name('courses.lessons');
+    Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
+    Route::get('/lesson/{id}', [LessonController::class, 'getLesson'])->name('lessons.show');
+
+>>>>>>> Stashed changes
     Route::get('/support', [SupportController::class, 'index'])->name('support');
     Route::post('/support', [SupportController::class, 'submit'])->name('support');
 

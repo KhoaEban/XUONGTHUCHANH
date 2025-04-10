@@ -27,5 +27,35 @@ class User extends Authenticatable
         // Implement your role checking logic here
         return $this->role === $role;
     }
+<<<<<<< Updated upstream
     
+=======
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin'; // Kiểm tra nếu role là admin
+    }
+    public function isTeacher()
+    {
+        return $this->role === 'instructor';
+    }
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+    public function courseProgress()
+{
+    return $this->hasMany(CourseProgress::class);
+}
+>>>>>>> Stashed changes
 }
