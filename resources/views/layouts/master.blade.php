@@ -11,7 +11,7 @@
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/d70c32c211.js" crossorigin="anonymous"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
@@ -348,7 +348,64 @@
             <!-- Icon bên phải -->
             <div class="d-flex align-items-center">
                 <div class="icon me-3"><i class="fas fa-th"></i></div>
-                <div class="icon me-3"><i class="fas fa-bell"></i></div>
+
+                <!-- Biểu tượng chuông với thông báo -->
+                <div class="dropdown me-3">
+                    <a href="#" class="icon text-decoration-none position-relative" id="notificationDropdown" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        @if (Auth::check() && Auth::user()->unreadNotifications->count() > 0)
+                            <span class="badge bg-danger rounded-pill text-center" style="position: absolute; top: 5px; right: 5px; transform: translate(50%, -50%);">{{ Auth::user()->unreadNotifications->count() }}</span>
+                        @endif
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown"
+                        style="width: 300px;">
+                        @if (Auth::check() && Auth::user()->notifications->count() > 0)
+                            <li>
+                                <form action="{{ route('user.notifications.mark-all-as-read') }}" method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-center">Đánh dấu tất cả là đã
+                                        đọc</button>
+                                </form>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider m-0">
+                            </li>
+                            @foreach (Auth::user()->notifications->take(5) as $notification)
+                                <li>
+                                    <div class="dropdown-item {{ $notification->read_at ? 'bg_finished' : 'bg_unfinished' }}">
+                                        <p class="mb-1">{{ $notification->data['message'] }}</p>
+                                        <a href="{{ $notification->data['action_url'] }}"
+                                            class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                        @if (!$notification->read_at)
+                                            <form
+                                                action="{{ route('user.notifications.mark-as-read', $notification->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-secondary btn-sm">Đã đọc</button>
+                                            </form>
+                                        @endif
+                                        <small
+                                            class="text-muted d-block">{{ $notification->created_at->format('d/m/Y H:i') }}</small>
+                                    </div>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider m-0">
+                                </li>
+                            @endforeach
+                            <li>
+                                <a class="dropdown-item text-center" href="{{ route('user.notifications') }}">Xem tất cả
+                                    thông báo</a>
+                            </li>
+                        @else
+                            <li>
+                                <div class="dropdown-item">Không có thông báo</div>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
 
                 @if (Auth::check())
                     <div class="dropdown">
@@ -368,14 +425,12 @@
                                             <i class="fas fa-user-cog"></i> Chức năng
                                         </a>
                                         <a class="dropdown-item" href="{{ route('user.payment.history') }}">
-                                            {{-- icon hồ sơ --}}
                                             <i class="fas fa-user"></i> Hồ sơ
                                         </a>
                                     </li>
                                 @else
                                     <li>
                                         <a class="dropdown-item" href="{{ route('user.payment.history') }}">
-                                            {{-- icon hồ sơ --}}
                                             <i class="fas fa-user"></i> Hồ sơ
                                         </a>
                                     </li>
@@ -429,6 +484,23 @@
     </script>
 
     <style>
+        .dropdown-menu {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .dropdown-item {
+            white-space: normal;
+        }
+
+        .bg_finished {
+            background-color: #00ff002c !important;
+        }
+
+        .bg_unfinished {
+            background-color: #ff00002c !important;
+        }
+
         /* Chat Container */
         #chat-container {
             position: fixed;

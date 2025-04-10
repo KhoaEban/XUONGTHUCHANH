@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Models\Category;
 use App\Models\Course;
@@ -28,5 +28,37 @@ class HomeController extends Controller
         // $categories->load('courses'); // Load tất cả khóa học của mỗi danh mục
         $courses = Course::all();
         return view('user.home', compact('categories', 'courses'));
+    }
+
+    public function notifications()
+    {
+        $user = Auth::user();
+        $notifications = $user->unreadNotifications; // Lấy thông báo chưa đọc
+
+        return view('user.notifications', compact('notifications'));
+    }
+
+    public function markAllAsRead()
+    {
+        Auth::user()->unreadNotifications->markAsRead();
+
+        return redirect()->back()->with('success', 'Đã đánh dấu tất cả thông báo là đã đọc.');
+    }
+
+    public function markAsRead($notificationId)
+    {
+        try {
+            // Tìm thông báo thuộc về user hiện tại
+            $notification = Auth::user()->notifications()->findOrFail($notificationId);
+
+            // Đánh dấu là đã đọc
+            $notification->markAsRead();
+
+            return redirect()->back()->with('success', 'Đã đánh dấu thông báo là đã đọc.');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->back()->with('error', 'Thông báo không tồn tại hoặc không thuộc về bạn.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Đã có lỗi xảy ra: ' . $e->getMessage());
+        }
     }
 }

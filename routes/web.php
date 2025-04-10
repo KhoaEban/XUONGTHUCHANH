@@ -312,6 +312,11 @@ Route::prefix('user')->group(function () {
 // VNPay callback
 Route::get('/vnpay/callback', [PaymentController::class, 'vnpayCallback'])->name('vnpay.callback');
 
+// Thống báo
+Route::get('/notifications', [HomeController::class, 'notifications'])->name('user.notifications');
+Route::post('/notifications/{notificationId}/mark-as-read', [HomeController::class, 'markAsRead'])->name('user.notifications.mark-as-read');
+Route::post('/notifications/mark-all-as-read', [HomeController::class, 'markAllAsRead'])->name('user.notifications.mark-all-as-read');
+
 // 404
 Route::fallback(function () {
     return view('errors.404');
