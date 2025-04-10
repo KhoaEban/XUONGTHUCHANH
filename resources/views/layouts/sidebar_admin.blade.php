@@ -58,7 +58,14 @@
                         <a href="{{ route('admin.orders.index') }}">Quản lý đơn hàng</a>
                         <a href="{{ route('admin.comments.index') }}">Quản lý bình luận</a>
                         <a href="{{ route('revenue.index') }}">Quản lý doanh thu</a>
+                        <a href="{{ route('admin.reviews.index') }}">Quản lí đánh giá</a>
                     </div>
+                </div>
+                
+                <div class="menu-item has-submenu">
+                    <a href="{{ route('quiz_results.index') }}">
+                        <i class="fas fa-check-circle"></i> Học viên hoàn thành
+                    </a>
                 </div>
 
                 <div class="menu-item has-submenu">
@@ -120,7 +127,8 @@
                 @if (session('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
                     </div>
                 @endif
 

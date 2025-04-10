@@ -39,6 +39,16 @@ class User extends Authenticatable
         return $this->role === 'instructor';
     }
 
+    public function quizResults()
+    {
+        return $this->hasMany(QuizResult::class);
+    }
+
+    public function userAnswers()
+    {
+        return $this->hasMany(UserAnswer::class);
+    }
+
     protected $hidden = [
         'password',
         'remember_token',

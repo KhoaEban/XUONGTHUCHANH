@@ -10,8 +10,7 @@
                             <i class="fa fa-chevron-down"></i>
                         </a>
                         <ul class="submenu">
-                            <li><a href="#">Danh sách học viên</a></li>
-                            <li><a href="#">Thêm mới học viên</a></li>
+                            <li><a href="{{ route('instructor.progress.index') }}"><i class="fa fa-user-graduate mx-2"></i>Học viên</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">

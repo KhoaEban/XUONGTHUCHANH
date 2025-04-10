@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Quiz;
 use App\Models\Answer;
-use Illuminate\Http\Request;
 use App\Models\QuizResult;
+use App\Models\UserAnswer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class QuizController extends Controller
 {
@@ -18,46 +19,64 @@ class QuizController extends Controller
         $quiz = Quiz::with('questions.answers')->findOrFail($id);
         return view('user.quizzes.show', compact('quiz'));
     }
+
     public function submit(Request $request, $id)
     {
         $quiz = Quiz::with('questions.answers')->findOrFail($id);
         $answers = $request->input('answers', []);
 
-        $score = 0;
-        $total = $quiz->questions->count();
-        $details = [];
+        return DB::transaction(function () use ($request, $quiz, $answers) {
+            // Tạo bản ghi trong quiz_results
+            $quizResult = QuizResult::create([
+                'user_id' => Auth::id(),
+                'quiz_id' => $quiz->id,
+                'total_questions' => $quiz->questions->count(),
+                'taken_at' => now(),
+                'score' => 0, // Ban đầu đặt score là 0 (in_progress)
+                'slug' => Str::slug($quiz->title . '-' . Auth::id() . '-' . time()),
+            ]);
 
-        foreach ($quiz->questions as $question) {
-            $userAnswerId = $answers[$question->id] ?? null;
-            $correctAnswer = $question->answers->where('is_correct', 1)->first();
+            $score = 0;
+            $total = $quiz->questions->count();
+            $details = [];
 
-            $isCorrect = ($userAnswerId == optional($correctAnswer)->id);
+            // Lưu chi tiết câu trả lời vào user_answers
+            foreach ($quiz->questions as $question) {
+                $userAnswerId = $answers[$question->id] ?? null;
+                $correctAnswer = $question->answers->where('is_correct', 1)->first();
 
-            if ($isCorrect) $score++;
+                $isCorrect = ($userAnswerId == optional($correctAnswer)->id);
 
-            $details[] = [
-                'question' => $question->question_text,
-                'your_answer' => optional(\App\Models\Answer::find($userAnswerId))->answer_text,
-                'correct_answer' => optional($correctAnswer)->answer_text,
-                'is_correct' => $isCorrect,
-            ];
-        }
+                if ($isCorrect) $score++;
 
-        \App\Models\QuizResult::create([
-            'user_id' => Auth::id(),
-            'quiz_id' => $quiz->id,
-            'score' => $score,
-            'total_questions' => $total,
-        ]);
+                UserAnswer::create([
+                    'user_id' => Auth::id(),
+                    'quiz_result_id' => $quizResult->id,
+                    'question_id' => $question->id,
+                    'answer_id' => $userAnswerId,
+                    'is_correct' => $isCorrect,
+                    'submitted_at' => now(),
+                ]);
 
-        return view('user.quizzes.result', [
-            'quiz' => $quiz,
-            'score' => $score,
-            'total' => $total,
-            'details' => $details
-        ]);
+                $details[] = [
+                    'question' => $question->question_text,
+                    'your_answer' => optional(Answer::find($userAnswerId))->answer_text,
+                    'correct_answer' => optional($correctAnswer)->answer_text,
+                    'is_correct' => $isCorrect,
+                ];
+            }
+
+            // Cập nhật điểm số (score > 0 nghĩa là completed)
+            $quizResult->update([
+                'score' => ($score / $total) * 10, // Chuyển sang thang điểm 10
+            ]);
+
+            return view('user.quizzes.result', [
+                'quiz' => $quiz,
+                'score' => $score,
+                'total' => $total,
+                'details' => $details,
+            ]);
+        });
     }
-
-
-
 }

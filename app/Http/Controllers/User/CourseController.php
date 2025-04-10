@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\Course;
-use App\Models\Category;
 use App\Models\Lesson;
 use App\Models\CourseProgress;
 use App\Models\Review;
+use App\Models\Quiz;
 
 class CourseController extends Controller
 {

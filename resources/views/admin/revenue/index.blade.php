@@ -274,8 +274,8 @@
                 </div>
             </div>
             <div class="card-footer bg-white">
-                <div class="d-flex justify-content-center">
-                    {{ $payments->links() }}
+                <div class="d-flex justify-content-center gap-3 mt-3">
+                    {{ $payments->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>

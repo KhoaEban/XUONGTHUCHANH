@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
-
 
 class Quiz extends Model
 {
@@ -13,34 +14,26 @@ class Quiz extends Model
 
     protected $fillable = ['course_id', 'lesson_id', 'title', 'slug'];
 
-    public function question()
-    {
-        return $this->hasMany(Question::class);
-    }
-
-
-    public function course()
+    public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
     }
 
-    // public function quiz_results()
-    // {
-    //     return $this->hasMany(Result::class);
-    // }
-
-
-    public function lessons()
+    public function lesson(): BelongsTo
     {
-        return $this->course->lessons;
+        return $this->belongsTo(Lesson::class);
     }
 
-    // Quan hệ với bảng questions (Câu hỏi)
     public function questions()
     {
         return $this->hasMany(Question::class);
     }
-    
+
+    public function quizResults()
+    {
+        return $this->hasMany(QuizResult::class);
+    }
+
     // Slug
     public static function boot()
     {

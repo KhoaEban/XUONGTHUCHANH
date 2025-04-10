@@ -6,31 +6,35 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\View\View; // Import View class (nếu bạn dùng type hinting)
 
 class AdminRevenueController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View // Sử dụng type hinting cho return (nếu dùng)
     {
         $query = Payment::query();
 
-        if ($request->has('user_id') && $request->user_id != '') {
+        // Lọc theo user_id (nếu có)
+        if ($request->filled('user_id')) {
             $query->where('user_id', $request->user_id);
         }
 
-        if ($request->has('course_id') && $request->course_id != '') {
+        // Lọc theo course_id (nếu có)
+        if ($request->filled('course_id')) {
             $query->where('course_id', $request->course_id);
         }
 
-        if ($request->has('start_date') && $request->has('end_date')) {
-            $startDate = Carbon::parse($request->start_date)->startOfDay();
-            $endDate = Carbon::parse($request->end_date)->endOfDay();
-        } else {
-            $startDate = Carbon::now()->startOfMonth();
-            $endDate = Carbon::now()->endOfMonth();
-        }
+        // Xác định khoảng thời gian
+        $startDate = $request->filled('start_date') ? Carbon::parse($request->start_date)->startOfDay() : Carbon::now()->startOfMonth();
+        $endDate = $request->filled('end_date') ? Carbon::parse($request->end_date)->endOfDay() : Carbon::now()->endOfMonth();
 
-        $payments = $query->whereBetween('created_at', [$startDate, $endDate])->paginate(10);
+        // Lọc theo khoảng thời gian
+        $query->whereBetween('created_at', [$startDate, $endDate]);
 
+        // Phân trang
+        $payments = $query->paginate(10)->withQueryString(); // Quan trọng: Giữ lại query string
+
+        // Tính toán số liệu thống kê
         $totalPayments = Payment::whereBetween('created_at', [$startDate, $endDate])->count();
         $successfulPayments = Payment::where('status', 'completed')
             ->whereBetween('created_at', [$startDate, $endDate])
@@ -42,6 +46,7 @@ class AdminRevenueController extends Controller
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('amount');
 
+        // Lấy doanh thu theo ngày
         $revenueByDay = Payment::selectRaw('DATE(created_at) as transaction_date, SUM(amount) as daily_revenue')
             ->where('status', 'completed')
             ->whereBetween('created_at', [$startDate, $endDate])
