@@ -77,6 +77,7 @@ class LessonControllerAdmin extends Controller
             'video_url' => 'nullable|url',
             'content' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'slug' => 'required|string|unique:lessons,slug',
         ]);
 
         // Xử lý upload ảnh nếu có
@@ -90,20 +91,16 @@ class LessonControllerAdmin extends Controller
         }
 
         // Tạo bài học mới
-        Lesson::create([
+        $lesson = Lesson::create([
             'instructor_id' => Auth::id(),
             'title' => $request->title,
             'course_id' => $request->course_id,
             'order_number' => $request->order_number,
             'video_url' => $request->video_url,
             'content' => $request->content,
-            'thumbnail' => $thumbnailPath
+            'thumbnail' => $thumbnailPath,
+            'slug' => $request->slug,
         ]);
-
-        // slug tạo tự động
-        $lesson = Lesson::latest()->first();
-        $lesson->slug = Str::slug($lesson->title);
-        $lesson->save();
 
         return redirect()->route('admin.lessons.index')->with('success', 'Bài học đã được tạo!');
     }
@@ -124,13 +121,14 @@ class LessonControllerAdmin extends Controller
             'video_url' => 'nullable|url',
             'content' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048',
+            'slug' => 'required|string|unique:lessons,slug,' . $id,
         ]);
 
         $lesson = Lesson::findOrFail($id);
 
         // Kiểm tra quyền truy cập
         if (Auth::user()->role !== 'admin' && Auth::id() !== $lesson->instructor_id) {
-            abort(403, 'Bạn không có quyền chỉnh sửa bài học này.');
+            abort(403, 'B��n không có quyền chỉnh sửa bài học này.');
         }
 
         // Cập nhật thông tin bài học
@@ -154,8 +152,9 @@ class LessonControllerAdmin extends Controller
             // Lưu ảnh mới
             $lesson->thumbnail = 'uploads/lessons/' . $imageName;
         }
-        // Cập nhật slug tạo tự động
-        $lesson->slug = Str::slug($lesson->title);
+
+        // Cập nhật slug
+        $lesson->slug = $request->slug;
 
         $lesson->save();
 
