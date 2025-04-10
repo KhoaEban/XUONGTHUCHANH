@@ -61,21 +61,54 @@
 @endsection
 
 <style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8fafc;
+        color: #333;
+    }
+
+    h1 {
+        margin: 30px 0;
+        font-size: 32px;
+        font-weight: 600;
+        text-align: center;
+        color: #2c3e50;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
-        font-size: 14px;
+        background-color: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        margin-bottom: 30px;
+    }
+
+    thead {
+        background-color: #f1f5f9;
     }
 
     th, td {
-        padding: 12px;
-        border: 1px solid #ddd;
+        padding: 16px;
         text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+        vertical-align: middle;
     }
 
     th {
-        background-color: #f4f4f4;
+        font-size: 14px;
+        font-weight: 600;
+        color: #4b5563;
+    }
+
+    td {
+        font-size: 14px;
+        color: #374151;
+    }
+
+    tr:hover {
+        background-color: #f9fafb;
     }
 
     form {
@@ -84,26 +117,74 @@
     }
 
     button {
-        padding: 6px 10px;
+        padding: 8px 12px;
+        background-color: #ef4444;
+        color: #fff;
         border: none;
-        background-color: #3490dc;
-        color: white;
-        border-radius: 4px;
+        border-radius: 6px;
+        font-size: 13px;
         cursor: pointer;
+        transition: background-color 0.2s ease;
     }
 
     button:hover {
-        background-color: #2779bd;
-    }
-
-    h1 {
-        margin-top: 20px;
-        font-size: 24px;
+        background-color: #dc2626;
     }
 
     select {
-        padding: 5px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        background-color: #fff;
+        color: #1e293b;
+        font-size: 13px;
+        transition: border-color 0.2s ease;
+    }
+
+    select:hover,
+    select:focus {
+        border-color: #60a5fa;
+        outline: none;
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 768px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
+        }
+
+        thead {
+            display: none;
+        }
+
+        tr {
+            margin-bottom: 15px;
+            background-color: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        td {
+            position: relative;
+            padding-left: 50%;
+        }
+
+        td:before {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            font-weight: bold;
+            white-space: nowrap;
+            color: #6b7280;
+        }
+
+        td:nth-of-type(1)::before { content: "Người dùng"; }
+        td:nth-of-type(2)::before { content: "Khóa học"; }
+        td:nth-of-type(3)::before { content: "Nội dung"; }
+        td:nth-of-type(4)::before { content: "Đánh giá"; }
+        td:nth-of-type(5)::before { content: "Hiển thị"; }
+        td:nth-of-type(6)::before { content: "Hành động"; }
     }
 </style>
