@@ -40,8 +40,10 @@ class Lesson extends Model
         return $this->course->belongsTo(User::class, 'instructor_id'); // Liên kết đến bảng users qua trường instructor_id trong bảng courses
     }
 
-
-
+    public function getRouteKeyName()
+    {
+        return 'slug'; // Use slug as the route key
+    }
 
     // Slug
     public static function boot()
@@ -49,11 +51,11 @@ class Lesson extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->slug = Str::slug($model->name);
+            $model->slug = Str::slug($model->title); // Use title instead of name
         });
 
         static::updating(function ($model) {
-            $model->slug = Str::slug($model->name);
+            $model->slug = Str::slug($model->title); // Use title instead of name
         });
     }
 }

@@ -21,30 +21,33 @@ class GeminiChatController extends Controller
         $user = Auth::user();
         $name = $user->name ?? 'bạn';
         $userMessage = $request->input('message');
-
-        // Bước 1: Dùng AI để phân tích intent
         $prompt = <<<PROMPT
-Phân tích câu sau và CHỈ trả về JSON đúng định dạng: { "intent": "..." }.
-Không thêm giải thích hoặc ký tự thừa.
-Các intent hợp lệ gồm: 'course_count', 'category_count', 'lesson_count', 'list_courses', 'explain_lesson', 'other'.
-Câu: "$userMessage"
-PROMPT;
+        Bạn là một người trợ lý ảo thông minh, có khả năng phân tích câu hỏi và trả lời một cách tự nhiên.
+    Phân tích câu sau và CHỈ trả về JSON đúng định dạng: { "intent": "..." }.
+    Không thêm giải thích hoặc ký tự thừa.
+    Các intent hợp lệ gồm: 'course_count', 'category_count', 'lesson_count', 'list_courses', 'explain_lesson', 'other'.
+    Câu: "$userMessage"
+    PROMPT;
 
         $aiIntentResponse = $this->queryGemini($prompt);
         $intent = $this->extractIntent($aiIntentResponse);
 
-        // Bước 2: Xử lý intent
+        if (!Auth::check() && $intent !== 'other') {
+            return $this->reply("Bạn cần đăng nhập để sử dụng chatbot.", $name);
+        }
         $intentHandlers = [
             'course_count' => fn() => $this->reply("Hiện tại, chúng tôi có " . Course::count() . " khóa học.", $name),
             'category_count' => fn() => $this->reply("Hiện tại, chúng tôi có " . Category::count() . " danh mục.", $name),
             'lesson_count' => fn() => $this->reply("Hiện tại, chúng tôi có " . Lesson::count() . " bài học.", $name),
             'list_courses' => fn() => $this->listCourses($name),
-            'explain_lesson' => fn() => $this->reply("Tính năng giải thích bài học sẽ sớm được triển khai!", $name),
+            'explain_lesson' => fn() => $this->explainLesson($userMessage, $name),
+
             'other' => fn() => $this->chatWithGemini($userMessage, $name)
         ];
 
         return ($intentHandlers[$intent] ?? $intentHandlers['other'])();
     }
+
 
     private function reply(string $message, string $name)
     {
@@ -68,7 +71,6 @@ PROMPT;
 
     private function chatWithGemini(string $message, string $name)
     {
-        // Nếu chưa đăng nhập thì chỉ cho trả lời cơ bản
         if (!Auth::check()) {
             return $this->reply("Bạn cần đăng nhập để sử dụng đầy đủ chức năng của chatbot.", $name);
         }
@@ -108,5 +110,25 @@ PROMPT;
     private function extractText($data): ?string
     {
         return $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+    }
+
+    private function explainLesson(string $message, string $name)
+    {
+        $prompt = <<<PROMPT
+Bạn là trợ giảng AI của hệ thống học trực tuyến. Học viên đang hỏi về nội dung một bài học.
+
+Yêu cầu:
+- Giải thích rõ ràng, ngắn gọn, dễ hiểu.
+- Dựa vào câu hỏi để xác định học viên muốn hỏi bài gì.
+- Không dùng thuật ngữ quá chuyên môn nếu không cần thiết.
+
+Câu hỏi của học viên:
+"$message"
+PROMPT;
+
+        $aiResponse = $this->queryGemini($prompt);
+        $reply = $this->extractText($aiResponse) ?? 'Xin lỗi, mình chưa hiểu bài học bạn đang hỏi.';
+
+        return $this->reply($reply, $name);
     }
 }

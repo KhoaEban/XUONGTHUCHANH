@@ -54,21 +54,88 @@
     /* Sidebar Container */
     .sidebar-course .card {
         border: none;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         max-height: 500px;
-        /* Set a fixed maximum height for the sidebar */
         overflow-y: auto;
-        /* Enable scrolling if content exceeds height */
     }
 
     .course-progress {
-        padding: 15px;
-        /* Add padding for the progress section */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+    }
+
+    .course-progress h4 {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .course-progress p {
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .progress-bar-container {
+        width: 350px;
+        height: 10px;
+        background: #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: #007bff;
+        width: 0;
+        transition: width 0.5s ease;
+    }
+
+    .progress-circle {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+    }
+
+    .progress-ring__circle {
+        transition: 0.35s stroke-dasharray;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+    }
+
+    .progress-ring__circle-bg {
+        stroke: #e0e0e0;
+    }
+
+    .progress-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 12px;
+        /* Kích thước chữ vừa phải cho 40px */
+        font-weight: bold;
+        color: #333;
+    }
+
+    .progress-title {
+        text-align: center;
+    }
+
+    .divider {
+        border-bottom: 1px dashed #8b8b8b;
+        margin: 0;
+        /* Add some margin for spacing */
     }
 
     /* Card Body */
     .sidebar-course .card-body {
-        padding: 15px;
+        padding: 15px 20px;
         /* Reduce padding to save space */
     }
 
@@ -83,7 +150,7 @@
     /* Video List */
     .video-list {
         list-style: none;
-        padding: 0;
+        padding: 0 15px;
         margin: 0;
         /* Remove default margin */
     }
@@ -154,7 +221,7 @@
     }
 
     .quiz-item {
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #c5c4c4;
     }
 
     .quiz-link {
@@ -210,6 +277,20 @@
         color: #f39c12;
         /* Màu vàng khi được chọn */
     }
+
+    .video-item:active .fa-play {
+        /* khi nhấm sẽ xoay 160 độ */
+        transform: rotate(90deg);
+    }
+
+    .video-item:hover .fa-play {
+        /* khi nhấm sẽ xoay 160 độ */
+        transform: rotate(90deg);
+    }
+
+    .video-item .fa-play {
+        transition: transform 0.3s ease-in-out;
+    }
 </style>
 @section('content')
     <div class="row">
@@ -242,8 +323,8 @@
                             <button class="tab-button" onclick="openTab(event, 'noidung')">Nội dung khóa học</button>
                             <button class="tab-button" onclick="openTab(event, 'tailieu')">Tài liệu</button>
                             <button class="tab-button" onclick="openTab(event, 'thongtin')">Thông tin giảng viên</button>
-                            <button class="tab-button" onclick="openTab(event, 'danhgia')">Đánh giá</button>
                             <button class="tab-button" onclick="openTab(event, 'binhluan')">Bình luận</button>
+                            <button class="tab-button" onclick="openTab(event, 'danhgia')">Đánh giá</button>
                         </div>
                         <div id="gioithieu" class="tab-content active">
                             <p class="px-3">{!! nl2br(e($course->lessons->first()->content)) !!}</p>
@@ -252,7 +333,7 @@
                             <ul>
                                 @foreach ($course->lessons as $lesson)
                                     <li>
-                                        <a href="#"
+                                        <a href="{{ route('course.lessons.show', $lesson->id) }}"
                                             onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}', {{ $lesson->id }})">
                                             {{ $lesson->title }} - ({{ gmdate('H:i:s', $lesson->duration) }})
                                             @if ($lesson->completed)
@@ -269,8 +350,8 @@
                         <div id="thongtin" class="tab-content">
                             <p>Giảng viên: {{ $course->instructor->name ?? 'Đang cập nhật' }}</p>
                         </div>
-                        <div id="danhgia" class="tab-content">
-                            <h4>Đánh giá khóa học</h4>
+                        <div id="binhluan" class="tab-content">
+                            <h4>Bình luận</h4>
 
                             @auth
                                 <form id="comment-form" action="{{ route('comments.store') }}" method="POST">
@@ -278,12 +359,12 @@
                                     <input type="hidden" name="lesson_id" id="comment-lesson-id"
                                         value="{{ $course->lessons->first()->id }}">
                                     <div class="mb-3">
-                                        <textarea name="content" class="form-control" rows="3" placeholder="Viết đánh giá..." required></textarea>
+                                        <textarea name="content" class="form-control" rows="3" placeholder="Viết bình luận..." required></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                    <button type="submit" class="btn btn-primary">Gửi bình luận</button>
                                 </form>
                             @else
-                                <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để gửi đánh giá.</p>
+                                <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để gửi bình luận.</p>
                             @endauth
 
                             <ul class="list-group mt-3" id="comments-list">
@@ -293,8 +374,8 @@
                                 ])
                             </ul>
                         </div>
-                        <div id="binhluan" class="tab-content container my-4">
-                            <h4>Đánh giá khóa học</h4>
+                        <div id="danhgia" class="tab-content container my-4">
+                            <h4>Đánh giá</h4>
 
                             <!-- Form đánh giá -->
                             @auth
@@ -359,34 +440,48 @@
                 <div class="sidebar-course m-0">
                     <div class="card">
                         <div class="course-progress">
-                            <h4>Tiến độ khóa học</h4>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" id="course-progress-bar"
-                                    style="width: {{ $progressPercentage }}%;"></div>
+                            <h4 class="progress-title mt-2">Tiến độ</h4>
+                            <div class="progress-circle">
+                                <svg class="progress-ring" width="40" height="40">
+                                    <circle class="progress-ring__circle-bg" stroke="#e0e0e0" stroke-width="5"
+                                        fill="transparent" r="17" cx="20" cy="20" />
+                                    <circle class="progress-ring__circle" stroke="#4CAF50" stroke-width="5"
+                                        fill="transparent" r="17" cx="20" cy="20"
+                                        style="stroke-dasharray: {{ 106 * ($progressPercentage / 100) }}, 106;" />
+                                </svg>
+                                <div class="progress-text">{{ $progressPercentage }}%</div>
                             </div>
-                            <p class="progress-text" id="progress-percentage">{{ $progressPercentage }}%</p>
                         </div>
+
+                        @if ($progressPercentage == 100)
+                            <a href="#"
+                                class="bg-dark text-white py-2 px-4 border-0 text-center text-decoration-none"
+                                style="width: 170px; margin-left: 370px; margin-top: 5px; margin-bottom: 15px">Nhận chứng
+                                chỉ</a>
+                        @endif
+                        <div class="divider"></div>
                         <div class="card-body">
-                            <h3>Nội dung khóa học</h3>
+                            <h3><i class="fas fa-book-open ud-icon"></i> Nội dung khóa học</h3>
                             <ul class="video-list">
                                 @foreach ($course->lessons as $lesson)
-                                    <li
-                                        onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}', {{ $lesson->id }})">
-                                        <img src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}"
-                                            alt="Video">
-                                        <div class="d-flex align-items-center">
-                                            <span>{{ $lesson->order_number }}.</span>
-                                            <h4 class="m-0">{{ $lesson->title }}</h4>
-                                            @if ($lesson->completed)
-                                                <p>✅</p>
-                                            @endif
+                                    <li onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}', {{ $lesson->id }})"
+                                        class="video-item d-flex align-items-center">
+                                        <i class="fas fa-play ud-icon"></i>
+                                        <div class="lesson-info">
+                                            <div class="d-flex align-items-center">
+                                                <span>{{ $lesson->order_number }}.</span>
+                                                <h4 class="m-0">{{ $lesson->title }}</h4>
+                                                @if ($lesson->completed)
+                                                    <p>✅</p>
+                                                @endif
+                                            </div>
                                         </div>
                                     </li>
                                     <ul class="quiz-list" id="quiz-list-{{ $lesson->id }}" class="quiz-list">
                                         @foreach ($lesson->quizzes as $quiz)
-                                            <li class="quiz-item border-bottom">
+                                            <li class="quiz-item">
                                                 <a class="quiz-link text-decoration-none text-dark"
-                                                    href="{{ route('quizzes.show', $quiz->id) }}">1.
+                                                    href="{{ route('quizzes.show', $quiz->id) }}">
                                                     {{ $quiz->title }}</a>
                                             </li>
                                         @endforeach

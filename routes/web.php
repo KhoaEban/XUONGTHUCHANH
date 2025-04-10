@@ -214,7 +214,7 @@ Route::prefix('user')->group(function () {
 
     // Bài học
     Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
-    Route::get('/lesson/{id}', [LessonController::class, 'show'])->name('lessons.show');
+    Route::get('/course/lesson/{slug}', [LessonController::class, 'show'])->name('course.lessons.show');
 
     // Quizzes
     Route::get('/lessons/{lessonId}/quizzes', [CourseController::class, 'getQuizzesByLesson']);

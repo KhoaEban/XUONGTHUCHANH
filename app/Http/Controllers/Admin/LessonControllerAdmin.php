@@ -100,6 +100,11 @@ class LessonControllerAdmin extends Controller
             'thumbnail' => $thumbnailPath
         ]);
 
+        // slug tạo tự động
+        $lesson = Lesson::latest()->first();
+        $lesson->slug = Str::slug($lesson->title);
+        $lesson->save();
+
         return redirect()->route('admin.lessons.index')->with('success', 'Bài học đã được tạo!');
     }
 
@@ -149,6 +154,8 @@ class LessonControllerAdmin extends Controller
             // Lưu ảnh mới
             $lesson->thumbnail = 'uploads/lessons/' . $imageName;
         }
+        // Cập nhật slug tạo tự động
+        $lesson->slug = Str::slug($lesson->title);
 
         $lesson->save();
 

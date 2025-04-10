@@ -14,7 +14,7 @@ class LessonController extends Controller
     public function index()
     {
         $lesson = Lesson::all();
-        return view('user.lesson.index', compact('lesson'));
+        return view('user.course.show', compact('lesson'));
     }
 
     public function show(Request $request, $id)
