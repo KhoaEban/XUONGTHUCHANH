@@ -40,9 +40,9 @@ class CourseController extends Controller
         $firstLesson = $course->lessons->first();
         $comments = $firstLesson
             ? $firstLesson->comments()
-            ->with(['user', 'replies.user', 'replies.likes']) // Không cần nạp quan hệ likes cho comment chính
-            ->orderBy('created_at', 'desc')
-            ->get()
+                ->with(['user', 'replies.user', 'replies.likes']) // Không cần nạp quan hệ likes cho comment chính
+                ->orderBy('created_at', 'desc')
+                ->get()
             : collect([]);
 
         $userId = Auth::id();
@@ -56,10 +56,26 @@ class CourseController extends Controller
             $completedLessons = $progress->completed_lessons ?? [];
         }
 
+        $averageRating = Review::where('course_id', $course->id)
+            ->where('visible', 1)
+            ->avg('rating');
+
+        $ratingCount = Review::where('course_id', $course->id)
+            ->where('visible', 1)
+            ->count();
+
+        $ratingSummary = Review::where('course_id', $course->id)
+            ->where('visible', 1)
+            ->selectRaw('rating, COUNT(*) as count')
+            ->groupBy('rating')
+            ->pluck('count', 'rating');
+
+
         // Tính toán phần trăm tiến độ
         $totalLessonsCount = $course->lessons()->count();
         $completedLessonsCount = count($completedLessons);
         $progressPercentage = $totalLessonsCount > 0 ? ($completedLessonsCount / $totalLessonsCount) * 100 : 0;
+
 
         foreach ($comments as $comment) {
             // Gán trạng thái like cho comment chính
@@ -73,7 +89,7 @@ class CourseController extends Controller
             }
         }
 
-        return view('user.course.show', compact('course', 'comments', 'reviews', 'completedLessons', 'progressPercentage', 'totalLessonsCount', 'completedLessonsCount'));
+        return view('user.course.show', compact('course', 'comments', 'reviews', 'completedLessons', 'progressPercentage', 'totalLessonsCount', 'completedLessonsCount', 'averageRating', 'ratingCount', 'ratingSummary'));
     }
 
     public function markLessonAsComplete(Request $request, $courseId, $lessonId)
