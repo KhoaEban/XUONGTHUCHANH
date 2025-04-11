@@ -29,6 +29,7 @@ use App\Http\Controllers\User\QuizController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\ReviewController;
+use App\Http\Controllers\User\CertificateController;
 
 // Instructor
 use App\Http\Controllers\Teacher\HomeControllerInstructor;
@@ -184,7 +185,7 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::delete('/{id}', [AdminCommentsController::class, 'destroy'])->name('admin.comments.destroy');
     });
 
-    // Quản lí đánh giá 
+    // Quản lí đánh giá
     Route::prefix('admin/reviews')->group(function () {
         Route::get('/', [ReviewControllerAdmin::class, 'index'])->name('admin.reviews.index');
         Route::patch('/{review}/toggle-visibility', [ReviewControllerAdmin::class, 'toggleVisibility'])->name('reviews.toggle_visibility');
@@ -307,6 +308,10 @@ Route::prefix('user')->group(function () {
 
     Route::get('/comments/{lesson_id}', [CommentController::class, 'getComments'])->name('comments.get');
     Route::post('/ratings', [ReviewController::class, 'store'])->name('ratings.store');
+
+    //Download chứng chỉ
+    Route::get('/certificate/{course_id}', [CertificateController::class, 'show'])->name('certificate.show');
+    Route::get('/certificate/{course_id}/download', [CertificateController::class, 'download'])->name('certificate.download');
 });
 
 // VNPay callback

@@ -376,6 +376,109 @@
                         </div>
                         <div id="danhgia" class="tab-content container my-4">
                             <h4>Đánh giá</h4>
+                            <div class="row g-0 ">
+    <!-- Left side with average rating -->
+    <div class="col-md-3 text-center p-4 border-end">
+      <div class="fs-1 fw-bold mb-2">
+        <span class="text-warning me-2">★</span>{{ number_format($averageRating, 1) }}/5
+      </div>
+      <div class="text-muted">{{ $ratingCount }} Đánh giá và nhận xét</div>
+    </div>
+
+    <!-- Right side with rating bars -->
+    <div class="col-md-9 p-4">
+      @for ($i = 5; $i >= 1; $i--)
+        @php
+          $count = $ratingSummary[$i] ?? 0;
+          $percent = $ratingCount > 0 ? ($count / $ratingCount) * 100 : 0;
+        @endphp
+        <div class="d-flex align-items-center mb-3">
+          <div class="me-3" style="min-width: 100px;">
+            @for ($j = 1; $j <= 5; $j++)
+              <span class="{{ $j <= $i ? 'text-warning' : 'text-secondary' }}">★</span>
+            @endfor
+          </div>
+          <div class="progress flex-grow-1 me-3" style="height: 8px;">
+            <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $percent }}%"></div>
+          </div>
+          <div style="min-width: 50px; text-align: right;">{{ number_format($percent, 0) }}%</div>
+        </div>
+      @endfor
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <div class="row g-0">
+      <!-- Left side with average rating -->
+      <div class="col-md-3 text-center p-4 border-end">
+        <div class="fs-1 fw-bold mb-2">
+          <span class="text-warning me-2">★</span>5/5
+        </div>
+        <div class="text-muted">2 Đánh giá và nhận xét</div>
+      </div>
+
+      <!-- Right side with rating bars -->
+      <div class="col-md-9 p-4">
+        <!-- 5 Stars -->
+        <div class="d-flex align-items-center mb-3">
+          <div class="me-3" style="min-width: 100px;">
+            <span class="text-warning">★★★★★</span>
+          </div>
+          <div class="progress flex-grow-1 me-3" style="height: 8px;">
+            <div class="progress-bar bg-warning" role="progressbar" style="width: 100%"></div>
+          </div>
+          <div style="min-width: 50px; text-align: right;">100%</div>
+        </div>
+
+        <!-- 4 Stars -->
+        <div class="d-flex align-items-center mb-3">
+          <div class="me-3" style="min-width: 100px;">
+            <span class="text-warning">★★★★</span><span class="text-secondary">★</span>
+          </div>
+          <div class="progress flex-grow-1 me-3" style="height: 8px;">
+            <div class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+          </div>
+          <div style="min-width: 50px; text-align: right;">0%</div>
+        </div>
+
+        <!-- 3 Stars -->
+        <div class="d-flex align-items-center mb-3">
+          <div class="me-3" style="min-width: 100px;">
+            <span class="text-warning">★★★</span><span class="text-secondary">★★</span>
+          </div>
+          <div class="progress flex-grow-1 me-3" style="height: 8px;">
+            <div class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+          </div>
+          <div style="min-width: 50px; text-align: right;">0%</div>
+        </div>
+
+        <!-- 2 Stars -->
+        <div class="d-flex align-items-center mb-3">
+          <div class="me-3" style="min-width: 100px;">
+            <span class="text-warning">★★</span><span class="text-secondary">★★★</span>
+          </div>
+          <div class="progress flex-grow-1 me-3" style="height: 8px;">
+            <div class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+          </div>
+          <div style="min-width: 50px; text-align: right;">0%</div>
+        </div>
+
+        <!-- 1 Star -->
+        <div class="d-flex align-items-center">
+          <div class="me-3" style="min-width: 100px;">
+            <span class="text-warning">★</span><span class="text-secondary">★★★★</span>
+          </div>
+          <div class="progress flex-grow-1 me-3" style="height: 8px;">
+            <div class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+          </div>
+          <div style="min-width: 50px; text-align: right;">0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
                             <!-- Form đánh giá -->
                             @auth
@@ -454,10 +557,11 @@
                         </div>
 
                         @if ($progressPercentage == 100)
-                            <a href="#"
+                            <a href="{{ route('certificate.show', $course->id) }}"
                                 class="bg-dark text-white py-2 px-4 border-0 text-center text-decoration-none"
-                                style="width: 170px; margin-left: 370px; margin-top: 5px; margin-bottom: 15px">Nhận chứng
-                                chỉ</a>
+                                style="width: 170px; margin-left: 370px; margin-top: 5px; margin-bottom: 15px">
+                                Nhận chứng chỉ
+                            </a>
                         @endif
                         <div class="divider"></div>
                         <div class="card-body">
