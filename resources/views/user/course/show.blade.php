@@ -99,7 +99,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        
+
     }
 
     .progress-ring__circle {
