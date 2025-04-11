@@ -69,24 +69,31 @@
                                     <div class="badge-overlay">
                                         @if ($course->is_free)
                                             <span class="badge-free">Free</span>
+
+                                        @elseif (in_array($course->id, $purchasedCourses))
+                                            <span class="badge-purchased">Đã mua</span>
+                                            <!-- New badge for purchased courses -->
                                         @else
                                             <span class="badge-pro"><i class="fas fa-crown me-1"></i>Pro</span>
                                         @endif
                                     </div>
                                 </div>
-
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ $course->name }}</h5>
-                                    <p class="card-text text-secondary">{{ $course->instructor->name }}</p>
+                                    <h5 class="card-title">{{ $course->title }}</h5>
+                                    <!-- Hiển thị giá khóa học nếu không miễn phí -->
+                                    @if (!$course->is_free)
+                                        <p class="card-text">Giá: <span
+                                                class="text-danger">{{ number_format($course->price, 0, ',', '.') }}
+                                                VNĐ<span>
+                                        </p>
+                                    @endif
                                     <div class="d-flex align-items-center text-secondary">
                                         <p class="card-text m-0">{{ $course->lessons->count() }} nội dung</p>
                                         <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
                                         <p class="card-text">{{ $course->created_at->format('d/m/Y') }}</p>
                                     </div>
-
-                                    @if (!$course->is_free)
-                                        <p class="card-text">Giá: {{ number_format($course->price, 0, ',', '.') }} VNĐ</p>
-                                    @endif
+                                    <p class="card-text text-secondary mt-2" style="font-size: 12px">Tác giả:
+                                        {{ $course->instructor->name }}</p>
                                 </div>
                             </a>
                         </div>
@@ -166,44 +173,52 @@
     <div class="row">
         <div class="col-12">
             <div class="row">
-                @if (count($courses) > 0)
-                    <div class="col-3">
-                        <div class="card">
-                            <a href="{{ route('course.show', $courses[0]->slug) }}"
-                                class="card-link text-decoration-none text-dark">
-                                <!-- Phần hiển thị hình ảnh -->
-                                <div class="position-relative">
-                                    <img class="card-img-top"
-                                        src="{{ asset($courses[0]->thumbnail ?? 'images/default-thumbnail.jpg') }}"
-                                        alt="Card image cap">
+                @if ($courses->count() > 0)
+                    @foreach ($courses as $course)
+                        <div class="col-3">
+                            <div class="card mb-3">
+                                <a href="{{ route('course.show', $course->slug) }}"
+                                    class="card-link text-decoration-none text-dark">
+                                    <!-- Phần hiển thị hình ảnh -->
+                                    <div class="position-relative">
+                                        <img class="card-img-top"
+                                            src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}"
+                                            alt="Card image cap">
 
-                                    {{-- <!-- Nhãn Free/Pro -->
-                                    <div class="badge-overlay">
-                                        @if ($course->is_free)
-                                            <span class="badge-free">Free</span>
-                                        @else
-                                            <span class="badge-pro"><i class="fas fa-crown me-1"></i>Pro</span>
-                                        @endif
-                                    </div> --}}
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ $courses[0]->name }}</h5>
-                                    <p class="card-text text-secondary">{{ $courses[0]->instructor->name }}</p>
-                                    <div class="d-flex align-items-center text-secondary">
-                                        <p class="card-text m-0">{{ $courses[0]->lessons->count() }} nội dung</p>
-                                        <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                        <p class="card-text">{{ $courses[0]->created_at->format('d/m/Y') }}</p>
+                                        <!-- Nhãn Free/Pro -->
+                                        <div class="badge-overlay">
+                                            @if ($course->is_free)
+                                                <span class="badge-free">Free</span>
+                                            @elseif (in_array($course->id, $purchasedCourses))
+                                                <span class="badge-purchased">Đã mua</span>
+                                                <!-- New badge for purchased courses -->
+                                            @else
+                                                <span class="badge-pro"><i class="fas fa-crown me-1"></i>Pro</span>
+                                            @endif
+                                        </div>
                                     </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $course->title }}</h5>
+                                        <!-- Hiển thị giá khóa học nếu không miễn phí -->
+                                        @if (!$course->is_free)
+                                            <p class="card-text">Giá: <span
+                                                    class="text-danger">{{ number_format($course->price, 0, ',', '.') }}
+                                                    VNĐ<span>
+                                            </p>
+                                        @endif
+                                        <div class="d-flex align-items-center text-secondary">
+                                            <p class="card-text m-0">{{ $course->lessons->count() }} nội dung</p>
+                                            <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
+                                            <p class="card-text">{{ $course->created_at->format('d/m/Y') }}</p>
+                                        </div>
 
-                                    <!-- Hiển thị giá khóa học nếu không miễn phí -->
-                                    @if (!$courses[0]->is_free)
-                                        <p class="card-text">Giá: {{ number_format($courses[0]->price, 0, ',', '.') }} VNĐ
-                                        </p>
-                                    @endif
-                                </div>
-                            </a>
+                                        <p class="card-text text-secondary mt-2" style="font-size: 12px">Tác giả:
+                                            {{ $course->instructor->name }}</p>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
                 @endif
             </div>
         </div>
@@ -367,6 +382,10 @@
         transform: scale(1.05);
     }
 
+    .card-img-top {
+        height: 228.781px;
+    }
+
     .news-card {
         background-color: white;
     }
@@ -418,9 +437,16 @@
     }
 
     .badge-free {
-        background-color: #0c920c;
-        color: #fff;
+        background-color: #295F2D;
+        color: #ffe67c;
         padding: 5px 15px;
+        font-size: 15px;
+    }
+
+    .badge-purchased {
+        background-color: #f4a950;
+        color: #161b21;
+        padding: 5px 10px;
         font-size: 15px;
     }
 </style>

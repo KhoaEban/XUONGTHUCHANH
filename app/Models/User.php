@@ -19,12 +19,17 @@ class User extends Authenticatable
         'role', // Thêm role vào fillable để có thể cập nhật
     ];
 
-
     public function hasRole($role)
     {
         // Implement your role checking logic here
         return $this->role === $role;
     }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
     public function isAdmin()
     {
         return $this->role === 'admin'; // Kiểm tra nếu role là admin
@@ -32,7 +37,24 @@ class User extends Authenticatable
     public function isTeacher()
     {
         return $this->role === 'instructor';
-
-
     }
+
+    public function quizResults()
+    {
+        return $this->hasMany(QuizResult::class);
+    }
+
+    public function userAnswers()
+    {
+        return $this->hasMany(UserAnswer::class);
+    }
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }

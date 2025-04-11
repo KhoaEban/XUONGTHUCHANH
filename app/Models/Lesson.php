@@ -19,14 +19,19 @@ class Lesson extends Model
         'slug'
     ];
 
-    // Quan hệ với Course
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
-    public function comments()
+
+    public function quizzes()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Quiz::class);
     }
 
     // Quan hệ với Instructor thông qua Course (giả sử instructor_id nằm trong bảng courses)
@@ -35,12 +40,10 @@ class Lesson extends Model
         return $this->course->belongsTo(User::class, 'instructor_id'); // Liên kết đến bảng users qua trường instructor_id trong bảng courses
     }
 
-    // Mỗi quan hệ quizzes với bài kiểm tra
-    public function quizzes()
+    public function getRouteKeyName()
     {
-        return $this->hasMany(Quiz::class);
+        return 'slug'; // Use slug as the route key
     }
-
 
     // Slug
     public static function boot()
@@ -48,11 +51,11 @@ class Lesson extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->slug = Str::slug($model->name);
+            $model->slug = Str::slug($model->title); // Use title instead of name
         });
 
         static::updating(function ($model) {
-            $model->slug = Str::slug($model->name);
+            $model->slug = Str::slug($model->title); // Use title instead of name
         });
     }
 }

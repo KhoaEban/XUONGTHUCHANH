@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use Illuminate\Http\Request;
@@ -13,24 +14,24 @@ class AdminCommentsController extends Controller
         return view('admin.comments.index', compact('comments'));
     }
 
-    public function hide($id)
+    public function updateStatus(Request $request, $id)
     {
-        $comment = Comment::findOrFail($id);
-        $comment->update(['status' => 'hidden']);
-        return back()->with('success', 'Bình luận đã bị ẩn.');
-    }
+        $request->validate([
+            'status' => 'required|in:active,pending,spam,deleted',
+        ]);
 
-    public function show($id)
-    {
         $comment = Comment::findOrFail($id);
-        $comment->update(['status' => 'visible']);
-        return back()->with('success', 'Bình luận đã hiển thị lại.');
-    }
+        $comment->update(['status' => $request->status]);
 
+        return back()->with('success', 'Trạng thái bình luận đã được cập nhật.');
+    }
 
     public function destroy($id)
     {
-        Comment::findOrFail($id)->delete();
-        return back()->with('success', 'Bình luận đã bị xóa.');
+        $comment = Comment::findOrFail($id);
+        $comment->update(['status' => 'deleted']);
+        $comment->delete();
+
+        return back()->with('success', 'Bình luận đã được đánh dấu là xóa.');
     }
 }

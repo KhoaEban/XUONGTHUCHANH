@@ -2,27 +2,41 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class QuizResult extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'quiz_id',
+        'score',
+        'total_questions',
+        'taken_at',
+        'slug',
+    ];
 
-    protected $fillable = ['quiz_id', 'user_id', 'score'];
-
-    public function quiz()
-    {
-        return $this->belongsTo(Quiz::class);
-    }
+    protected $casts = [
+        'taken_at' => 'datetime',
+    ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function answers()
+    public function quiz()
     {
-        return $this->hasMany(Answer::class);
+        return $this->belongsTo(Quiz::class);
+    }
+
+    public function userAnswers()
+    {
+        return $this->hasMany(UserAnswer::class, 'quiz_result_id');
+    }
+
+    // Xác định trạng thái dựa trên score
+    public function getStatusAttribute()
+    {
+        return is_null($this->score) || $this->score == 0 ? 'in_progress' : 'completed';
     }
 }

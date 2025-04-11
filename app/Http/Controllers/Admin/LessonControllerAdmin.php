@@ -74,7 +74,10 @@ class LessonControllerAdmin extends Controller
             'title' => 'required|string|max:255',
             'course_id' => 'required|integer|exists:courses,id',
             'order_number' => 'required|integer',
+            'video_url' => 'nullable|url',
+            'content' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'slug' => 'required|string|unique:lessons,slug',
         ]);
 
         // Xử lý upload ảnh nếu có
@@ -88,12 +91,15 @@ class LessonControllerAdmin extends Controller
         }
 
         // Tạo bài học mới
-        Lesson::create([
+        $lesson = Lesson::create([
             'instructor_id' => Auth::id(),
             'title' => $request->title,
             'course_id' => $request->course_id,
             'order_number' => $request->order_number,
-            'thumbnail' => $thumbnailPath
+            'video_url' => $request->video_url,
+            'content' => $request->content,
+            'thumbnail' => $thumbnailPath,
+            'slug' => $request->slug,
         ]);
 
         return redirect()->route('admin.lessons.index')->with('success', 'Bài học đã được tạo!');
@@ -112,20 +118,25 @@ class LessonControllerAdmin extends Controller
             'title' => 'required|string|max:255',
             'course_id' => 'required|integer|exists:courses,id',
             'order_number' => 'required|integer',
+            'video_url' => 'nullable|url',
+            'content' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048',
+            'slug' => 'required|string|unique:lessons,slug,' . $id,
         ]);
 
         $lesson = Lesson::findOrFail($id);
 
         // Kiểm tra quyền truy cập
         if (Auth::user()->role !== 'admin' && Auth::id() !== $lesson->instructor_id) {
-            abort(403, 'Bạn không có quyền chỉnh sửa bài học này.');
+            abort(403, 'B��n không có quyền chỉnh sửa bài học này.');
         }
 
         // Cập nhật thông tin bài học
         $lesson->title = $request->title;
         $lesson->course_id = $request->course_id;
         $lesson->order_number = $request->order_number;
+        $lesson->video_url = $request->video_url;
+        $lesson->content = $request->content;
 
         // Xử lý cập nhật ảnh nếu có
         if ($request->hasFile('thumbnail')) {
@@ -141,6 +152,9 @@ class LessonControllerAdmin extends Controller
             // Lưu ảnh mới
             $lesson->thumbnail = 'uploads/lessons/' . $imageName;
         }
+
+        // Cập nhật slug
+        $lesson->slug = $request->slug;
 
         $lesson->save();
 

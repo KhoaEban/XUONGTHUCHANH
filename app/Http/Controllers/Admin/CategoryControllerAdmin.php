@@ -94,15 +94,17 @@ class CategoryControllerAdmin extends Controller
         $category->parent_id = $request->parent_id ?? null;
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('categories', 'public');
-            $category->image = $imagePath;
+            // Lưu ảnh vào thư mục public/uploads
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName(); // Tạo tên file duy nhất
+            $image->move(public_path('uploads'), $imageName); // Di chuyển file vào thư mục public/uploads
+            $category->image = 'uploads/' . $imageName; // Lưu đường dẫn tương đối vào database
         }
 
         $category->save();
 
         return redirect()->route('admin.category.index')->with('success', 'Danh mục được thêm thành công!');
     }
-
 
     public function edit(Category $category)
     {
@@ -120,11 +122,15 @@ class CategoryControllerAdmin extends Controller
 
         if ($request->hasFile('image')) {
             // Xóa ảnh cũ nếu có
-            if ($category->image) {
-                Storage::disk('public')->delete($category->image);
+            if ($category->image && file_exists(public_path($category->image))) {
+                unlink(public_path($category->image)); // Xóa file ảnh cũ trong public/uploads
             }
-            // Lưu ảnh mới vào storage/public/categories
-            $category->image = $request->file('image')->store('categories', 'public');
+
+            // Lưu ảnh mới vào thư mục public/uploads
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName(); // Tạo tên file duy nhất
+            $image->move(public_path('uploads'), $imageName); // Di chuyển file vào thư mục public/uploads
+            $category->image = 'uploads/' . $imageName; // Cập nhật đường dẫn mới
         }
 
         $category->update([

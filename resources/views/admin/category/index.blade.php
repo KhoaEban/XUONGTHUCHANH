@@ -49,8 +49,8 @@
                                 <td>{{ $category->name }}</td>
                                 <td>
                                     @if ($category->image)
-                                        <img class="img-fluid" width="100"
-                                            src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}">
+                                        <img class="img-fluid" width="100" src="{{ asset($category->image) }}"
+                                            alt="{{ $category->name }}">
                                     @else
                                         Không có ảnh
                                     @endif
@@ -59,31 +59,40 @@
                                 </td>
                                 <td>{{ $category->updated_at ? $category->updated_at->format('d/m/Y') : 'N/A' }}</td>
                                 <td>
-                                    <!-- Kiểm tra nếu có danh mục con thì hiển thị button -->
-                                    @if ($category->children->count() > 0)
-                                        <a class="btn btn-warning btn-sm"
-                                            href="{{ route('admin.category.create.child', ['parent_id' => $category->id]) }}">
-                                            Thêm danh mục con
-                                        </a>
-                                        <button class="btn btn-info btn-sm view-children" data-id="{{ $category->id }}">
-                                            Xem danh mục con
-                                        </button>
-                                    @else
-                                        <a class="btn btn-warning btn-sm"
-                                            href="{{ route('admin.category.create.child', ['parent_id' => $category->id]) }}">
-                                            Thêm danh mục con
-                                        </a>
-                                    @endif
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <!-- Kiểm tra nếu có danh mục con thì hiển thị button -->
+                                        @if ($category->children->count() > 0)
+                                            <a class="text-warning"
+                                                href="{{ route('admin.category.create.child', ['parent_id' => $category->id]) }}"
+                                                title="Thêm danh mục con">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </a>
+                                            <button class="border-0 bg-transparent text-info view-children"
+                                                data-id="{{ $category->id }}" title="Xem danh mục con">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        @else
+                                            <a class="text-warning"
+                                                href="{{ route('admin.category.create.child', ['parent_id' => $category->id]) }}"
+                                                title="Thêm danh mục con">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </a>
+                                        @endif
 
-                                    <a href="{{ route('admin.category.edit', $category->id) }}"
-                                        class="btn btn-sm btn-primary">Sửa</a>
-                                    <form action="{{ route('admin.category.destroy', $category->id) }}" method="POST"
-                                        style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button>
-                                    </form>
+                                        <a class="text-warning" href="{{ route('admin.category.edit', $category->id) }}"
+                                            title="Sửa">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <form action="{{ route('admin.category.destroy', $category->id) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="border-0 bg-transparent text-danger" type="submit"
+                                                onclick="return confirm('Bạn có chắc muốn xóa không?')" title="Xóa">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

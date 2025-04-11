@@ -25,6 +25,10 @@
                 <input type="text" name="title" id="title" class="form-control" value="{{ $lesson->title }}">
             </div>
             <div class="form-group">
+                <label for="slug">Slug:</label>
+                <input type="text" name="slug" id="slug" class="form-control" value="{{ $lesson->slug }}" readonly>
+            </div>
+            <div class="form-group">
                 <label for="video_url">Video URL:</label>
                 <input type="url" name="video_url" id="video_url" class="form-control"
                     value="{{ $lesson->video_url }}">
@@ -51,4 +55,11 @@
         </form>
 
     </div>
+
+    <script>
+        document.getElementById('title').addEventListener('input', function () {
+            const slug = this.value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            document.getElementById('slug').value = slug;
+        });
+    </script>
 @endsection

@@ -1,7 +1,5 @@
 <?php
 
-// App\Models\CommentLike.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -20,4 +18,3 @@ class CommentLike extends Model
         return $this->belongsTo(User::class);
     }
 }
-

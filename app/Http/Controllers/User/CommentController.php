@@ -4,10 +4,11 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
 use App\Models\CommentLike;
 use App\Models\Course;
-use Illuminate\Support\Facades\Auth;
+
 
 class CommentController extends Controller
 {
@@ -31,39 +32,38 @@ class CommentController extends Controller
         }
 
         // Trả về kết quả bình thường khi không phải AJAX
-        return redirect()->back()->with('success', 'Bình luận đã được thêm!');
+        return redirect()->back();
     }
 
-
-    public function like($id)
+    public function like($commentId)
     {
-        $comment = Comment::findOrFail($id);
+        $comment = Comment::findOrFail($commentId);
 
-        // Kiểm tra nếu người dùng đã like bình luận này
-        $like = CommentLike::where('comment_id', $id)
-            ->where('user_id', auth()->id())
+        $like = CommentLike::where('comment_id', $comment->id)
+            ->where('user_id', Auth::id())
             ->first();
 
         if ($like) {
-            // Nếu đã like, bỏ like
+            // Nếu đã like → hủy like
             $like->delete();
-            $comment->decrement('likes_count');
-            return back()->with('success', 'Bạn đã bỏ like bình luận này.');
         } else {
-            // Nếu chưa like, thêm like
+            // Nếu chưa like → tạo like mới
             CommentLike::create([
-                'user_id' => auth()->id(),
-                'comment_id' => $id,
+                'user_id' => Auth::id(),
+                'comment_id' => $comment->id,
             ]);
-            $comment->increment('likes_count');
-            return back()->with('success', 'Đã thích bình luận!');
         }
-        $comment->like();
 
-        return back()->with('success', 'Đã thích bình luận!');
+        // Cập nhật lại likes_count dựa trên số lượng bản ghi trong CommentLike
+        $comment->likes_count = CommentLike::where('comment_id', $comment->id)->count();
+        $comment->save();
+
+        // Lấy slug của khóa học từ bài học
+        $lesson = $comment->lesson;
+        $course = $lesson->course;
+
+        return redirect()->route('course.show', ['slug' => $course->slug]);
     }
-
-
 
     // Hiển thị form sửa bình luận
     public function edit($id)
@@ -95,6 +95,7 @@ class CommentController extends Controller
         // Quay lại trang và thông báo thành công
         return redirect()->back()->with('success', 'Bình luận đã được cập nhật.');
     }
+
     public function show($id)
     {
         $course = Course::findOrFail($id);
@@ -116,12 +117,20 @@ class CommentController extends Controller
         return response()->json($comments);
     }
 
-    // Xóa bình luận
-    public function destroy($id)
+    public function destroy($commentId)
     {
-        $comment = Comment::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $comment = Comment::findOrFail($commentId);
+
+        // Xóa tất cả lượt thích liên quan
+        CommentLike::where('comment_id', $comment->id)->delete();
+
+        // Cập nhật lại likes_count
+        $comment->likes_count = 0;
+        $comment->save();
+
+        // Xóa bình luận
         $comment->delete();
 
-        return back()->with('success', 'Bình luận đã bị xóa.');
+        return redirect()->back();
     }
 }

@@ -10,7 +10,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d70c32c211.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <style>
         /* Định dạng màu gradient nền */
@@ -286,7 +289,36 @@
             width: 30px;
             margin-left: 10px;
         }
-        
+
+        #chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        #chat-toggle {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #chat-bubble {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -301,7 +333,7 @@
             </button>
             <!-- Logo -->
             <a class="navbar-brand m-0" href="{{ url('/') }}">
-                <img class="img-fluid rounded" src="{{ asset('image/images.png') }}" alt="Logo">
+                <img class="img-fluid rounded" src="{{ asset('image/logo.png') }}" alt="Logo">
             </a>
 
             <!-- Thanh tìm kiếm -->
@@ -316,7 +348,64 @@
             <!-- Icon bên phải -->
             <div class="d-flex align-items-center">
                 <div class="icon me-3"><i class="fas fa-th"></i></div>
-                <div class="icon me-3"><i class="fas fa-bell"></i></div>
+
+                <!-- Biểu tượng chuông với thông báo -->
+                <div class="dropdown me-3">
+                    <a href="#" class="icon text-decoration-none position-relative" id="notificationDropdown" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        @if (Auth::check() && Auth::user()->unreadNotifications->count() > 0)
+                            <span class="badge bg-danger rounded-pill text-center" style="position: absolute; top: 5px; right: 5px; transform: translate(50%, -50%);">{{ Auth::user()->unreadNotifications->count() }}</span>
+                        @endif
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown"
+                        style="width: 300px;">
+                        @if (Auth::check() && Auth::user()->notifications->count() > 0)
+                            <li>
+                                <form action="{{ route('user.notifications.mark-all-as-read') }}" method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-center">Đánh dấu tất cả là đã
+                                        đọc</button>
+                                </form>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider m-0">
+                            </li>
+                            @foreach (Auth::user()->notifications->take(5) as $notification)
+                                <li>
+                                    <div class="dropdown-item {{ $notification->read_at ? 'bg_finished' : 'bg_unfinished' }}">
+                                        <p class="mb-1">{{ $notification->data['message'] }}</p>
+                                        <a href="{{ $notification->data['action_url'] }}"
+                                            class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                        @if (!$notification->read_at)
+                                            <form
+                                                action="{{ route('user.notifications.mark-as-read', $notification->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-secondary btn-sm">Đã đọc</button>
+                                            </form>
+                                        @endif
+                                        <small
+                                            class="text-muted d-block">{{ $notification->created_at->format('d/m/Y H:i') }}</small>
+                                    </div>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider m-0">
+                                </li>
+                            @endforeach
+                            <li>
+                                <a class="dropdown-item text-center" href="{{ route('user.notifications') }}">Xem tất cả
+                                    thông báo</a>
+                            </li>
+                        @else
+                            <li>
+                                <div class="dropdown-item">Không có thông báo</div>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
 
                 @if (Auth::check())
                     <div class="dropdown">
@@ -336,14 +425,12 @@
                                             <i class="fas fa-user-cog"></i> Chức năng
                                         </a>
                                         <a class="dropdown-item" href="{{ route('user.payment.history') }}">
-                                            {{-- icon hồ sơ --}}
                                             <i class="fas fa-user"></i> Hồ sơ
                                         </a>
                                     </li>
                                 @else
                                     <li>
                                         <a class="dropdown-item" href="{{ route('user.payment.history') }}">
-                                            {{-- icon hồ sơ --}}
                                             <i class="fas fa-user"></i> Hồ sơ
                                         </a>
                                     </li>
@@ -370,16 +457,134 @@
     </nav>
 
     {{-- @include('layouts.sidebar') --}}
-
     @if (request()->is('user/profile'))
-        <!-- Kiểm tra nếu URL là user/profile -->
         @include('layouts.sidebar_profile')
     @else
-        @include('layouts.sidebar') <!-- Sidebar mặc định -->
+        @include('layouts.sidebar')
     @endif
-    
+
+    <!-- Chat Button -->
+    <div id="chat-container">
+        <div id="chat-bubble" class="d-none">
+            <iframe src="{{ route('chat.index') }}" frameborder="0"
+                style="width: 100%; height: 100%; border-radius: 15px;"></iframe>
+        </div>
+        <button id="chat-toggle" class="btn btn-primary chat-toggle-btn">
+            <i class="fas fa-comments"></i> Chat
+        </button>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('chat-toggle').addEventListener('click', function() {
+            const chatBubble = document.getElementById('chat-bubble');
+            chatBubble.classList.toggle('d-none');
+        });
+    </script>
+
+    <style>
+        .dropdown-menu {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .dropdown-item {
+            white-space: normal;
+        }
+
+        .bg_finished {
+            background-color: #00ff002c !important;
+        }
+
+        .bg_unfinished {
+            background-color: #ff00002c !important;
+        }
+
+        /* Chat Container */
+        #chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        /* Chat Toggle Button */
+        .chat-toggle-btn {
+            font-size: 1.2em;
+            /* Increase font size for larger text/icon */
+            padding: 15px 25px;
+            /* Larger padding for a bigger button */
+            background: #4a4a4a !important;
+            /* Dark gray background to match Grok theme */
+            color: #ffffff !important;
+            /* White text */
+            border: none !important;
+            /* Remove default border */
+            border-radius: 30px !important;
+            /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            /* Subtle shadow for depth */
+            transition: background 0.2s ease, transform 0.1s ease;
+            /* Smooth transitions */
+        }
+
+        .chat-toggle-btn:hover {
+            background: #5a5a5a !important;
+            /* Lighter gray on hover */
+            transform: scale(1.05);
+            /* Slight scale-up effect on hover */
+        }
+
+        .chat-toggle-btn i {
+            margin-right: 8px;
+            /* Space between icon and text */
+        }
+
+        /* Chat Bubble */
+        #chat-bubble {
+            width: 400px;
+            /* Fixed width for the chat window */
+            height: 600px;
+            /* Fixed height for the chat window */
+            background: #2a2a2a;
+            /* Dark background to match Grok theme */
+            border-radius: 15px;
+            /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            /* Floating effect */
+            position: absolute;
+            bottom: 80px;
+            /* Position above the button */
+            right: 0;
+            overflow: hidden;
+            /* Ensure iframe fits within rounded corners */
+        }
+
+        /* Hide chat bubble when d-none is applied */
+        #chat-bubble.d-none {
+            display: none !important;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            #chat-bubble {
+                width: 90vw;
+                /* Full width on smaller screens */
+                height: 80vh;
+                /* Taller on mobile */
+                bottom: 70px;
+                /* Adjust position */
+            }
+
+            .chat-toggle-btn {
+                font-size: 1em;
+                /* Slightly smaller font on mobile */
+                padding: 12px 20px;
+                /* Adjust padding */
+            }
+        }
+    </style>
 </body>
 
 </html>
