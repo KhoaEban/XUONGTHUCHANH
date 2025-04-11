@@ -41,6 +41,11 @@ use App\Http\Controllers\Teacher\ProgressController;
 // Gemini Chat
 use App\Http\Controllers\GeminiChatController;
 
+// Gemini Chat
+Route::get('/chat', [GeminiChatController::class, 'index'])->name('chat.index');
+Route::post('/chat/send', [GeminiChatController::class, 'send'])->name('chat.send');
+Route::get('/chat/history', [GeminiChatController::class, 'history'])->name('chat.history'); // Route để lấy lịch sử chat
+
 // Trang chủ
 Route::get('/', [HomeController::class, 'index']);
 
@@ -231,6 +236,7 @@ Route::middleware(['check.role:instructor'])->group(function () {
         Route::get('/student/quiz/{id}', [ProgressController::class, 'show'])->name('student.quiz.show');
         Route::post('/student/quiz/{id}/submit', [ProgressController::class, 'submit'])->name('student.quiz.submit');
         Route::get('/student/quiz/{id}/result', [ProgressController::class, 'result'])->name('student.quiz.result');
+        Route::post('/progress/{userId}/{quizId}/notify', [ProgressController::class, 'notify'])->name('instructor.progress.notify');
     });
 });
 
@@ -240,6 +246,8 @@ Route::prefix('user')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('user.profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
+    Route::get('/profile/course/show', [ProfileController::class, 'showProfile'])->name('user.profile.course.show');
+    Route::get('/profile/course/{id}', [CourseController::class, 'showCourseProfile'])->name('profile.course.detail');
 
     Route::get('/payment-history', [PaymentController::class, 'userPaymentHistory'])->name('user.payment.history');
 

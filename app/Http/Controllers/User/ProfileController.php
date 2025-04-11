@@ -24,9 +24,9 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $payments = Payment::where('user_id', $user->id)->get();
-        $enrollments = Enrollment::where('user_id', $user->id)->get();
-        $quizResults = QuizResult::where('user_id', $user->id)->get();
+        $payments = Payment::where('user_id', $user->id)->take(4)->get();
+        $enrollments = Enrollment::where('user_id', $user->id)->take(9)->get();
+        $quizResults = QuizResult::where('user_id', $user->id)->take(3)->get();
         return view('user.profile.index', compact('user', 'payments', 'enrollments', 'quizResults'));
     }
 

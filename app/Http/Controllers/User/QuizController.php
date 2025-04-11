@@ -7,6 +7,7 @@ use App\Models\Quiz;
 use App\Models\Answer;
 use App\Models\QuizResult;
 use App\Models\UserAnswer;
+use App\Notifications\AllQuizzesCompletedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -68,8 +69,18 @@ class QuizController extends Controller
 
             // Cập nhật điểm số (score > 0 nghĩa là completed)
             $quizResult->update([
-                'score' => ($score / $total) * 10, // Chuyển sang thang điểm 10
+                'score' => ($score / $total) * 10, // Thang điểm 10
             ]);
+
+            // Lấy course_id từ quiz
+            $courseId = $quiz->lesson->course_id;
+
+            // Kiểm tra xem học viên đã hoàn thành tất cả bài quiz trong khóa học chưa
+            $user = Auth::user();
+            if ($courseId && $user->hasCompletedAllQuizzesInCourse($courseId)) {
+                $course = \App\Models\Course::findOrFail($courseId);
+                $user->notify(new AllQuizzesCompletedNotification($course));
+            }
 
             return view('user.quizzes.result', [
                 'quiz' => $quiz,

@@ -1,5 +1,3 @@
-
-
 ```bash
 composer install
 ```
@@ -27,6 +25,9 @@ php artisan storage:link
 ```
 ```bash
 php artisan serve
+```
+```bash
+composer require barryvdh/laravel-dompdf
 ```
 
 # up git lên

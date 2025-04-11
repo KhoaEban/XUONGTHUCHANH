@@ -39,4 +39,5 @@ class QuizResult extends Model
     {
         return is_null($this->score) || $this->score == 0 ? 'in_progress' : 'completed';
     }
+    
 }
