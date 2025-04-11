@@ -54,6 +54,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 
+<<<<<<< Updated upstream
+=======
+// Gemini Chat
+Route::get('/chat', [GeminiChatController::class, 'index'])->name('chat.index');
+Route::post('/chat/send', [GeminiChatController::class, 'send'])->name('chat.send');
+Route::get('/chat/history', [GeminiChatController::class, 'history'])->name('chat.history'); // Route để lấy lịch sử chat
+>>>>>>> Stashed changes
 
 Route::middleware(['check.role:admin'])->group(function () {
     // Trang chủ Admin
