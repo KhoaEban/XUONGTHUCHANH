@@ -99,7 +99,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        
+
     }
 
     .progress-ring__circle {
@@ -454,10 +454,11 @@
                         </div>
 
                         @if ($progressPercentage == 100)
-                            <a href="#"
+                            <a href="{{ route('certificate.show', $course->id) }}"
                                 class="bg-dark text-white py-2 px-4 border-0 text-center text-decoration-none"
-                                style="width: 170px; margin-left: 370px; margin-top: 5px; margin-bottom: 15px">Nhận chứng
-                                chỉ</a>
+                                style="width: 170px; margin-left: 370px; margin-top: 5px; margin-bottom: 15px">
+                                Nhận chứng chỉ
+                            </a>
                         @endif
                         <div class="divider"></div>
                         <div class="card-body">
