@@ -49,6 +49,16 @@ class Course extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+    public function quizzes()
+    {
+        return $this->hasManyThrough(Quiz::class, Lesson::class);
+    }
+
     public function isPaidByUser($userId)
     {
         return Payment::where('user_id', $userId)
@@ -56,4 +66,5 @@ class Course extends Model
             ->where('status', 'completed')
             ->exists();
     }
+    
 }

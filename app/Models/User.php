@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class User extends Authenticatable
 {
@@ -16,12 +18,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // Thêm role vào fillable để có thể cập nhật
+        'role',
     ];
 
     public function hasRole($role)
     {
-        // Implement your role checking logic here
         return $this->role === $role;
     }
 
@@ -32,7 +33,7 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->role === 'admin'; // Kiểm tra nếu role là admin
+        return $this->role === 'admin';
     }
     public function isTeacher()
     {
@@ -47,6 +48,16 @@ class User extends Authenticatable
     public function userAnswers()
     {
         return $this->hasMany(UserAnswer::class);
+    }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+    public function chatMessages(): HasMany
+    {
+        return $this->hasMany(ChatMessage::class);
     }
 
     protected $hidden = [

@@ -4,9 +4,13 @@
     <ul class="tag-slider slick-slider">
         <div class="slick-list draggable">
             <div class="slick-track" style="opacity: 1; width: auto; transform: translate3d(0px, 0px, 0px);">
-                @foreach ($categories as $category)
-                    <li><a href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a></li>
-                @endforeach
+                @if ($categories->isNotEmpty())
+                    @foreach ($categories as $category)
+                        <li><a href="{{ route('category.show', $category->slug) }}">{{ $category->name }}</a></li>
+                    @endforeach
+                @else
+                    <li>Không có danh mục nào.</li>
+                @endif
             </div>
         </div>
     </ul>
@@ -69,7 +73,6 @@
                                     <div class="badge-overlay">
                                         @if ($course->is_free)
                                             <span class="badge-free">Free</span>
-
                                         @elseif (in_array($course->id, $purchasedCourses))
                                             <span class="badge-purchased">Đã mua</span>
                                             <!-- New badge for purchased courses -->

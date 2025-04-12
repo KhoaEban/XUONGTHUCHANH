@@ -424,13 +424,13 @@
                                         <a class="dropdown-item" href="#">
                                             <i class="fas fa-user-cog"></i> Chức năng
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('user.payment.history') }}">
+                                        <a class="dropdown-item" href="{{ route('user.profile') }}">
                                             <i class="fas fa-user"></i> Hồ sơ
                                         </a>
                                     </li>
                                 @else
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('user.payment.history') }}">
+                                        <a class="dropdown-item" href="{{ route('user.profile') }}">
                                             <i class="fas fa-user"></i> Hồ sơ
                                         </a>
                                     </li>
@@ -484,6 +484,7 @@
     </script>
 
     <style>
+        
         .dropdown-menu {
             max-height: 400px;
             overflow-y: auto;

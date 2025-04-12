@@ -8,8 +8,9 @@
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
+    </script>
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
@@ -342,27 +343,91 @@
 </head>
 
 <body>
+
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
+            {{-- Menu responsive bên trái --}}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <!-- Logo -->
             <a class="navbar-brand m-0" href="{{ url('/') }}">
-                <img class="img-fluid rounded" src="{{ asset('image/images.png') }}" alt="Logo">
+                <img class="img-fluid rounded" src="{{ asset('image/logo.png') }}" alt="Logo">
             </a>
 
+            <!-- Thanh tìm kiếm -->
             <div class="search-box d-flex justify-content-center gap-5">
                 <div class="d-flex align-items-center" style="width: 1000px">
-                    <input type="text" placeholder="Tìm kiếm" class="form-control">
-                    <button class="search-btn btn btn-light" type="submit"><i class="fas fa-search"></i> Tìm
-                        kiếm</button>
+                    <input type="text" placeholder="Tìm kiếm">
+                    <button class="search-btn" type="submit"><i class="fas fa-search"></i> Tìm kiếm</button>
                 </div>
+                {{-- <button class="search-adv btn btn-light" type="submit">Tìm kiếm nâng cao</button> --}}
             </div>
 
+            <!-- Icon bên phải -->
             <div class="d-flex align-items-center">
                 <div class="icon me-3"><i class="fas fa-th"></i></div>
-                <div class="icon me-3"><i class="fas fa-bell"></i></div>
+
+                <!-- Biểu tượng chuông với thông báo -->
+                <div class="dropdown me-3">
+                    <a href="#" class="icon text-decoration-none position-relative" id="notificationDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        @if (Auth::check() && Auth::user()->unreadNotifications->count() > 0)
+                            <span class="badge bg-danger rounded-pill text-center"
+                                style="position: absolute; top: 5px; right: 5px; transform: translate(50%, -50%);">{{ Auth::user()->unreadNotifications->count() }}</span>
+                        @endif
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown"
+                        style="width: 300px;">
+                        @if (Auth::check() && Auth::user()->notifications->count() > 0)
+                            <li>
+                                <form action="{{ route('user.notifications.mark-all-as-read') }}" method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-center">Đánh dấu tất cả là đã
+                                        đọc</button>
+                                </form>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider m-0">
+                            </li>
+                            @foreach (Auth::user()->notifications->take(5) as $notification)
+                                <li>
+                                    <div
+                                        class="dropdown-item {{ $notification->read_at ? 'bg_finished' : 'bg_unfinished' }}">
+                                        <p class="mb-1">{{ $notification->data['message'] }}</p>
+                                        <a href="{{ $notification->data['action_url'] }}"
+                                            class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                        @if (!$notification->read_at)
+                                            <form
+                                                action="{{ route('user.notifications.mark-as-read', $notification->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-secondary btn-sm">Đã đọc</button>
+                                            </form>
+                                        @endif
+                                        <small
+                                            class="text-muted d-block">{{ $notification->created_at->format('d/m/Y H:i') }}</small>
+                                    </div>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider m-0">
+                                </li>
+                            @endforeach
+                            <li>
+                                <a class="dropdown-item text-center" href="{{ route('user.notifications') }}">Xem tất cả
+                                    thông báo</a>
+                            </li>
+                        @else
+                            <li>
+                                <div class="dropdown-item">Không có thông báo</div>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
 
                 @if (Auth::check())
                     <div class="dropdown">
@@ -376,11 +441,22 @@
                                 <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i
                                             class="fas fa-tachometer-alt"></i> Quản lý</a></li>
                             @else
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('user.payment.history') }}">
-                                        <i class="fas fa-user"></i> Hồ sơ
-                                    </a>
-                                </li>
+                                @if (Auth::user()->role == 'instructor')
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fas fa-user-cog"></i> Chức năng
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('user.profile') }}">
+                                            <i class="fas fa-user"></i> Hồ sơ
+                                        </a>
+                                    </li>
+                                @else
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('user.profile') }}">
+                                            <i class="fas fa-user"></i> Hồ sơ
+                                        </a>
+                                    </li>
+                                @endif
                             @endif
                             <li>
                                 <a class="dropdown-item" href="#"
@@ -402,20 +478,24 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="d-flex">
             <div class="sidebar">
-                <h6 class="text-lg mt-4"><img style="width: 30px; height: 30px; object-fit: cover; border-radius: 50%" src="{{ asset(Auth::user()->avatar) }}" alt="Avatar">
-                    {{ Auth::user()->name }}</h6>
-                <ul class="list-unstyled">
-                    <li><a href="{{ route('user.profile') }}" class="d-block py-2">Hồ sơ</a></li>
-                    <li><a href="{{ route('user.payment.history') }}" class="d-block py-2">Lịch sử đơn hàng</a></li>
-                    <li><a href="{{ route('user.profile.edit') }}" class=" d-block py-2">Cài đặt hồ sơ</a></li>
+                <h6 class="text-lg mt-4">
+                    <img style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
+                        src="{{ asset(Auth::user()->avatar) }}" alt="Avatar">
+                    {{ Auth::user()->name }}
+                </h6>
+                <ul class="list-unstyled mt-4">
+                    <li><a href="{{ route('user.profile') }}" class="d-block py-2"><i class="fa fa-user me-2"></i> Hồ sơ</a></li>
+                    <li><a href="{{ route('user.profile.course.show') }}" class="d-block py-2"><i class="fa fa-book me-2"></i> Khóa học</a></li>
+                    <li><a href="{{ route('user.payment.history') }}" class="d-block py-2"><i class="fa fa-history me-2"></i> Lịch sử</a></li>
+                    <li><a href="{{ route('user.profile.edit') }}" class=" d-block py-2"><i class="fa fa-cog me-2"></i>Cài đặt hồ sơ</a></li>
                     <li><a href="{{ route('logout') }}" class="d-block py-2 text-danger">Đăng xuất</a></li>
                 </ul>
             </div>
 
-            <div class="flex-grow-1 m-4">
+            <div class="flex-grow-1 mt-4">
                 @yield('content')
             </div>
         </div>
