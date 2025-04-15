@@ -9,7 +9,9 @@ class AddStatusToCommentsTable extends Migration
     public function up()
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->enum('status', ['active', 'pending', 'spam', 'deleted'])->default('pending');
+            if (!Schema::hasColumn('comments', 'status')) {
+                $table->enum('status', ['active', 'pending', 'spam', 'deleted'])->default('pending');
+            }
         });
     }
 
