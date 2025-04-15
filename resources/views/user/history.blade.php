@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Lịch Sử Thanh Toán</h2>
+    <h2>Khóa Học Đã Mua</h2>
 
     <table class="table">
         <thead>
@@ -13,7 +13,7 @@
                 <th>Trạng thái thanh toán</th>
                 <th>Trạng thái đăng ký</th>
                 <th>Ngày thanh toán</th>
-                <th>Hành động</th>
+                {{-- <th>Hành động</th> --}}
             </tr>
         </thead>
         <tbody>
@@ -30,7 +30,7 @@
                     @endphp
                 </td>
                 <td>{{ $payment->created_at }}</td>
-                <td>
+                {{-- <td>
                     @if($payment->status === 'completed')
                     <form action="{{ route('user.payment.cancel', $payment) }}" method="POST">
                         @csrf
@@ -42,7 +42,7 @@
                         <button type="submit" class="btn btn-primary btn-sm">Mua lại</button>
                     </form>
                     @endif
-                </td>
+                </td> --}}
             </tr>
             @endforeach
         </tbody>

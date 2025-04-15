@@ -60,6 +60,30 @@ class User extends Authenticatable
         return $this->hasMany(ChatMessage::class);
     }
 
+    public function hasCompletedAllQuizzesInCourse($courseId)
+    {
+        // Lấy danh sách tất cả bài học có quiz của khóa học
+        $lessonQuizzes = \App\Models\Lesson::where('course_id', $courseId)
+            ->whereHas('quizzes')
+            ->pluck('id');
+
+        if ($lessonQuizzes->isEmpty()) {
+            return false;
+        }
+
+        $totalQuizzes = \App\Models\Quiz::whereIn('lesson_id', $lessonQuizzes)->count();
+
+        $completedQuizzes = $this->quizResults()
+            ->whereIn('quiz_id', function ($query) use ($lessonQuizzes) {
+                $query->select('id')
+                    ->from('quizzes')
+                    ->whereIn('lesson_id', $lessonQuizzes);
+            })
+            ->count();
+
+        return $totalQuizzes > 0 && $completedQuizzes >= $totalQuizzes;
+    }
+
     protected $hidden = [
         'password',
         'remember_token',

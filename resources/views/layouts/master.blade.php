@@ -375,9 +375,9 @@
                             </li>
                             @foreach (Auth::user()->notifications->take(5) as $notification)
                                 <li>
-                                    <div class="dropdown-item {{ $notification->read_at ? 'bg_finished' : 'bg_unfinished' }}">
+                                    <div class="dropdown-item {{ $notification->read_at ? 'bg_unfinished' : 'bg_finished' }}">
                                         <p class="mb-1">{{ $notification->data['message'] }}</p>
-                                        <a href="{{ $notification->data['action_url'] }}"
+                                        <a href="{{ route('user.profile') }}"
                                             class="btn btn-primary btn-sm">Xem chi tiết</a>
                                         @if (!$notification->read_at)
                                             <form

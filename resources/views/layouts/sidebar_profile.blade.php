@@ -491,6 +491,7 @@
                     <li><a href="{{ route('user.profile.course.show') }}" class="d-block py-2"><i class="fa fa-book me-2"></i> Khóa học</a></li>
                     <li><a href="{{ route('user.payment.history') }}" class="d-block py-2"><i class="fa fa-history me-2"></i> Lịch sử</a></li>
                     <li><a href="{{ route('user.profile.edit') }}" class=" d-block py-2"><i class="fa fa-cog me-2"></i>Cài đặt hồ sơ</a></li>
+                    <li><a href="{{ url('/') }}" class="d-block py-2 text-muted">Quay về trang chủ</a></li>
                     <li><a href="{{ route('logout') }}" class="d-block py-2 text-danger">Đăng xuất</a></li>
                 </ul>
             </div>

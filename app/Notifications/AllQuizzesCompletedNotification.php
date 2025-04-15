@@ -29,7 +29,7 @@ class AllQuizzesCompletedNotification extends Notification
             ->greeting('Xin chào ' . $notifiable->name . ',')
             ->line("Chúc mừng bạn đã hoàn thành tất cả các bài quiz trong khóa học: **{$this->course->title}**!")
             ->line('Cảm ơn bạn đã nỗ lực học tập. Tiếp tục phát huy nhé!')
-            ->action('Xem hồ sơ', route('user.profile.course.show'))
+            ->action('Xem hồ sơ', route('user.profile'))
             ->line('Trân trọng,');
     }
 
@@ -37,7 +37,7 @@ class AllQuizzesCompletedNotification extends Notification
     {
         return [
             'message' => "Bạn đã hoàn thành tất cả bài quiz trong khóa học: {$this->course->title}!",
-            'action_url' => route('user.profile.course.show'),
+            'action_url' => route('user.profile'),
         ];
     }
 
