@@ -16,19 +16,17 @@ class HomeController extends Controller
         $categories = Category::all();
         $courses = Course::all();
 
-        $user = Auth::user();
+        $popularCourses = Course::where('views', '>', 5)->orderBy('views', 'desc')->get();
 
+        $user = Auth::user();
         $purchasedCourses = [];
         if ($user) {
             $purchasedCourses = $user->enrollments->pluck('course_id')->toArray();
         }
 
-        return view('user.home', compact('categories', 'courses', 'purchasedCourses'));
-        $categories = Category::all(); // Lấy tất cả danh mục
-        // $categories->load('courses'); // Load tất cả khóa học của mỗi danh mục
-        $courses = Course::all();
-        return view('user.home', compact('categories', 'courses'));
+        return view('user.home', compact('categories', 'courses', 'popularCourses', 'purchasedCourses'));
     }
+
 
     public function notifications()
     {

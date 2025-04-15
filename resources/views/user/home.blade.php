@@ -176,8 +176,8 @@
     <div class="row">
         <div class="col-12">
             <div class="row">
-                @if ($courses->count() > 0)
-                    @foreach ($courses as $course)
+                @if ($popularCourses->count() > 0)
+                    @foreach ($popularCourses as $course)
                         <div class="col-3">
                             <div class="card mb-3">
                                 <a href="{{ route('course.show', $course->slug) }}"
