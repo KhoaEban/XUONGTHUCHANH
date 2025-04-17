@@ -1,9 +1,13 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="container">
-        <h2>Kết quả: {{ $quiz->title }}</h2>
-        <p>Điểm số: <strong>{{ number_format(($score / $total) * 10, 1) }} / 10</strong> (Đúng {{ $score }}/{{ $total }} câu)</p>
+    <div class="container mt-4">
+        <a class="bg-secondary text-white py-2 px-3" href="{{ $backUrl }}">
+            <i class="fa fa-arrow-left me-1"></i>Quay lại bài học
+        </a>
+        <h2 class="mt-5">Kết quả: {{ $quiz->title }}</h2>
+        <p>Điểm số: <strong>{{ number_format(($score / $total) * 10, 1) }} / 10</strong> (Đúng
+            {{ $score }}/{{ $total }} câu)</p>
 
         <hr>
         @foreach ($details as $item)

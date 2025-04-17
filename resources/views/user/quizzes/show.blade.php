@@ -1,8 +1,9 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="container">
-        <h2>{{ $quiz->title }}</h2>
+    <div class="container mt-4">
+        <a class="bg-secondary text-white py-2 px-3" href="{{ url()->previous() }}"><i class="fa fa-arrow-left me-1"></i>Quay lại bài học</a>
+        <h2 class="mt-5">{{ $quiz->title }}</h2>
         <p>{{ $quiz->description }}</p>
 
         <form action="{{ route('user.quizzes.submit', $quiz->id) }}" method="POST">

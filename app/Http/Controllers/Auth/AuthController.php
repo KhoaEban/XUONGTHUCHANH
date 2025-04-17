@@ -73,16 +73,19 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
             'password_confirmation' => 'required|same:password',
+            'role' => 'required|in:student,instructor',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role, // Lưu vai trò vào cột `role` trong bảng users
         ]);
 
         return redirect()->route('login')->with('success', 'Đăng ký thành công! Hãy đăng nhập.');
     }
+
 
     // Xử lý đăng xuất
     public function logout()

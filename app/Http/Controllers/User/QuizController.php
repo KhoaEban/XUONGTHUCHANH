@@ -87,6 +87,7 @@ class QuizController extends Controller
                 'score' => $score,
                 'total' => $total,
                 'details' => $details,
+                'backUrl' => route('course.show', ['slug' => $quiz->lesson->course->slug]),
             ]);
         });
     }
