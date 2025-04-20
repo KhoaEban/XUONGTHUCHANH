@@ -206,4 +206,60 @@ class PaymentController extends Controller
 
         return redirect()->route('course.payment', ['slug' => $course->slug]);
     }
+
+    public function enrollFreeCourse(Request $request, $slug)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để tham gia khóa học.');
+        }
+
+        $course = Course::where('slug', $slug)->firstOrFail();
+
+        if (!$course->is_free) {
+            return redirect()->route('course.payment', ['slug' => $course->slug])
+                ->with('error', 'Khóa học này không miễn phí.');
+        }
+
+        $existingEnrollment = Enrollment::where('user_id', Auth::id())
+            ->where('course_id', $course->id)
+            ->where('status', 'active')
+            ->exists();
+
+        if ($existingEnrollment) {
+            return redirect()->route('course.detail', ['slug' => $course->slug])
+                ->with('error', 'Bạn đã tham gia khóa học này.');
+        }
+
+        $payment = Payment::create([
+            'user_id' => Auth::id(),
+            'course_id' => $course->id,
+            'amount' => 0,
+            'payment_method' => 'free', // Must match ENUM values in the payments table
+            'status' => 'completed',
+            'transaction_id' => uniqid(),
+        ]);
+
+        Log::info('Payment created: ' . json_encode($payment));
+
+        $enrollment = Enrollment::create([
+            'user_id' => Auth::id(),
+            'course_id' => $course->id,
+            'payment_id' => $payment->id,
+            'status' => 'active',
+            'enrolled_at' => now(),
+        ]);
+
+        Log::info('Enrollment created: ' . json_encode($enrollment));
+
+        Enrollment::create([
+            'user_id' => Auth::id(),
+            'course_id' => $course->id,
+            'payment_id' => $payment->id,
+            'status' => 'active',
+            'enrolled_at' => now(),
+        ]);
+
+        return redirect()->route('payment.success')
+            ->with('success', 'Bạn đã tham gia khóa học miễn phí thành công.');
+    }
 }

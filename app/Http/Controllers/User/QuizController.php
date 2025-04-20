@@ -7,6 +7,7 @@ use App\Models\Quiz;
 use App\Models\Answer;
 use App\Models\QuizResult;
 use App\Models\UserAnswer;
+use App\Models\CourseProgress;
 use App\Notifications\AllQuizzesCompletedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,15 +68,52 @@ class QuizController extends Controller
                 ];
             }
 
-            // Cập nhật điểm số (score > 0 nghĩa là completed)
-            $quizResult->update([
-                'score' => ($score / $total) * 10, // Thang điểm 10
-            ]);
+            // Tính điểm số (thang điểm 10)
+            $finalScore = ($score / $total) * 10;
+            $quizResult->update(['score' => $finalScore]);
 
-            // Lấy course_id từ quiz
-            $courseId = $quiz->lesson->course_id;
+            // Xác định xem quiz có đạt yêu cầu (ví dụ: score >= 7)
+            $passingScore = 7; // Có thể cấu hình trong .env hoặc config
+            $quizPassed = $finalScore >= $passingScore;
+
+            if ($quizPassed) {
+                $courseId = $quiz->lesson->course_id;
+                $lessonId = $quiz->lesson_id;
+            
+                $progress = CourseProgress::firstOrCreate(
+                    [
+                        'user_id' => Auth::id(),
+                        'course_id' => $courseId,
+                    ],
+                    [
+                        'completed_lessons' => [],
+                    ]
+                );
+            
+                $completedLessons = $progress->completed_lessons ?? [];
+                if (!in_array($lessonId, $completedLessons)) {
+                    $completedLessons[] = $lessonId;
+                    $progress->completed_lessons = $completedLessons;
+                    $progress->save();
+                }
+            }
+
+            if ($quizPassed) {
+                return redirect()->route('course.show', ['slug' => $quiz->lesson->course->slug])
+                    ->with('success', 'Chúc mừng! Bạn đã vượt qua bài kiểm tra. Tiến độ khóa học đã được cập nhật.');
+            } else {
+                return view('user.quizzes.result', [
+                    'quiz' => $quiz,
+                    'score' => $score,
+                    'total' => $total,
+                    'details' => $details,
+                    'backUrl' => route('course.show', ['slug' => $quiz->lesson->course->slug]),
+                    'passed' => $quizPassed,
+                ]);
+            }
 
             // Kiểm tra xem học viên đã hoàn thành tất cả bài quiz trong khóa học chưa
+            $courseId = $quiz->lesson->course_id;
             $user = Auth::user();
             if ($courseId && $user->hasCompletedAllQuizzesInCourse($courseId)) {
                 $course = \App\Models\Course::findOrFail($courseId);
@@ -88,6 +126,7 @@ class QuizController extends Controller
                 'total' => $total,
                 'details' => $details,
                 'backUrl' => route('course.show', ['slug' => $quiz->lesson->course->slug]),
+                'passed' => $quizPassed, // Truyền trạng thái pass/fail để hiển thị thông báo
             ]);
         });
     }

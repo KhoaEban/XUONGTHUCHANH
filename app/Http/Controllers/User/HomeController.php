@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Category;
 use App\Models\Course;
@@ -15,13 +16,14 @@ class HomeController extends Controller
     {
         $categories = Category::all();
         $courses = Course::all();
-
         $popularCourses = Course::where('views', '>', 5)->orderBy('views', 'desc')->get();
 
         $user = Auth::user();
         $purchasedCourses = [];
         if ($user) {
+            $user->load('enrollments'); // Eager-load enrollments
             $purchasedCourses = $user->enrollments->pluck('course_id')->toArray();
+            Log::info('Purchased Courses for User ' . $user->id . ': ' . json_encode($purchasedCourses));
         }
 
         return view('user.home', compact('categories', 'courses', 'popularCourses', 'purchasedCourses'));

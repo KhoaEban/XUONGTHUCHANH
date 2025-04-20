@@ -298,6 +298,7 @@ Route::prefix('user')->group(function () {
     Route::post('/payment-history/{payment}/cancel', [PaymentController::class, 'cancelPayment'])->name('user.payment.cancel');
     Route::post('/payment-history/{course}/buy-again', [PaymentController::class, 'buyAgain'])->name('user.payment.buy_again');
     Route::get('/payment/{slug}', [PaymentController::class, 'showPaymentForm'])->name('payment.form');
+    Route::post('/payment/{slug}/enroll-free', [PaymentController::class, 'enrollFreeCourse'])->name('course.enroll.free');
     Route::post('/user/payment/{slug}', [PaymentController::class, 'processPayment'])->name('course.payment.process');
 
     // các route khác

@@ -60,28 +60,20 @@ class User extends Authenticatable
         return $this->hasMany(ChatMessage::class);
     }
 
+    // app/Models/User.php
     public function hasCompletedAllQuizzesInCourse($courseId)
     {
-        // Lấy danh sách tất cả bài học có quiz của khóa học
-        $lessonQuizzes = \App\Models\Lesson::where('course_id', $courseId)
-            ->whereHas('quizzes')
-            ->pluck('id');
+        $course = Course::findOrFail($courseId);
+        $quizIds = $course->lessons->flatMap->quizzes->pluck('id')->toArray();
+        $passingScore = 10; // Có thể cấu hình trong .env
 
-        if ($lessonQuizzes->isEmpty()) {
-            return false;
-        }
+        $completedQuizzes = QuizResult::where('user_id', $this->id)
+            ->whereIn('quiz_id', $quizIds)
+            ->where('score', '>=', $passingScore)
+            ->pluck('quiz_id')
+            ->toArray();
 
-        $totalQuizzes = \App\Models\Quiz::whereIn('lesson_id', $lessonQuizzes)->count();
-
-        $completedQuizzes = $this->quizResults()
-            ->whereIn('quiz_id', function ($query) use ($lessonQuizzes) {
-                $query->select('id')
-                    ->from('quizzes')
-                    ->whereIn('lesson_id', $lessonQuizzes);
-            })
-            ->count();
-
-        return $totalQuizzes > 0 && $completedQuizzes >= $totalQuizzes;
+        return count($quizIds) > 0 && count(array_diff($quizIds, $completedQuizzes)) === 0;
     }
 
     protected $hidden = [

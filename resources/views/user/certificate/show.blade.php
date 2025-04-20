@@ -357,7 +357,6 @@
                 <div class="certificate-content">
                 <div>
                     <img src="{{ asset('image/images.png') }}" alt="Udemy Logo" class="logo">
-                    <img src="{{ asset('image/logo-3.png') }}" alt="FPT Polytechnic Logo" class="logo">
                 </div>
                 <br>
                     <h1 class="title">CERTIFICATE OF COMPLETION</h1>

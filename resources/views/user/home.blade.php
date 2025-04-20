@@ -71,11 +71,10 @@
 
                                     <!-- Nhãn Free/Pro -->
                                     <div class="badge-overlay">
-                                        @if ($course->is_free)
-                                            <span class="badge-free">Free</span>
-                                        @elseif (in_array($course->id, $purchasedCourses))
+                                        @if (in_array($course->id, $purchasedCourses))
                                             <span class="badge-purchased">Đã mua</span>
-                                            <!-- New badge for purchased courses -->
+                                        @elseif ($course->is_free)
+                                            <span class="badge-free">Free</span>
                                         @else
                                             <span class="badge-pro"><i class="fas fa-crown me-1"></i>Pro</span>
                                         @endif
@@ -190,11 +189,10 @@
 
                                         <!-- Nhãn Free/Pro -->
                                         <div class="badge-overlay">
-                                            @if ($course->is_free)
-                                                <span class="badge-free">Free</span>
-                                            @elseif (in_array($course->id, $purchasedCourses))
+                                            @if (in_array($course->id, $purchasedCourses))
                                                 <span class="badge-purchased">Đã mua</span>
-                                                <!-- New badge for purchased courses -->
+                                            @elseif ($course->is_free)
+                                                <span class="badge-free">Free</span>
                                             @else
                                                 <span class="badge-pro"><i class="fas fa-crown me-1"></i>Pro</span>
                                             @endif

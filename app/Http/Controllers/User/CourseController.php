@@ -40,9 +40,9 @@ class CourseController extends Controller
         $firstLesson = $course->lessons->first();
         $comments = $firstLesson
             ? $firstLesson->comments()
-                ->with(['user', 'replies.user', 'replies.likes']) // Không cần nạp quan hệ likes cho comment chính
-                ->orderBy('created_at', 'desc')
-                ->get()
+            ->with(['user', 'replies.user', 'replies.likes']) // Không cần nạp quan hệ likes cho comment chính
+            ->orderBy('created_at', 'desc')
+            ->get()
             : collect([]);
 
         $userId = Auth::id();
@@ -142,7 +142,7 @@ class CourseController extends Controller
             ->first();
 
         $completedLessons = $progress ? count($progress->completed_lessons) : 0;
-        $totalLessons = $course->lessons()->count();
+        $totalLessons = $course->lessons()->has('quizzes')->count();
         $progressPercentage = $totalLessons > 0 ? ($completedLessons / $totalLessons) * 100 : 0;
 
         return response()->json([

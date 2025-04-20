@@ -24,79 +24,96 @@
     <div class="container mt-5 p-0">
         <div class="left-section">
             <div class="layoutss"></div>
-            <div style="padding: 20px;">
-                <div class="d-flex align-items-center gap-3 mb-3">
+            <div style="padding: 20px 20px 0px 20px;">
+                <div class="d-flex align-items-center gap-3">
                     <img height="50" src="{{ asset($course->thumbnail ?? 'images/default-thumbnail.jpg') }}"
                         style="border-radius: 50%; object-fit: cover;" width="50" alt="JavaScript Pro logo" />
                     <h1 class="m-0" style="font-size: 20px;">Khóa học {{ $course->title }}</h1>
                 </div>
-                <p style="font-size: 14px;">{{ $course->description }}</p>
-
+            </div>
+            <div style="padding: 20px 50px;">
                 <h2 style="font-size: 14px;">Bạn nhận được gì từ khóa học này?</h2>
                 <ul class="px-4">
                     @foreach ($course->lessons as $lesson)
-                    <li style="font-size: 14px; list-style-type: disc;">{{ $lesson->title }}</li>
+                        <li style="font-size: 14px; list-style-type: disc;">{{ $lesson->title }}</li>
                     @endforeach
                 </ul>
                 <h2 style="font-size: 16px;" class="mt-4">Đánh giá khóa học</h2>
                 @if ($course->reviews->count() > 0)
-                @foreach ($course->reviews as $review)
-                <div class="border p-2 rounded mb-2">
-                    <strong>{{ $review->user->name }}</strong>
-                    <span class="ms-2 text-warning">
-                        @for ($i = 1; $i <= 5; $i++)
-                            @if ($i <=$review->rating)
-                            ★
-                            @else
-                            ☆
-                            @endif
-                            @endfor
-                    </span>
-                    <p class="mb-0">{{ $review->comment }}</p>
-                    <small class="text-muted">{{ $review->created_at->diffForHumans() }}</small>
-                </div>
-                @endforeach
+                    @foreach ($course->reviews as $review)
+                        <div class="border p-2 rounded mb-2">
+                            <strong>{{ $review->user->name }}</strong>
+                            <span class="ms-2 text-warning">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $review->rating)
+                                        ★
+                                    @else
+                                        ☆
+                                    @endif
+                                @endfor
+                            </span>
+                            <p class="mb-0">{{ $review->comment }}</p>
+                            <small class="text-muted">{{ $review->created_at->diffForHumans() }}</small>
+                        </div>
+                    @endforeach
                 @else
-                <p class="text-muted">Chưa có đánh giá nào cho khóa học này.</p>
+                    <p class="text-muted">Chưa có đánh giá nào cho khóa học này.</p>
                 @endif
             </div>
 
         </div>
         <div class="right-section" style="padding: 20px;">
-            <h2>Chi tiết thanh toán</h2>
-            <div class="price-details">
-                <div>Khóa học {{ $course->title }}</div>
-                <div class="original-price">Giá gốc: {{ number_format($course->price, 0, ',', '.') }} VNĐ</div>
-                <div class="discounted-price">Giá ưu đãi hôm nay: <span
-                        class="text-danger">{{ number_format($course->price, 0, ',', '.') }} VNĐ</span></div>
-            </div>
-            <div class="discount-code">
-                <input placeholder="Nhập mã giảm giá" type="text" />
-                <button>Áp dụng</button>
-            </div>
-            <div class="total d-flex justify-content-between">
-                <p class="m-0">TỔNG:</p> <span class="text-danger">{{ number_format($course->price, 0, ',', '.') }}
-                    VNĐ</span>
-            </div>
-            <form action="{{ route('course.payment.process', ['slug' => $course->slug]) }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="payment_method" class="form-label">Phương thức thanh toán:</label>
-                    <select name="payment_method" id="payment_method" class="select" required>
-                        <option value="credit_card">Thẻ tín dụng</option>
-                        <option value="paypal">PayPal</option>
-                        <option value="momo">MoMo</option>
-                        <option value="vnpay">VNPay</option> <!-- Add VNPay option -->
-                    </select>
+            @if ($course->is_free)
+                <h3 class="fw-bold mb-3">Khóa học miễn phí</h3>
+                <div class="price-details" style="margin-bottom: 80px">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <h6 class="fw-bold m-0">Khóa học:</h6> <span>{{ $course->title }}</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <h6 class="fw-bold m-0">Mô tả:</h6> <span
+                            style="font-size: 14px;">{{ $course->description }}</span>
+                    </div>
                 </div>
-                <button type="submit" class="checkout-button">
-                    Mua khóa học
-                </button>
-            </form>
-            {{-- <div class="safe-payment">
-                    <i class="fas fa-lock"></i>
-                    <span>Thanh toán an toàn với SePay</span>
-                </div> --}}
+                <form action="{{ route('course.enroll.free', ['slug' => $course->slug]) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="checkout-button">
+                        Đăng ký ngay
+                    </button>
+                </form>
+            @else
+                <h3 class="fw-bold mb-3">Chi tiết thanh toán</h3>
+                <div class="price-details">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <h6 class="fw-bold m-0">Khóa học:</h6> <span>{{ $course->title }}</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <h6 class="fw-bold m-0">Mô tả:</h6>
+                        <span style="font-size: 14px;">{{ $course->description }}</span>
+                    </div>
+                    <div class="discounted-price d-flex align-items-center gap-1">
+                        <h6 class="fw-bold m-0">Giá:</h6>
+                        <span class="text-danger">{{ number_format($course->price, 0, ',', '.') }} VNĐ</span>
+                    </div>
+                </div>
+                <div class="total d-flex justify-content-between">
+                    <p class="m-0">TỔNG:</p> <span
+                        class="text-danger">{{ number_format($course->price, 0, ',', '.') }} VNĐ</span>
+                </div>
+                <form action="{{ route('course.payment.process', ['slug' => $course->slug]) }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="payment_method" class="form-label">Phương thức thanh toán:</label>
+                        <select name="payment_method" id="payment_method" class="select" required>
+                            <option value="credit_card">Thẻ tín dụng</option>
+                            <option value="momo">MoMo</option>
+                            <option value="vnpay">VNPay</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="checkout-button">
+                        Mua khóa học
+                    </button>
+                </form>
+            @endif
         </div>
     </div>
 </body>

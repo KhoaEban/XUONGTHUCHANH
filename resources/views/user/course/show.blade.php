@@ -311,12 +311,6 @@
                         <p><span class="author">Giảng viên: {{ $course->instructor->name ?? 'Đang cập nhật' }}</span></p>
                     </div>
 
-                    <button class="complete-button" id="complete-button"
-                        onclick="markLessonComplete({{ $course->id }}, getCurrentLessonId())">
-                        Đánh dấu hoàn thành bài học <span
-                            id="complete-lesson-title">{{ $course->lessons->first()->title ?? '' }}</span>
-                    </button>
-
                     <div class="">
                         <div class="tabs">
                             <button class="tab-button active" onclick="openTab(event, 'gioithieu')">Giới thiệu</button>
@@ -419,7 +413,7 @@
                                 @php
                                     $reviewed = $course->reviews->where('user_id', auth()->id())->first();
                                 @endphp
-    
+
                                 @if (!$reviewed)
                                     <form id="rating-form" action="{{ route('ratings.store') }}" method="POST">
                                         @csrf
@@ -444,7 +438,7 @@
                                 @else
                                     <p class="text-success mt-3">Bạn đã đánh giá khóa học này.</p>
                                 @endif
-    
+
                                 <!-- Hiển thị các đánh giá -->
                                 @if ($reviews->count())
                                     <div class="mt-4">
@@ -465,8 +459,7 @@
                                     <p class="mt-3">Chưa có đánh giá nào.</p>
                                 @endif
                             @else
-                                <p class="mt-3">Vui lồng đăng nhập để đánh giá khóa học.</p>
-    
+                                <p class="mt-3">Vui lòng đăng nhập để đánh giá khóa học.</p>
                             @endauth
                         </div>
                     </div>
@@ -547,9 +540,6 @@
             // Cập nhật ngay lập tức tiêu đề và video
             document.getElementById("lesson-title").innerText = title;
             document.getElementById("lesson-video").src = videoUrl;
-
-            // Cập nhật tiêu đề trên nút "Đánh dấu hoàn thành"
-            document.getElementById("complete-lesson-title").innerText = title;
 
             // Cập nhật currentLessonId
             currentLessonId = lessonId;
@@ -642,53 +632,6 @@
             evt.currentTarget.className += " active";
         }
 
-        function getCurrentLessonId() {
-            return currentLessonId;
-        }
-
-        function markLessonComplete(courseId, lessonId) {
-            if (!lessonId) {
-                alert('Không thể xác định bài học hiện tại.');
-                return;
-            }
-            fetch(`/user/courses/${courseId}/lessons/${lessonId}/complete`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        let lessonItem = document.querySelector(`.video-list li[onclick*="${lessonId}"]`);
-                        if (lessonItem && !lessonItem.classList.contains('completed')) {
-                            lessonItem.classList.add('completed');
-                            let completedIcon = document.createElement('p');
-                            completedIcon.classList.add('ml-2', 'm-0');
-                            completedIcon.innerText = '✅';
-                            let titleDiv = lessonItem.querySelector('.d-flex');
-                            if (titleDiv) {
-                                titleDiv.appendChild(completedIcon);
-                            }
-                            updateCourseProgress(courseId);
-                        }
-                        alert(data.message);
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch((error) => {
-                    console.error('Lỗi đánh dấu bài học hoàn thành:', error);
-                    alert('Đã có lỗi xảy ra khi đánh dấu bài học là hoàn thành.');
-                });
-        }
-
         function updateCourseProgress(courseId) {
             fetch(`/user/courses/${courseId}/progress`)
                 .then(response => {
@@ -699,8 +642,30 @@
                 })
                 .then(data => {
                     if (data.progressPercentage !== undefined) {
-                        document.getElementById('course-progress-bar').style.width = data.progressPercentage + '%';
-                        document.getElementById('progress-percentage').innerText = data.progressPercentage + '%';
+                        // Cập nhật vòng tròn tiến độ
+                        const progressCircle = document.querySelector('.progress-ring__circle');
+                        const circumference = 106; // Chu vi của vòng tròn
+                        const offset = circumference * (data.progressPercentage / 100);
+                        progressCircle.style.strokeDasharray = `${offset}, ${circumference}`;
+                        document.querySelector('.progress-text').innerText = `${data.progressPercentage}%`;
+
+                        // Cập nhật liên kết nhận chứng chỉ nếu hoàn thành 100%
+                        if (data.progressPercentage === 100) {
+                            // Kiểm tra xem liên kết đã tồn tại chưa
+                            const existingLink = document.querySelector(
+                                'a[href="{{ route('certificate.show', $course->id) }}"]');
+                            if (!existingLink) {
+                                const certificateLink = document.createElement('a');
+                                certificateLink.href = '{{ route('certificate.show', $course->id) }}';
+                                certificateLink.className =
+                                    'bg-dark text-white py-2 px-4 border-0 text-center text-decoration-none';
+                                certificateLink.style.cssText =
+                                    'width: 170px; margin-left: 370px; margin-top: 5px; margin-bottom: 15px';
+                                certificateLink.innerText = 'Nhận chứng chỉ';
+                                const divider = document.querySelector('.divider');
+                                divider.insertAdjacentElement('beforebegin', certificateLink);
+                            }
+                        }
                     }
                 })
                 .catch(error => console.error('Lỗi khi lấy tiến độ khóa học:', error));
