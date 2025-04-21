@@ -299,8 +299,8 @@
 
         #chat-toggle {
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -355,102 +355,102 @@
                         aria-expanded="false">
                         <i class="fas fa-bell"></i>
                         @if (Auth::check() && Auth::user()->unreadNotifications->count() > 0)
-                            <span class="badge bg-danger rounded-pill text-center" style="position: absolute; top: 5px; right: 5px; transform: translate(50%, -50%);">{{ Auth::user()->unreadNotifications->count() }}</span>
+                        <span class="badge bg-danger rounded-pill text-center" style="position: absolute; top: 5px; right: 5px; transform: translate(50%, -50%);">{{ Auth::user()->unreadNotifications->count() }}</span>
                         @endif
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown"
                         style="width: 300px;">
                         @if (Auth::check() && Auth::user()->notifications->count() > 0)
-                            <li>
-                                <form action="{{ route('user.notifications.mark-all-as-read') }}" method="POST"
-                                    class="d-inline">
+                        <li>
+                            <form action="{{ route('user.notifications.mark-all-as-read') }}" method="POST"
+                                class="d-inline">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-center">Đánh dấu tất cả là đã
+                                    đọc</button>
+                            </form>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider m-0">
+                        </li>
+                        @foreach (Auth::user()->notifications->take(5) as $notification)
+                        <li>
+                            <div class="dropdown-item {{ $notification->read_at ? 'bg_unfinished' : 'bg_finished' }}">
+                                <p class="mb-1">{{ $notification->data['message'] }}</p>
+                                <a href="{{ route('user.profile') }}"
+                                    class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                @if (!$notification->read_at)
+                                <form
+                                    action="{{ route('user.notifications.mark-as-read', $notification->id) }}"
+                                    method="POST" class="d-inline">
                                     @csrf
-                                    <button type="submit" class="dropdown-item text-center">Đánh dấu tất cả là đã
-                                        đọc</button>
+                                    <button type="submit" class="btn btn-secondary btn-sm">Đã đọc</button>
                                 </form>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider m-0">
-                            </li>
-                            @foreach (Auth::user()->notifications->take(5) as $notification)
-                                <li>
-                                    <div class="dropdown-item {{ $notification->read_at ? 'bg_unfinished' : 'bg_finished' }}">
-                                        <p class="mb-1">{{ $notification->data['message'] }}</p>
-                                        <a href="{{ route('user.profile') }}"
-                                            class="btn btn-primary btn-sm">Xem chi tiết</a>
-                                        @if (!$notification->read_at)
-                                            <form
-                                                action="{{ route('user.notifications.mark-as-read', $notification->id) }}"
-                                                method="POST" class="d-inline">
-                                                @csrf
-                                                <button type="submit" class="btn btn-secondary btn-sm">Đã đọc</button>
-                                            </form>
-                                        @endif
-                                        <small
-                                            class="text-muted d-block">{{ $notification->created_at->format('d/m/Y H:i') }}</small>
-                                    </div>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider m-0">
-                                </li>
-                            @endforeach
-                            <li>
-                                <a class="dropdown-item text-center" href="{{ route('user.notifications') }}">Xem tất cả
-                                    thông báo</a>
-                            </li>
+                                @endif
+                                <small
+                                    class="text-muted d-block">{{ $notification->created_at->format('d/m/Y H:i') }}</small>
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider m-0">
+                        </li>
+                        @endforeach
+                        <li>
+                            <a class="dropdown-item text-center" href="{{ route('user.notifications') }}">Xem tất cả
+                                thông báo</a>
+                        </li>
                         @else
-                            <li>
-                                <div class="dropdown-item">Không có thông báo</div>
-                            </li>
+                        <li>
+                            <div class="dropdown-item">Không có thông báo</div>
+                        </li>
                         @endif
                     </ul>
                 </div>
 
                 @if (Auth::check())
-                    <div class="dropdown">
-                        <a class="btn btn-light dropdown-toggle" href="#" role="button" id="userDropdown"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Xin chào, {{ Auth::user()->name }}
-                        </a>
+                <div class="dropdown">
+                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="userDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Xin chào, {{ Auth::user()->name }}
+                    </a>
 
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            @if (Auth::user()->role == 'admin')
-                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i
-                                            class="fas fa-tachometer-alt"></i> Quản lý</a></li>
-                            @else
-                                @if (Auth::user()->role == 'instructor')
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-user-cog"></i> Chức năng
-                                        </a>
-                                        <a class="dropdown-item" href="{{ route('user.profile') }}">
-                                            <i class="fas fa-user"></i> Hồ sơ
-                                        </a>
-                                    </li>
-                                @else
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('user.profile') }}">
-                                            <i class="fas fa-user"></i> Hồ sơ
-                                        </a>
-                                    </li>
-                                @endif
-                            @endif
-                            <li>
-                                <a class="dropdown-item" href="#"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        @if (Auth::user()->role == 'admin')
+                        <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i
+                                    class="fas fa-tachometer-alt"></i> Quản lý</a></li>
+                        @else
+                        @if (Auth::user()->role == 'instructor')
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user-cog"></i> Chức năng
+                            </a>
+                            <a class="dropdown-item" href="{{ route('user.profile') }}">
+                                <i class="fas fa-user"></i> Hồ sơ
+                            </a>
+                        </li>
+                        @else
+                        <li>
+                            <a class="dropdown-item" href="{{ route('user.profile') }}">
+                                <i class="fas fa-user"></i> Hồ sơ
+                            </a>
+                        </li>
+                        @endif
+                        @endif
+                        <li>
+                            <a class="dropdown-item" href="#"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-outline-light me-2">Đăng nhập</a>
-                    <a href="{{ route('register') }}" class="btn btn-primary">Đăng ký</a>
+                <a href="{{ route('login') }}" class="btn btn-outline-light me-2">Đăng nhập</a>
+                <a href="{{ route('register') }}" class="btn btn-primary">Đăng ký</a>
                 @endif
             </div>
         </div>
@@ -458,23 +458,20 @@
 
     {{-- @include('layouts.sidebar') --}}
     @if (request()->is('user/profile'))
-        @include('layouts.sidebar_profile')
+    @include('layouts.sidebar_profile')
     @else
-        @include('layouts.sidebar')
+    @include('layouts.sidebar')
     @endif
 
-    <!-- Chat Button -->
     <div id="chat-container">
         <div id="chat-bubble" class="d-none">
             <iframe src="{{ route('chat.index') }}" frameborder="0"
                 style="width: 100%; height: 100%; border-radius: 15px;"></iframe>
         </div>
-        <button id="chat-toggle" class="btn btn-primary chat-toggle-btn">
-            <i class="fas fa-comments"></i> Chat
-        </button>
+        <button id="chat-toggle" class="btn btn-primary chat-toggle-btn"><i class="fas fa-comments"></i></button>
+
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.getElementById('chat-toggle').addEventListener('click', function() {
@@ -484,7 +481,6 @@
     </script>
 
     <style>
-        
         .dropdown-menu {
             max-height: 400px;
             overflow-y: auto;
