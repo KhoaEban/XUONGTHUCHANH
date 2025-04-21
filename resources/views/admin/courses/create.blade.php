@@ -9,10 +9,20 @@
         </div>
         <form action="{{ route('admin.courses.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @if ($errors->any())
+                <div class="alert alert-danger d-flex justify-content-between">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
             <div class="mb-3">
                 <label class="form-label">Tiêu đề:</label>
-                <input type="text" name="title" class="form-control" required>
+                <input type="text" name="title" class="form-control">
             </div>
 
             <div class="mb-3">
@@ -22,7 +32,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Danh mục:</label>
-                <select name="category_id" class="form-control" required>
+                <select name="category_id" class="form-control" >
                     <option value="">-- Chọn danh mục --</option>
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -42,10 +52,10 @@
                     onclick="togglePriceField()">
             </div>
 
-                <!-- Trường giá sẽ bị ẩn khi "Khóa học miễn phí" được chọn -->
+            <!-- Trường giá sẽ bị ẩn khi "Khóa học miễn phí" được chọn -->
             <div class="mb-3" id="price-field">
                 <label class="form-label">Giá:</label>
-                <input type="number" name="price" class="form-control" required>
+                <input type="number" name="price" class="form-control" >
             </div>
 
 
@@ -63,10 +73,10 @@
 
             if (isFree) {
                 priceField.style.display = 'none'; // Ẩn trường giá
-                priceInput.removeAttribute('required'); // Bỏ qua yêu cầu nhập giá khi miễn phí
+                priceInput.removeAttribute(''); // Bỏ qua yêu cầu nhập giá khi miễn phí
             } else {
                 priceField.style.display = 'block'; // Hiển thị lại trường giá
-                priceInput.setAttribute('required', 'required'); // Đặt lại yêu cầu nhập giá
+                priceInput.setAttribute('', ''); // Đặt lại yêu cầu nhập giá
             }
         }
 

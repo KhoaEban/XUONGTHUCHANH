@@ -6,6 +6,15 @@
     <form action="{{ route('instructor.lesson.update', $lesson->id) }}" method="POST">
         @csrf
         @method('PUT')
+        @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
         <div class="form-group">
             <label for="course_id">Khóa học:</label>
             <select name="course_id" id="course_id" class="form-control">

@@ -10,6 +10,16 @@
         <form action="{{ route('admin.lessons.update', $lesson->id) }}" method="POST">
             @csrf
             @method('PUT')
+            @if ($errors->any())
+                <div class="alert alert-danger d-flex justify-content-between">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <div class="form-group">
                 <label for="course_id">Khóa học:</label>
                 <select name="course_id" id="course_id" class="form-control">

@@ -7,7 +7,7 @@
             <!-- Nút tạo khóa học -->
             <div class="d-flex justify-content-between gap-2">
                 <a href="{{ route('admin.lessons.create') }}" class=""
-                    style="border: none; background-color: #2185D0; color: white; padding: 10px; font-size: 16px; font-weight: bold;">Thêm
+                    style="border: none; background-color: #2185D0; color: white; padding: 10px; font-size: 16px; font-weight: bold; text-decoration: none;">Thêm
                     Bài Học
                 </a>
                 {{-- Tìm kiếm --}}
@@ -69,7 +69,7 @@
                         <tr class="course-item" data-category="{{ $lesson->course_id }}"
                             data-instructor="{{ $lesson->instructor->id ?? '' }}">
 
-                            <td>{{ $lesson->id }}</td>
+                            <td>{{ $index + 1 }}</td>
                             {{-- Hiển thị hình ảnh khóa học nếu có --}}
                             <td>
                                 @if ($lesson->course->thumbnail)
@@ -107,6 +107,10 @@
                 @endforeach
             </tbody>
         </table>
+        <!-- Phân trang -->
+        <div class="d-flex justify-content-end">
+            {{ $lessons->links('pagination::bootstrap-5') }}
+        </div>
 
         {{-- Hiển thị thông báo nếu không có bài học nào --}}
         @if ($lessons->isEmpty())

@@ -32,27 +32,61 @@ class QuizControllerAdmin extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'course_id' => 'required|exists:courses,id',
-            'lesson_id' => 'required|exists:lessons,id',
-            'title' => 'required|string|max:255',
-            'questions' => 'required|array',
-            'questions.*.question_text' => 'required|string',
-            'questions.*.answers' => 'required|array',
-            'questions.*.answers.*.answer_text' => 'required|string',
-            'questions.*.answers.*.is_correct' => 'required|boolean',
-        ]);
+        $errors = [];
 
-        DB::transaction(function () use ($validated) {
+        if (!$request->filled('course_id') || !Course::find($request->course_id)) {
+            $errors['course_id'] = 'Khóa học không hợp lệ.';
+        }
+
+        if (!$request->filled('lesson_id') || !Lesson::where('course_id', $request->course_id)->find($request->lesson_id)) {
+            $errors['lesson_id'] = 'Bài học không hợp lệ hoặc không thuộc khóa học đã chọn.';
+        }
+
+        if (!$request->filled('title')) {
+            $errors['title'] = 'Tiêu đề không được để trống.';
+        }
+
+        if (!isset($request->questions) || !is_array($request->questions) || empty($request->questions)) {
+            $errors['questions'] = 'Quiz phải có ít nhất một câu hỏi.';
+        } else {
+            foreach ($request->questions as $index => $qData) {
+                if (empty($qData['question_text'])) {
+                    $errors["questions.$index.question_text"] = 'Nội dung câu hỏi không được để trống.';
+                }
+
+                if (!isset($qData['answers']) || !is_array($qData['answers']) || empty($qData['answers'])) {
+                    $errors["questions.$index.answers"] = 'Câu hỏi phải có ít nhất một câu trả lời.';
+                } else {
+                    $correctAnswers = 0;
+                    foreach ($qData['answers'] as $aIndex => $aData) {
+                        if (empty($aData['answer_text'])) {
+                            $errors["questions.$index.answers.$aIndex.answer_text"] = 'Câu trả lời không được để trống.';
+                        }
+                        if ($aData['is_correct'] ?? false) {
+                            $correctAnswers++;
+                        }
+                    }
+                    if ($correctAnswers == 0) {
+                        $errors["questions.$index.correct"] = 'Phải có ít nhất một câu trả lời đúng.';
+                    }
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
+
+        DB::transaction(function () use ($request) {
             // Tạo Quiz
             $quiz = Quiz::create([
-                'course_id' => $validated['course_id'],
-                'lesson_id' => $validated['lesson_id'],
-                'title' => $validated['title'],
+                'course_id' => $request->course_id,
+                'lesson_id' => $request->lesson_id,
+                'title' => $request->title,
             ]);
 
             // Tạo Questions và Answers
-            foreach ($validated['questions'] as $questionData) {
+            foreach ($request->questions as $questionData) {
                 $question = Question::create([
                     'quiz_id' => $quiz->id,
                     'question_text' => $questionData['question_text'],
@@ -83,81 +117,82 @@ class QuizControllerAdmin extends Controller
     // Xử lý cập nhật
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'course_id' => 'required|exists:courses,id',
-            'lesson_id' => 'required|exists:lessons,id',
-            'title' => 'required|string|max:255',
-            'questions' => 'required|array',
-            'questions.*.question_text' => 'required|string',
-            'questions.*.answers' => 'required|array',
-            'questions.*.answers.*.answer_text' => 'required|string',
-            'questions.*.answers.*.is_correct' => 'required|boolean',
-        ]);
+        $errors = [];
 
-        DB::transaction(function () use ($validated, $id) {
-            // Cập nhật Quiz
-            $quiz = Quiz::findOrFail($id);
-            $quiz->update([
-                'course_id' => $validated['course_id'],
-                'lesson_id' => $validated['lesson_id'],
-                'title' => $validated['title'],
-            ]);
+        $quiz = Quiz::findOrFail($id);
 
-            // Lấy danh sách ID của questions và answers hiện tại để so sánh
-            $existingQuestionIds = $quiz->questions->pluck('id')->toArray();
-            $existingAnswerIds = $quiz->questions->flatMap->answers->pluck('id')->toArray();
+        if (!$request->filled('course_id') || !Course::find($request->course_id)) {
+            $errors['course_id'] = 'Khóa học không hợp lệ.';
+        }
 
-            $submittedQuestionIds = [];
-            $submittedAnswerIds = [];
+        if (!$request->filled('lesson_id') || !Lesson::where('course_id', $request->course_id)->find($request->lesson_id)) {
+            $errors['lesson_id'] = 'Bài học không hợp lệ hoặc không thuộc khóa học đã chọn.';
+        }
 
-            // Cập nhật hoặc tạo mới Questions và Answers
-            foreach ($validated['questions'] as $qIndex => $questionData) {
-                if (isset($questionData['id'])) {
-                    // Cập nhật question hiện có
-                    $question = Question::find($questionData['id']);
-                    if ($question) {
-                        $question->update(['question_text' => $questionData['question_text']]);
-                        $submittedQuestionIds[] = $question->id;
-                    }
-                } else {
-                    // Tạo mới question
-                    $question = Question::create([
-                        'quiz_id' => $quiz->id,
-                        'question_text' => $questionData['question_text'],
-                    ]);
-                    $submittedQuestionIds[] = $question->id;
+        if (!$request->filled('title')) {
+            $errors['title'] = 'Tiêu đề không được để trống.';
+        }
+
+        if (!isset($request->questions) || !is_array($request->questions) || empty($request->questions)) {
+            $errors['questions'] = 'Quiz phải có ít nhất một câu hỏi.';
+        } else {
+            foreach ($request->questions as $index => $qData) {
+                if (empty($qData['question_text'])) {
+                    $errors["questions.$index.question_text"] = 'Nội dung câu hỏi không được để trống.';
                 }
 
-                foreach ($questionData['answers'] as $aIndex => $answerData) {
-                    if (isset($answerData['id'])) {
-                        // Cập nhật answer hiện có
-                        $answer = Answer::find($answerData['id']);
-                        if ($answer) {
-                            $answer->update([
-                                'answer_text' => $answerData['answer_text'],
-                                'is_correct' => $answerData['is_correct'],
-                            ]);
-                            $submittedAnswerIds[] = $answer->id;
+                if (!isset($qData['answers']) || !is_array($qData['answers']) || empty($qData['answers'])) {
+                    $errors["questions.$index.answers"] = 'Câu hỏi phải có ít nhất một câu trả lời.';
+                } else {
+                    $correctAnswers = 0;
+                    foreach ($qData['answers'] as $aIndex => $aData) {
+                        if (empty($aData['answer_text'])) {
+                            $errors["questions.$index.answers.$aIndex.answer_text"] = 'Câu trả lời không được để trống.';
                         }
-                    } else {
-                        // Tạo mới answer
-                        $answer = Answer::create([
-                            'question_id' => $question->id,
-                            'answer_text' => $answerData['answer_text'],
-                            'is_correct' => $answerData['is_correct'],
-                        ]);
-                        $submittedAnswerIds[] = $answer->id;
+                        if ($aData['is_correct'] ?? false) {
+                            $correctAnswers++;
+                        }
+                    }
+                    if ($correctAnswers == 0) {
+                        $errors["questions.$index.correct"] = 'Phải có ít nhất một câu trả lời đúng.';
                     }
                 }
             }
+        }
 
-            // Xóa các questions không còn trong form
-            $questionsToDelete = array_diff($existingQuestionIds, $submittedQuestionIds);
-            Question::whereIn('id', $questionsToDelete)->delete();
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
 
-            // Xóa các answers không còn trong form
-            $answersToDelete = array_diff($existingAnswerIds, $submittedAnswerIds);
-            Answer::whereIn('id', $answersToDelete)->delete();
+        DB::transaction(function () use ($request, $quiz) {
+            // Cập nhật Quiz
+            $quiz->update([
+                'course_id' => $request->course_id,
+                'lesson_id' => $request->lesson_id,
+                'title' => $request->title,
+            ]);
+
+            // Xóa các câu hỏi và câu trả lời cũ
+            foreach ($quiz->questions as $question) {
+                $question->answers()->delete();
+                $question->delete();
+            }
+
+            // Tạo lại Questions và Answers
+            foreach ($request->questions as $questionData) {
+                $question = Question::create([
+                    'quiz_id' => $quiz->id,
+                    'question_text' => $questionData['question_text'],
+                ]);
+
+                foreach ($questionData['answers'] as $answerData) {
+                    Answer::create([
+                        'question_id' => $question->id,
+                        'answer_text' => $answerData['answer_text'],
+                        'is_correct' => $answerData['is_correct'],
+                    ]);
+                }
+            }
         });
 
         return redirect()->route('admin.quizzes.index')->with('success', 'Đã cập nhật thành công!');

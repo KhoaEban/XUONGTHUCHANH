@@ -41,12 +41,19 @@
                 @csrf
                 <h1>Login</h1>
                 <div class="input-box">
-                    <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                        placeholder="Email">
+                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                        name="email" value="{{ old('email') }}" placeholder="Email">
+                    @error('email')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
                     <i class='bx bxs-user'></i>
                 </div>
                 <div class="input-box">
-                    <input id="password" type="password" name="password" required placeholder="Password">
+                    <input id="password" class="form-control @error('password') is-invalid @enderror" type="password"
+                        name="password" placeholder="Password">
+                    @error('password')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
                     <i class='bx bxs-lock-alt'></i>
                 </div>
                 <div class="forgot-link">
@@ -69,7 +76,7 @@
                 <h1>Registration</h1>
                 <div class="input-box">
                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                        value="{{ old('name') }}" required placeholder="Username">
+                        value="{{ old('name') }}" placeholder="Username">
                     @error('name')
                         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                     @enderror
@@ -77,18 +84,18 @@
                 </div>
                 <div class="input-box">
                     <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
-                        value="{{ old('email') }}" required placeholder="Email">
+                        value="{{ old('email') }}" placeholder="Email">
                     <i class='bx bxs-envelope'></i>
                     @error('email')
                         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                     @enderror
                 </div>
                 <div class="input-box">
-                    <input type="password" name="password" required placeholder="Password">
+                    <input type="password" name="password" placeholder="Password">
                     <i class='bx bxs-lock-alt'></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" name="password_confirmation" required placeholder="Repeat Password">
+                    <input type="password" name="password_confirmation" placeholder="Repeat Password">
                     <i class='bx bxs-lock-alt'></i>
                 </div>
                 <div class="input-box">

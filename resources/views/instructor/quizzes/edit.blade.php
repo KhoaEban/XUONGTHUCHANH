@@ -1,9 +1,27 @@
-@extends('layouts.master_admin')
+<!-- resources/views/instructor/quizzes/edit.blade.php -->
+@extends('layouts.master_instructor')
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid mt-4">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
         <button class="btn btn-secondary mb-3">
-            <a href="{{ route('admin.quizzes.index') }}" class="text-white">
+            <a href="{{ route('instructor.quizzes.index') }}" class="text-white">
                 <i class="fas fa-arrow-left me-1"></i> Quay lại
             </a>
         </button>
@@ -12,19 +30,9 @@
             <p class="text-decoration-underline m-0 px-2" style="color: #15274F">Sửa Quiz, Câu hỏi và Đáp án</p>
         </div>
 
-        <form action="{{ route('admin.quizzes.update', $quiz->id) }}" method="POST">
+        <form action="{{ route('instructor.quizzes.update', $quiz->id) }}" method="POST">
             @csrf
             @method('PUT')
-            @if ($errors->any())
-                <div class="alert alert-danger d-flex justify-content-between">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
 
             <!-- Quiz Section -->
             <div class="card mb-4">
@@ -117,7 +125,7 @@
             let lessonSelect = document.getElementById("lessonSelect");
             lessonSelect.innerHTML = '<option value="">-- Chọn bài học --</option>';
             if (courseId) {
-                fetch(`/admin/quizzes/get-lessons/${courseId}`)
+                fetch(`/instructor/quizzes/get-lessons/${courseId}`)
                     .then(response => response.ok ? response.json() : Promise.reject('Lỗi khi lấy dữ liệu'))
                     .then(data => {
                         data.forEach(lesson => {

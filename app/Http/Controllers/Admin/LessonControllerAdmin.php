@@ -70,28 +70,44 @@ class LessonControllerAdmin extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'course_id' => 'required|integer|exists:courses,id',
-            'order_number' => 'required|integer',
-            'video_url' => 'nullable|url',
-            'content' => 'nullable|string',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'slug' => 'required|string|unique:lessons,slug',
-        ]);
+        $errors = [];
 
-        // Xử lý upload ảnh nếu có
+        if (!$request->filled('title')) {
+            $errors['title'] = 'Tiêu đề không được để trống.';
+        }
+
+        if (!$request->filled('course_id') || !Course::find($request->course_id)) {
+            $errors['course_id'] = 'Khóa học không hợp lệ.';
+        }
+
+        if (!$request->filled('order_number') || !is_numeric($request->order_number) || $request->order_number < 1) {
+            $errors['order_number'] = 'Thứ tự bài học phải là số nguyên dương.';
+        } elseif (Lesson::where('course_id', $request->course_id)->where('order_number', $request->order_number)->exists()) {
+            $errors['order_number'] = 'Thứ tự này đã tồn tại trong khóa học.';
+        }
+
+        if ($request->filled('video_url') && !filter_var($request->video_url, FILTER_VALIDATE_URL)) {
+            $errors['video_url'] = 'Đường dẫn video không hợp lệ.';
+        }
+
+        if ($request->hasFile('thumbnail') && !$request->file('thumbnail')->isValid()) {
+            $errors['thumbnail'] = 'Ảnh tải lên không hợp lệ.';
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
+
+        // Xử lý upload ảnh nếu có (giữ nguyên cách xử lý)
+        $thumbnailPath = null;
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
             $imageName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('uploads/lessons'), $imageName);
             $thumbnailPath = 'uploads/lessons/' . $imageName;
-        } else {
-            $thumbnailPath = null;
         }
 
-        // Tạo bài học mới
-        $lesson = Lesson::create([
+        Lesson::create([
             'instructor_id' => Auth::id(),
             'title' => $request->title,
             'course_id' => $request->course_id,
@@ -99,10 +115,10 @@ class LessonControllerAdmin extends Controller
             'video_url' => $request->video_url,
             'content' => $request->content,
             'thumbnail' => $thumbnailPath,
-            'slug' => $request->slug,
+            'slug' => Str::slug($request->title, '-') . '-' . time(),
         ]);
 
-        return redirect()->route('admin.lessons.index')->with('success', 'Bài học đã được tạo!');
+        return redirect()->route('admin.lessons.index')->with('success', 'Bài học đã được tạo thành công!');
     }
 
     public function edit($id)
@@ -114,31 +130,37 @@ class LessonControllerAdmin extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'course_id' => 'required|integer|exists:courses,id',
-            'order_number' => 'required|integer',
-            'video_url' => 'nullable|url',
-            'content' => 'nullable|string',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048',
-            'slug' => 'required|string|unique:lessons,slug,' . $id,
-        ]);
+        $errors = [];
 
         $lesson = Lesson::findOrFail($id);
 
-        // Kiểm tra quyền truy cập
-        if (Auth::user()->role !== 'admin' && Auth::id() !== $lesson->instructor_id) {
-            abort(403, 'B��n không có quyền chỉnh sửa bài học này.');
+        if (!$request->filled('title')) {
+            $errors['title'] = 'Tiêu đề không được để trống.';
         }
 
-        // Cập nhật thông tin bài học
-        $lesson->title = $request->title;
-        $lesson->course_id = $request->course_id;
-        $lesson->order_number = $request->order_number;
-        $lesson->video_url = $request->video_url;
-        $lesson->content = $request->content;
+        if (!$request->filled('course_id') || !Course::find($request->course_id)) {
+            $errors['course_id'] = 'Khóa học không hợp lệ.';
+        }
 
-        // Xử lý cập nhật ảnh nếu có
+        if (!$request->filled('order_number') || !is_numeric($request->order_number) || $request->order_number < 1) {
+            $errors['order_number'] = 'Thứ tự bài học phải là số nguyên dương.';
+        } elseif (Lesson::where('course_id', $request->course_id)->where('order_number', $request->order_number)->where('id', '!=', $lesson->id)->exists()) {
+            $errors['order_number'] = 'Thứ tự này đã tồn tại trong khóa học.';
+        }
+
+        if ($request->filled('video_url') && !filter_var($request->video_url, FILTER_VALIDATE_URL)) {
+            $errors['video_url'] = 'Đường dẫn video không hợp lệ.';
+        }
+
+        if ($request->hasFile('thumbnail') && !$request->file('thumbnail')->isValid()) {
+            $errors['thumbnail'] = 'Ảnh tải lên không hợp lệ.';
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
+
+        // Xử lý upload ảnh nếu có (giữ nguyên cách xử lý)
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
             $imageName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
@@ -149,16 +171,19 @@ class LessonControllerAdmin extends Controller
                 unlink(public_path($lesson->thumbnail));
             }
 
-            // Lưu ảnh mới
             $lesson->thumbnail = 'uploads/lessons/' . $imageName;
         }
 
-        // Cập nhật slug
-        $lesson->slug = $request->slug;
+        $lesson->update([
+            'title' => $request->title,
+            'course_id' => $request->course_id,
+            'order_number' => $request->order_number,
+            'video_url' => $request->video_url,
+            'content' => $request->content,
+            'slug' => Str::slug($request->title, '-') . '-' . time(),
+        ]);
 
-        $lesson->save();
-
-        return redirect()->route('admin.lessons.index')->with('success', 'Bài học đã được cập nhật!');
+        return redirect()->route('admin.lessons.index')->with('success', 'Bài học đã được cập nhật thành công!');
     }
 
     public function destroy($id)

@@ -14,6 +14,16 @@
 
         <form action="{{ route('admin.quizzes.store') }}" method="POST">
             @csrf
+            @if ($errors->any())
+                <div class="alert alert-danger d-flex justify-content-between">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
             <!-- Quiz Section -->
             <div class="card mb-4">
@@ -21,7 +31,7 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label class="form-label">Khóa học:</label>
-                        <select class="form-select" name="course_id" id="courseSelect" required>
+                        <select class="form-select" name="course_id" id="courseSelect" >
                             <option value="">-- Chọn khóa học --</option>
                             @foreach ($courses as $course)
                                 <option value="{{ $course->id }}">{{ $course->title }}</option>
@@ -31,14 +41,14 @@
 
                     <div class="mb-3">
                         <label class="form-label">Bài học:</label>
-                        <select class="form-select" name="lesson_id" id="lessonSelect" required>
+                        <select class="form-select" name="lesson_id" id="lessonSelect" >
                             <option value="">-- Chọn bài học --</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Tiêu đề Quiz:</label>
-                        <input class="form-control" type="text" name="title" required>
+                        <input class="form-control" type="text" name="title" >
                     </div>
                 </div>
             </div>
@@ -50,26 +60,28 @@
                     <div class="question-item mb-3" data-index="0">
                         <div class="mb-3">
                             <label class="form-label">Nội dung câu hỏi:</label>
-                            <input class="form-control" type="text" name="questions[0][question_text]" required>
+                            <input class="form-control" type="text" name="questions[0][question_text]" >
                         </div>
                         <!-- Answers for this question -->
                         <div class="answers-container" data-question-index="0">
                             <div class="answer-item mb-2" data-answer-index="0">
                                 <label class="form-label">Câu trả lời:</label>
                                 <input class="form-control d-inline" type="text"
-                                    name="questions[0][answers][0][answer_text]" required>
+                                    name="questions[0][answers][0][answer_text]" >
                                 <select class="form-select d-inline w-20 mt-2" name="questions[0][answers][0][is_correct]"
-                                    required>
+                                    >
                                     <option value="0">Sai</option>
                                     <option value="1">Đúng</option>
                                 </select>
                             </div>
                         </div>
-                        <button type="button" class="bg-secondary text-white py-2 px-2 border-0 add-answer" data-question-index="0">Thêm
+                        <button type="button" class="bg-secondary text-white py-2 px-2 border-0 add-answer"
+                            data-question-index="0">Thêm
                             đáp án</button>
                     </div>
                 </div>
-                <button type="button" class="bg-dark text-white py-2 px-2 border-0 mt-2" id="add-question">Thêm câu hỏi</button>
+                <button type="button" class="bg-dark text-white py-2 px-2 border-0 mt-2" id="add-question">Thêm câu
+                    hỏi</button>
             </div>
 
             <button type="submit" class="bg-success text-white py-2 px-2 border-0">Lưu tất cả</button>
@@ -105,13 +117,13 @@
                 <div class="question-item mb-3" data-index="${questionIndex}">
                     <div class="mb-3">
                         <label class="form-label">Nội dung câu hỏi:</label>
-                        <input class="form-control" type="text" name="questions[${questionIndex}][question_text]" required>
+                        <input class="form-control" type="text" name="questions[${questionIndex}][question_text]" >
                     </div>
                     <div class="answers-container" data-question-index="${questionIndex}">
                         <div class="answer-item mb-2" data-answer-index="0">
                             <label class="form-label">Câu trả lời:</label>
-                            <input class="form-control d-inline w-75" type="text" name="questions[${questionIndex}][answers][0][answer_text]" required>
-                            <select class="form-select d-inline w-20 ms-2" name="questions[${questionIndex}][answers][0][is_correct]" required>
+                            <input class="form-control d-inline w-75" type="text" name="questions[${questionIndex}][answers][0][answer_text]" >
+                            <select class="form-select d-inline w-20 ms-2" name="questions[${questionIndex}][answers][0][is_correct]" >
                                 <option value="0">Sai</option>
                                 <option value="1">Đúng</option>
                             </select>
@@ -133,8 +145,8 @@
                 let newAnswer = `
                     <div class="answer-item mb-2" data-answer-index="${answerIndex}">
                         <label class="form-label">Câu trả lời:</label>
-                        <input class="form-control d-inline w-75" type="text" name="questions[${questionIdx}][answers][${answerIndex}][answer_text]" required>
-                        <select class="form-select d-inline w-20 ms-2" name="questions[${questionIdx}][answers][${answerIndex}][is_correct]" required>
+                        <input class="form-control d-inline w-75" type="text" name="questions[${questionIdx}][answers][${answerIndex}][answer_text]" >
+                        <select class="form-select d-inline w-20 ms-2" name="questions[${questionIdx}][answers][${answerIndex}][is_correct]" >
                             <option value="0">Sai</option>
                             <option value="1">Đúng</option>
                         </select>

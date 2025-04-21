@@ -2,14 +2,12 @@
 
 @section('content')
     <div class="container-fluid">
-
-
         <h2 class="mb-3">Danh sách Khóa Học</h2>
         <div class="d-flex justify-content-between mb-3">
             <!-- Nút tạo khóa học -->
             <div class="d-flex justify-content-between">
                 <a href="{{ route('admin.courses.create') }}" class=""
-                    style="border: none; background-color: #2185D0; color: white; padding: 10px; font-size: 16px; font-weight: bold;">Tạo
+                    style="border: none; background-color: #2185D0; color: white; padding: 10px; font-size: 16px; font-weight: bold; text-decoration: none;">Tạo
                     khóa học
                 </a>
             </div>
@@ -61,15 +59,6 @@
                         @endforeach
                     </select>
                 </form>
-                <form action="" method="">
-                    <select class="d-inline w-auto"
-                        style="border: none; border: 1px solid #6C757D; color: #000000; padding: 10px; font-size: 14px;">
-                        <option value="">Bulk Actions</option>
-                        <option value="delete">Delete</option>
-                    </select>
-                    {{-- <button type="submit"
-                        style="border: none; background-color: #6C757D; color: white; padding: 10px; font-size: 14px;">Apply</button> --}}
-                </form>
             </div>
         </div>
         <div class="row">
@@ -102,7 +91,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('courses.show', $course->slug) }}">{{ $course->title }}</a>
+                                        <a href="{{ route('admin.courses.show', $course->slug) }}">{{ $course->title }}</a>
                                     </td>
                                     <td>{{ Str::limit($course->description, 50) }}</td>
                                     <td>{{ $course->category->name ?? 'Chưa có danh mục' }}</td>
@@ -139,7 +128,7 @@
 
                 <!-- Phân trang -->
                 <div class="d-flex justify-content-end">
-                    {{ $courses->links() }}
+                    {{ $courses->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>

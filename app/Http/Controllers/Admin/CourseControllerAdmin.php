@@ -78,7 +78,7 @@ class CourseControllerAdmin extends Controller
         }
 
 
-        return view('admin.courses.show', compact('course' , 'lessons'));
+        return view('admin.courses.show', compact('course', 'lessons'));
     }
 
     public function create()
@@ -89,47 +89,63 @@ class CourseControllerAdmin extends Controller
 
     public function store(Request $request)
     {
-        // Cập nhật validation để trường 'price' không bắt buộc khi là khóa học miễn phí
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category_id' => 'required|integer|exists:categories,id',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048',
-            'is_free' => 'nullable|boolean',
-            'price' => 'nullable|numeric|required_if:is_free,0',  // 'price' chỉ bắt buộc khi khóa học có giá
-        ]);
+        $errors = [];
 
+        if (!$request->filled('title')) {
+            $errors['title'] = 'Tiêu đề không được để trống.';
+        }
 
+        if (!$request->filled('category_id') || !Category::find($request->category_id)) {
+            $errors['category_id'] = 'Danh mục không hợp lệ.';
+        }
+
+        if (!$request->has('is_free') && !$request->filled('price')) {
+            $errors['price'] = 'Giá bắt buộc nếu không phải khóa học miễn phí.';
+        } elseif ($request->filled('price') && !is_numeric($request->price)) {
+            $errors['price'] = 'Giá phải là số.';
+        } elseif ($request->filled('price') && $request->price < 0) {
+            $errors['price'] = 'Giá phải lớn hơn 0.';
+        } elseif ($request->filled('price') && $request->price > 10000000) {
+            $errors['price'] = 'Giá không được lớn hơn 10.000.000 VNĐ.';
+        }
+
+        if ($request->hasFile('thumbnail') && !$request->file('thumbnail')->isValid()) {
+            $errors['thumbnail'] = 'Ảnh tải lên không hợp lệ.';
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
+
+        // Xử lý upload ảnh
+        $thumbnailPath = null;
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
             $imageName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('uploads/courses'), $imageName);
             $thumbnailPath = 'uploads/courses/' . $imageName;
-        } else {
-            $thumbnailPath = null;
         }
 
         // Tạo slug từ title
         $slug = Str::slug($request->title, '-');
-        $count = Course::where('slug', 'LIKE', $slug . '%')->count();
-        if ($count > 0) {
-            $slug .= '-' . ($count + 1);
+        if (Course::where('slug', 'LIKE', $slug . '%')->exists()) {
+            $slug .= '-' . (Course::where('slug', 'LIKE', $slug . '%')->count() + 1);
         }
 
-        // Lưu vào database
         Course::create([
             'instructor_id' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
-            'price' => $request->has('is_free') ? 0 : $request->price,  // Nếu là khóa học miễn phí thì giá là 0
+            'price' => $request->has('is_free') ? 0 : $request->price,
             'category_id' => $request->category_id,
             'thumbnail' => $thumbnailPath,
             'slug' => $slug,
-            'is_free' => $request->has('is_free') ? true : false,  // Lưu thông tin khóa học miễn phí
+            'is_free' => $request->has('is_free') ? true : false,
         ]);
 
-        return redirect()->route('admin.courses.index')->with('success', 'Khóa học đã được tạo!');
+        return redirect()->route('admin.courses.index')->with('success', 'Khóa học đã được tạo thành công!');
     }
+
 
     public function edit($id)
     {
@@ -140,60 +156,70 @@ class CourseControllerAdmin extends Controller
 
     public function update(Request $request, $id)
     {
-        // Kiểm tra dữ liệu đầu vào
-        $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price'       => 'required|numeric',
-            'category_id' => 'required|integer|exists:categories,id',
-            'thumbnail'   => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:2048'
-        ]);
+        $errors = [];
 
-        // Tìm khóa học của giảng viên hiện tại
         $course = Course::findOrFail($id);
 
-
-        // Kiểm tra nếu người dùng không phải là admin hoặc không phải giảng viên sở hữu khóa học
-        if (Auth::user()->role !== 'admin' && Auth::id() !== $course->instructor_id) {
-            abort(403, 'Bạn không có quyền chỉnh sửa khóa học này.');
+        if (!$request->filled('title')) {
+            $errors['title'] = 'Tiêu đề không được để trống.';
         }
 
-        // Cập nhật thông tin khóa học
-        $course->title       = $request->title;
-        $course->description = $request->description;
-        $course->price       = $request->price;
-        $course->category_id = $request->category_id;
+        if (!$request->filled('category_id') || !Category::find($request->category_id)) {
+            $errors['category_id'] = 'Danh mục không hợp lệ.';
+        }
+
+        if (!$request->has('is_free') && !$request->filled('price')) {
+            $errors['price'] = 'Giá bắt buộc nếu không phải khóa học miễn phí.';
+        } elseif ($request->filled('price') && !is_numeric($request->price)) {
+            $errors['price'] = 'Giá phải là số.';
+        } elseif ($request->filled('price') && $request->price < 0) {
+            $errors['price'] = 'Giá phải lớn hơn 0.';
+        } elseif ($request->filled('price') && $request->price > 10000000) {
+            $errors['price'] = 'Giá không được lớn hơn 10.000.000 VNĐ.';
+        }
+
+        if ($request->hasFile('thumbnail') && !$request->file('thumbnail')->isValid()) {
+            $errors['thumbnail'] = 'Ảnh tải lên không hợp lệ.';
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
 
         // Xử lý cập nhật slug nếu title thay đổi
         if ($course->title !== $request->title) {
             $slug = Str::slug($request->title, '-');
-            $count = Course::where('slug', 'LIKE', $slug . '%')->where('id', '!=', $id)->count();
-            if ($count > 0) {
-                $slug .= '-' . ($count + 1);
+            if (Course::where('slug', 'LIKE', $slug . '%')->where('id', '!=', $id)->exists()) {
+                $slug .= '-' . (Course::where('slug', 'LIKE', $slug . '%')->count() + 1);
             }
             $course->slug = $slug;
         }
 
-        // Xử lý upload ảnh mới nếu có
+        // Xử lý upload ảnh nếu có
         if ($request->hasFile('thumbnail')) {
             $image = $request->file('thumbnail');
             $imageName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('uploads/courses'), $imageName);
 
-            // Xóa ảnh cũ (nếu có)
+            // Xóa ảnh cũ nếu có
             if ($course->thumbnail && file_exists(public_path($course->thumbnail))) {
                 unlink(public_path($course->thumbnail));
             }
 
-            // Lưu ảnh mới vào database
             $course->thumbnail = 'uploads/courses/' . $imageName;
         }
 
-        // Lưu thay đổi vào database
-        $course->save();
+        $course->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'price' => $request->has('is_free') ? 0 : $request->price,
+            'category_id' => $request->category_id,
+            'is_free' => $request->has('is_free'),
+        ]);
 
-        return redirect()->route('admin.courses.index')->with('success', 'Khóa học đã được cập nhật!');
+        return redirect()->route('admin.courses.index')->with('success', 'Khóa học đã được cập nhật thành công!');
     }
+
 
     public function destroy($id)
     {

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class QuizController extends Controller
 {
@@ -72,14 +73,15 @@ class QuizController extends Controller
             $finalScore = ($score / $total) * 10;
             $quizResult->update(['score' => $finalScore]);
 
-            // Xác định xem quiz có đạt yêu cầu (ví dụ: score >= 7)
+            // Xác định xem quiz có đạt yêu cầu (score >= 7)
             $passingScore = 7; // Có thể cấu hình trong .env hoặc config
             $quizPassed = $finalScore >= $passingScore;
 
+            // Nếu quiz được vượt qua, cập nhật tiến độ khóa học
             if ($quizPassed) {
                 $courseId = $quiz->lesson->course_id;
-                $lessonId = $quiz->lesson_id;
-            
+                $lessonId = $quiz->lesson->id;
+
                 $progress = CourseProgress::firstOrCreate(
                     [
                         'user_id' => Auth::id(),
@@ -89,44 +91,34 @@ class QuizController extends Controller
                         'completed_lessons' => [],
                     ]
                 );
-            
+
                 $completedLessons = $progress->completed_lessons ?? [];
                 if (!in_array($lessonId, $completedLessons)) {
                     $completedLessons[] = $lessonId;
                     $progress->completed_lessons = $completedLessons;
                     $progress->save();
                 }
-            }
 
-            if ($quizPassed) {
+                // Kiểm tra xem học viên đã hoàn thành tất cả bài quiz trong khóa học chưa
+                $user = Auth::user();
+                if ($courseId && $user->hasCompletedAllQuizzesInCourse($courseId)) {
+                    $course = \App\Models\Course::findOrFail($courseId);
+                    Log::info('Triggering AllQuizzesCompletedNotification for user ' . $user->id . ' and course ' . $course->id);
+                    $user->notify(new AllQuizzesCompletedNotification($course));
+                }
+
                 return redirect()->route('course.show', ['slug' => $quiz->lesson->course->slug])
                     ->with('success', 'Chúc mừng! Bạn đã vượt qua bài kiểm tra. Tiến độ khóa học đã được cập nhật.');
-            } else {
-                return view('user.quizzes.result', [
-                    'quiz' => $quiz,
-                    'score' => $score,
-                    'total' => $total,
-                    'details' => $details,
-                    'backUrl' => route('course.show', ['slug' => $quiz->lesson->course->slug]),
-                    'passed' => $quizPassed,
-                ]);
             }
 
-            // Kiểm tra xem học viên đã hoàn thành tất cả bài quiz trong khóa học chưa
-            $courseId = $quiz->lesson->course_id;
-            $user = Auth::user();
-            if ($courseId && $user->hasCompletedAllQuizzesInCourse($courseId)) {
-                $course = \App\Models\Course::findOrFail($courseId);
-                $user->notify(new AllQuizzesCompletedNotification($course));
-            }
-
+            // Nếu không vượt qua, trả về view kết quả
             return view('user.quizzes.result', [
                 'quiz' => $quiz,
                 'score' => $score,
                 'total' => $total,
                 'details' => $details,
                 'backUrl' => route('course.show', ['slug' => $quiz->lesson->course->slug]),
-                'passed' => $quizPassed, // Truyền trạng thái pass/fail để hiển thị thông báo
+                'passed' => $quizPassed,
             ]);
         });
     }

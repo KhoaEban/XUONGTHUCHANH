@@ -3,6 +3,12 @@
 @section('content')
     <div class="container-fluid mt-4">
         <h2 class="text-center">Danh Sách Bài Học</h2>
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
         <!-- Bộ lọc danh mục -->
         <div class="mb-3 mt-5">
             <div class="row flex align-items-center">

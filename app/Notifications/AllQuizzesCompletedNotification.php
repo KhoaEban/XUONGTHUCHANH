@@ -5,6 +5,7 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\DatabaseMessage;
 
 class AllQuizzesCompletedNotification extends Notification
 {
@@ -25,26 +26,18 @@ class AllQuizzesCompletedNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Chúc mừng bạn đã hoàn thành tất cả bài quiz trong khóa học!')
-            ->greeting('Xin chào ' . $notifiable->name . ',')
-            ->line("Chúc mừng bạn đã hoàn thành tất cả các bài quiz trong khóa học: **{$this->course->title}**!")
-            ->line('Cảm ơn bạn đã nỗ lực học tập. Tiếp tục phát huy nhé!')
-            ->action('Xem hồ sơ', route('user.profile'))
-            ->line('Trân trọng,');
+            ->subject('Chúc mừng! Bạn đã hoàn thành tất cả bài quiz trong khóa học')
+            ->line('Bạn đã hoàn thành tất cả bài quiz trong khóa học "' . $this->course->title . '".')
+            ->action('Xem khóa học', route('course.show', $this->course->slug))
+            ->line('Cảm ơn bạn đã tham gia học tập!');
     }
 
     public function toDatabase($notifiable)
     {
-        return [
-            'message' => "Bạn đã hoàn thành tất cả bài quiz trong khóa học: {$this->course->title}!",
-            'action_url' => route('user.profile'),
-        ];
-    }
-
-    public function toArray($notifiable)
-    {
-        return [
-            'message' => "Bạn đã hoàn thành tất cả bài quiz trong khóa học: {$this->course->title}!",
-        ];
+        return new DatabaseMessage([
+            'message' => 'Bạn đã hoàn thành tất cả bài quiz trong khóa học "' . $this->course->title . '".',
+            'course_id' => $this->course->id,
+            'url' => route('course.show', $this->course->slug),
+        ]);
     }
 }

@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid mt-4">
         <div class="card">
-            <div class="card-header bg-primary text-white text-center">
+            <div class="card-header text-center">
                 <h2 class="mb-0">Thêm Khóa Học</h2>
             </div>
             <div class="card-body">
@@ -22,7 +22,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Tiêu đề:</label>
-                        <input type="text" name="title" class="form-control" value="{{ old('title') }}" required>
+                        <input type="text" name="title" class="form-control" value="{{ old('title') }}" >
                     </div>
 
                     <div class="mb-3">
@@ -32,7 +32,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Danh mục:</label>
-                        <select name="category_id" class="form-control" required>
+                        <select name="category_id" class="form-control" >
                             <option value="">-- Chọn danh mục --</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
@@ -47,7 +47,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Giá:</label>
-                        <input type="number" name="price" class="form-control" value="{{ old('price') }}" required>
+                        <input type="number" name="price" class="form-control" value="{{ old('price') }}" >
                     </div>
 
                     <div class="mb-3">

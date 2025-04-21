@@ -81,20 +81,47 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
+                                    <div class="card-badge">
+                                        <span>Khóa học</span>
+                                    </div>
                                     <h5 class="card-title">{{ $course->title }}</h5>
+                                    <div class="d-flex align-items-center text-secondary gap-2 mb-2">
+                                        <p class="card-text m-0">
+                                            <i class="fas fa-users"></i>
+                                            {{ isset($enrollmentCounts[$course->id]) ? $enrollmentCounts[$course->id] : 0 }}
+                                        </p>
+                                        <!-- Hiển thị trung bình đánh giá -->
+                                        @if (isset($averageRatings[$course->id]))
+                                            <div class="average-rating">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <span
+                                                        style="color: {{ $i <= round($averageRatings[$course->id]) ? '#f39c12' : '#ccc' }}">★</span>
+                                                @endfor
+                                                <span
+                                                    class="text-muted">({{ number_format($averageRatings[$course->id], 1) }})</span>
+                                            </div>
+                                        @else
+                                            <div class="average-rating">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <span style="color: #ccc">★</span>
+                                                @endfor
+                                                <span class="ms-2 text-muted"></span>
+                                            </div>
+                                        @endif
+                                    </div>
                                     <!-- Hiển thị giá khóa học nếu không miễn phí -->
                                     @if (!$course->is_free)
                                         <p class="card-text">Giá: <span
                                                 class="text-danger">{{ number_format($course->price, 0, ',', '.') }}
-                                                VNĐ<span>
-                                        </p>
+                                                VNĐ</span></p>
                                     @endif
                                     <div class="d-flex align-items-center text-secondary">
                                         <p class="card-text m-0">{{ $course->lessons->count() }} nội dung</p>
                                         <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                        <p class="card-text">{{ $course->created_at->format('d/m/Y') }}</p>
+                                        <p class="card-text m-0">{{ $course->created_at->format('d/m/Y') }}</p>
+                                        <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
                                     </div>
-                                    <p class="card-text text-secondary mt-2" style="font-size: 12px">Tác giả:
+                                    <p class="card-text text-secondary mt-2" style="font-size: 12px">
                                         {{ $course->instructor->name }}</p>
                                 </div>
                             </a>
@@ -199,21 +226,47 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
+                                        <div class="card-badge">
+                                            <span>Khóa học</span>
+                                        </div>
                                         <h5 class="card-title">{{ $course->title }}</h5>
+                                        <div class="d-flex align-items-center text-secondary gap-2 mb-2">
+                                            <p class="card-text m-0">
+                                                <i class="fas fa-users"></i>
+                                                {{ isset($enrollmentCounts[$course->id]) ? $enrollmentCounts[$course->id] : 0 }}
+                                            </p>
+                                            <!-- Hiển thị trung bình đánh giá -->
+                                            @if (isset($averageRatings[$course->id]))
+                                                <div class="average-rating">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <span
+                                                            style="color: {{ $i <= round($averageRatings[$course->id]) ? '#f39c12' : '#ccc' }}">★</span>
+                                                    @endfor
+                                                    <span
+                                                        class="text-muted">({{ number_format($averageRatings[$course->id], 1) }})</span>
+                                                </div>
+                                            @else
+                                                <div class="average-rating">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <span style="color: #ccc">★</span>
+                                                    @endfor
+                                                    <span class="ms-2 text-muted"></span>
+                                                </div>
+                                            @endif
+                                        </div>
                                         <!-- Hiển thị giá khóa học nếu không miễn phí -->
                                         @if (!$course->is_free)
                                             <p class="card-text">Giá: <span
                                                     class="text-danger">{{ number_format($course->price, 0, ',', '.') }}
-                                                    VNĐ<span>
-                                            </p>
+                                                    VNĐ</span></p>
                                         @endif
                                         <div class="d-flex align-items-center text-secondary">
                                             <p class="card-text m-0">{{ $course->lessons->count() }} nội dung</p>
                                             <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
-                                            <p class="card-text">{{ $course->created_at->format('d/m/Y') }}</p>
+                                            <p class="card-text m-0">{{ $course->created_at->format('d/m/Y') }}</p>
+                                            <i class="fas fa-circle mx-2" style="font-size: 10px"></i>
                                         </div>
-
-                                        <p class="card-text text-secondary mt-2" style="font-size: 12px">Tác giả:
+                                        <p class="card-text text-secondary mt-2" style="font-size: 12px">
                                             {{ $course->instructor->name }}</p>
                                     </div>
                                 </a>
@@ -377,6 +430,7 @@
         transition: transform 0.2s ease;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.213);
         border: none;
+        height: 450px !important;
     }
 
     .card:hover {
@@ -385,6 +439,16 @@
 
     .card-img-top {
         height: 228.781px;
+        object-fit: cover;
+    }
+
+    .card-badge {
+        background-color: rgb(220 225 252);
+        color: rgb(80 108 240);
+        padding: 5px 10px;
+        width: fit-content;
+        font-size: 12px;
+        margin-bottom: 10px;
     }
 
     .news-card {

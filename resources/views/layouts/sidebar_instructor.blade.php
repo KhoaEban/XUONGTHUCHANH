@@ -2,7 +2,12 @@
     <div class="row">
         <div class="col-md-2 p-0">
             <div class="edu-sidebar">
-                <ul>
+                <ul class="mb-5">
+                    <li class="dropdown">
+                        <a href="{{ route('instructor.dashboard') }}" class="menu-item">
+                            <div>Khóa học đã tạo</div>
+                        </a>
+                    </li>
                     <li class="dropdown">
                         <a class="menu-item">
                             <i class="fa fa-user-graduate"></i>
@@ -10,7 +15,8 @@
                             <i class="fa fa-chevron-down"></i>
                         </a>
                         <ul class="submenu">
-                            <li><a href="{{ route('instructor.progress.index') }}"><i class="fa fa-user-graduate mx-2"></i>Học viên</a></li>
+                            <li><a href="{{ route('instructor.progress.index') }}"><i
+                                        class="fa fa-user-graduate mx-2"></i>Học viên</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -20,8 +26,7 @@
                             <i class="fa fa-chevron-down"></i>
                         </a>
                         <ul class="submenu">
-                            <li><a href="{{ route('instructor.courses.index') }}">Danh sách khóa học</a></li>
-                            <li><a href="{{ route('instructor.courses.create') }}">Thêm mới khóa học</a></li>
+                            <li><a href="{{ route('instructor.courses.index') }}"><i class="fa fa-bookmark mx-2"></i> Danh sách khóa học</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -31,11 +36,15 @@
                             <i class="fa fa-chevron-down"></i>
                         </a>
                         <ul class="submenu">
-                            <li><a href="{{ route('instructor.lesson.index') }}">Danh sách bài học</a></li>
-                            <li><a href="{{ route('instructor.lesson.create') }}">Thêm mới bài học</a></li>
+                            <li><a href="{{ route('instructor.lesson.index') }}"><i class="fa fa-book-open mx-2"></i> Danh sách bài học</a></li>
+                            <li><a href="{{ route('instructor.quizzes.index') }}"><i class="fa fa-question mx-2"></i> Danh sách Quizz</a></li>
                         </ul>
                     </li>
                 </ul>
+
+                <div class="mt-5 px-3 text-center">
+                    <a href="{{ url('/') }}" class="text-danger text-decoration-none"><i class="fas fa-arrow-left me-1"></i> Quay lại trang chủ</a>
+                </div>
             </div>
         </div>
         <div class="col-md-10 content-wrapper p-0">
@@ -75,8 +84,6 @@
                 <div class="footer-bottom">
                     <p>Copyright ©2021 - Bản quyền thuộc Công Ty Cổ Phần Tập Đoàn Khoa Học Công Nghệ Bách Khoa</p>
                     <div class="social-icons">
-                        <a href="#"><img src="facebook.png" alt="Facebook"></a>
-                        <a href="#"><img src="zalo.png" alt="Zalo"></a>
                     </div>
                 </div>
             </footer>

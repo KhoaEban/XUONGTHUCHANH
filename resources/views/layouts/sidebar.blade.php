@@ -68,8 +68,6 @@
                 <div class="footer-bottom">
                     <p>Copyright ©2021 - Bản quyền thuộc Công Ty Cổ Phần Tập Đoàn Khoa Học Công Nghệ Bách Khoa</p>
                     <div class="social-icons">
-                        <a href="#"><img src="facebook.png" alt="Facebook"></a>
-                        <a href="#"><img src="zalo.png" alt="Zalo"></a>
                     </div>
                 </div>
             </footer>

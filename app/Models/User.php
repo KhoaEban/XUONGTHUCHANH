@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log;
 
 
 class User extends Authenticatable
@@ -65,13 +66,17 @@ class User extends Authenticatable
     {
         $course = Course::findOrFail($courseId);
         $quizIds = $course->lessons->flatMap->quizzes->pluck('id')->toArray();
-        $passingScore = 10; // Có thể cấu hình trong .env
+        $passingScore = 7;
+
+        Log::info('Quizzes in course ' . $courseId . ': ' . json_encode($quizIds));
 
         $completedQuizzes = QuizResult::where('user_id', $this->id)
             ->whereIn('quiz_id', $quizIds)
             ->where('score', '>=', $passingScore)
             ->pluck('quiz_id')
             ->toArray();
+
+        Log::info('Completed quizzes for user ' . $this->id . ': ' . json_encode($completedQuizzes));
 
         return count($quizIds) > 0 && count(array_diff($quizIds, $completedQuizzes)) === 0;
     }

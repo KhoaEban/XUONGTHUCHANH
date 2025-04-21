@@ -10,10 +10,20 @@
         <form action="{{ route('admin.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            @if ($errors->any())
+                <div class="alert alert-danger d-flex justify-content-between">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
             <div class="mb-3">
                 <label class="form-label">Tiêu đề:</label>
-                <input type="text" name="title" class="form-control" value="{{ $course->title }}" required>
+                <input type="text" name="title" class="form-control" value="{{ $course->title }}" >
             </div>
 
             <div class="mb-3">
@@ -23,7 +33,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Danh mục:</label>
-                <select name="category_id" class="form-control" required>
+                <select name="category_id" class="form-control" >
                     <option value="">-- Chọn danh mục --</option>
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -33,8 +43,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Hình ảnh hiện tại:</label><br>
-                <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}" class="img-thumbnail"
-                    width="150">
+                <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}" class="img-thumbnail" width="150">
             </div>
 
             <div class="mb-3">
@@ -44,7 +53,7 @@
 
             <div class="mb-3">
                 <label class="form-label">Giá:</label>
-                <input type="number" name="price" class="form-control" value="{{ $course->price }}" required>
+                <input type="number" name="price" class="form-control" value="{{ $course->price }}" >
             </div>
 
             <div class="text-center">

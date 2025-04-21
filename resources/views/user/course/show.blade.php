@@ -308,7 +308,7 @@
 
                     <div class="video-info">
                         <h3 id="lesson-title">{{ $course->lessons->first()->title ?? '' }}</h3>
-                        <p><span class="author">Giảng viên: {{ $course->instructor->name ?? 'Đang cập nhật' }}</span></p>
+                        <p><span class="author">{{ $course->instructor->name ?? 'Đang cập nhật' }}</span></p>
                     </div>
 
                     <div class="">

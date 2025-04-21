@@ -66,5 +66,9 @@ class Course extends Model
             ->where('status', 'completed')
             ->exists();
     }
-    
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'course_id');
+    }
 }

@@ -67,8 +67,15 @@ Route::post('/chat/send', [GeminiChatController::class, 'send'])->name('chat.sen
 Route::middleware(['check.role:admin'])->group(function () {
     // Trang chủ Admin
     Route::get('/admin/dashboard', [Dashboard::class, 'index'])->name('admin.dashboard');
+
+
     // Quản lý người dùng
-    Route::get('/admin/user', [AuthController::class, 'index'])->name('admin.user.index');
+    Route::prefix('admin/user')->prefix('admin')->group(function () {
+        Route::get('/', [AuthController::class, 'index'])->name('admin.user.index');
+        Route::get('/{id}/edit', [AuthController::class, 'edit'])->name('admin.user.edit');
+        Route::put('/{id}', [AuthController::class, 'update'])->name('admin.user.update');
+        Route::delete('/delete/{id}', [AuthController::class, 'update'])->name('admin.user.delete');
+    });
 
     // Quản lý khóa học
     Route::prefix('admin/courses')->group(function () {
@@ -206,31 +213,40 @@ Route::middleware(['check.role:admin'])->group(function () {
 
 // Instructor
 Route::middleware(['check.role:instructor'])->group(function () {
-    Route::get('/instructor/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
-
-    // Quản lý khóa học
     Route::prefix('instructor')->group(function () {
+        // Trang chủ giảng viên
         Route::get('/home', [HomeControllerInstructor::class, 'index'])->name('instructor.dashboard');
+
+        // Quản lý khóa học
         Route::get('/courses', [CourseControllerTeacher::class, 'index'])->name('instructor.courses.index');
         Route::get('/courses/create', [CourseControllerTeacher::class, 'create'])->name('instructor.courses.create');
         Route::post('/courses', [CourseControllerTeacher::class, 'store'])->name('instructor.courses.store');
         Route::get('/courses/edit/{course}', [CourseControllerTeacher::class, 'edit'])->name('instructor.courses.edit');
-        Route::get('/courses/{slug}', [CourseControllerTeacher::class, 'show'])->name('courses.show');
+        Route::get('/courses/{slug}', [CourseControllerTeacher::class, 'show'])->name('instructor.courses.show'); // Đổi tên route để tránh xung đột
         Route::put('/courses/{course}', [CourseControllerTeacher::class, 'update'])->name('instructor.courses.update');
         Route::delete('/courses/{course}', [CourseControllerTeacher::class, 'destroy'])->name('instructor.courses.destroy');
-    });
-    // Quản lý bài học
-    Route::prefix('instructor')->group(function () {
-        Route::get('/lesson', [LessonController::class, 'index'])->name('instructor.lesson.index');
-        Route::get('/create', [LessonController::class, 'create'])->name('instructor.lesson.create');
-        Route::post('/store', [LessonController::class, 'store'])->name('instructor.lesson.store');
-        Route::get('/edit/{lesson}', [LessonController::class, 'edit'])->name('instructor.lesson.edit');
-        Route::put('/update/{lesson}', [LessonController::class, 'update'])->name('instructor.lesson.update');
-        Route::delete('/delete/{lesson}', [LessonController::class, 'destroy'])->name('instructor.lesson.destroy');
-    });
+        // Trong nhóm prefix('instructor')
+        Route::get('/courses/{courseId}/lessons', [HomeControllerInstructor::class, 'manageLessons'])->name('instructor.courses.lessons');
+        Route::post('/courses/{courseId}/lessons', [HomeControllerInstructor::class, 'storeLesson'])->name('instructor.courses.lessons.store');
 
-    // Quản lý tiến độ của học viên
-    Route::prefix('instructor')->group(function () {
+        // Quản lý bài học
+        Route::get('/lessons', [LessonController::class, 'index'])->name('instructor.lesson.index');
+        Route::get('/lessons/create', [LessonController::class, 'create'])->name('instructor.lesson.create');
+        Route::post('/lessons', [LessonController::class, 'store'])->name('instructor.lesson.store');
+        Route::get('/lessons/edit/{lesson}', [LessonController::class, 'edit'])->name('instructor.lesson.edit');
+        Route::put('/lessons/{lesson}', [LessonController::class, 'update'])->name('instructor.lesson.update');
+        Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])->name('instructor.lesson.destroy');
+
+        // Quản lý bài tập
+        Route::get('/quizzes', [QuizControllerInstructor::class, 'index'])->name('instructor.quizzes.index');
+        Route::get('/quizzes/create', [QuizControllerInstructor::class, 'create'])->name('instructor.quizzes.create');
+        Route::post('/quizzes', [QuizControllerInstructor::class, 'store'])->name('instructor.quizzes.store');
+        Route::get('/quizzes/{id}/edit', [QuizControllerInstructor::class, 'edit'])->name('instructor.quizzes.edit');
+        Route::put('/quizzes/{id}', [QuizControllerInstructor::class, 'update'])->name('instructor.quizzes.update');
+        Route::delete('/quizzes/{id}', [QuizControllerInstructor::class, 'destroy'])->name('instructor.quizzes.destroy');
+        Route::get('/quizzes/get-lessons/{courseId}', [QuizControllerInstructor::class, 'getLessons'])->name('instructor.quizzes.getLessons');
+
+        // Quản lý tiến độ của học viên
         Route::get('/progress', [ProgressController::class, 'index'])->name('instructor.progress.index');
         Route::get('/progress/{userId}/{quizId}', [ProgressController::class, 'detail'])->name('instructor.progress.detail');
         Route::get('/student/quiz/{id}', [ProgressController::class, 'show'])->name('student.quiz.show');
@@ -238,6 +254,11 @@ Route::middleware(['check.role:instructor'])->group(function () {
         Route::get('/student/quiz/{id}/result', [ProgressController::class, 'result'])->name('student.quiz.result');
         Route::post('/progress/{userId}/{quizId}/notify', [ProgressController::class, 'notify'])->name('instructor.progress.notify');
     });
+    Route::get('/instructor/courses/{courseId}/progress', [LessonController::class, 'trackProgress'])->name('instructor.courses.progress');
+    Route::get('/instructor/courses/{courseId}/lessons/{lessonId}/comments', [LessonController::class, 'manageComments'])->name('instructor.courses.comments');
+    Route::post('/instructor/courses/{courseId}/lessons/{lessonId}/comments/reply', [LessonController::class, 'replyComment'])->name('instructor.courses.comments.reply');
+    Route::patch('/instructor/courses/{courseId}/lessons/{lessonId}/comments/{commentId}', [LessonController::class, 'updateComment'])->name('instructor.courses.comments.update');
+    Route::delete('/instructor/courses/{courseId}/lessons/{lessonId}/comments/{commentId}', [LessonController::class, 'deleteComment'])->name('instructor.courses.comments.delete');
 });
 
 // User
