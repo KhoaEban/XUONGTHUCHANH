@@ -114,7 +114,13 @@ class AuthController extends Controller
             return redirect()->route('home');
         }
 
-        User::findOrFail($id)->delete();
+        // Kiểm tra nếu tài khoản đang đăng nhập là tài khoản cần xóa
+        if (Auth::id() == $id) {
+            return redirect()->route('admin.user.index')->with('error', 'Bạn không thể xóa chính tài khoản của mình.');
+        }
+
+        $user = User::findOrFail($id);
+        $user->delete();
 
         return redirect()->route('admin.user.index')->with('success', 'Người dùng đã bị xóa.');
     }

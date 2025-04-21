@@ -1,51 +1,56 @@
 @extends('layouts.sidebar_profile')
 
 @section('content')
-<div class="container">
-    <h2>Khóa Học Đã Mua</h2>
-
-    <table class="table">
+    <div class="flex justify-between items-center">
+        <h2 class="text-lg font-semibold text-[#0F172A] mb-4">
+            Khóa Học Đã Mua
+        </h2>
+    </div>
+    <table class="w-full border-collapse rounded-md overflow-hidden">
         <thead>
-            <tr>
-                <th>Khóa học</th>
-                <th>Số tiền</th>
-                <th>Phương thức thanh toán</th>
-                <th>Trạng thái thanh toán</th>
-                <th>Trạng thái đăng ký</th>
-                <th>Ngày thanh toán</th>
-                {{-- <th>Hành động</th> --}}
+            <tr class="bg-[#2563EB] text-white text-xs font-semibold text-left">
+                <th class="py-3 px-4 border-r border-blue-600">
+                    STT
+                </th>
+                <th class="py-3 px-4 border-r border-blue-600">
+                    Khóa học
+                </th>
+                <th class="py-3 px-4 border-r border-blue-600">
+                    Số tiền
+                </th>
+                <th class="py-3 px-4 border-r border-blue-600">
+                    Phương thức thanh toán
+                </th>
+                <th class="py-3 px-4 border-r border-blue-600">
+                    Trạng thái đăng ký
+                </th>
+                <th class="py-3 px-4">
+                    Ngày thanh toán
+                </th>
             </tr>
         </thead>
-        <tbody>
-            @foreach($payments as $payment)
-            <tr>
-                <td>{{ $payment->course->title }}</td>
-                <td>{{ number_format($payment->amount) }} VNĐ</td>
-                <td>{{ $payment->payment_method }}</td>
-                <td>{{ $payment->status }}</td>
-                <td>
-                    @php
-                    $enrollment = $enrollments->where('course_id', $payment->course_id)->first();
-                    echo $enrollment ? $enrollment->status : 'Chưa đăng ký';
-                    @endphp
-                </td>
-                <td>{{ $payment->created_at }}</td>
-                {{-- <td>
-                    @if($payment->status === 'completed')
-                    <form action="{{ route('user.payment.cancel', $payment) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn hủy thanh toán?')">Hủy</button>
-                    </form>
-                    @elseif($payment->status === 'cancelled')
-                    <form action="{{ route('user.payment.buy_again', $payment->course) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-primary btn-sm">Mua lại</button>
-                    </form>
-                    @endif
-                </td> --}}
-            </tr>
-            @endforeach
+        <tbody class="text-sm divide-y divide-gray-100">
+            @if ($payments->isEmpty())
+                <tr class="bg-white text-center text-xs text-gray-700">
+                    <td class="py-3 px-4 " colspan="6">Không tìm thấy kết quả</td>
+                </tr>
+            @else
+                @foreach ($payments as $payment)
+                    <tr class="bg-white text-center text-xs text-gray-700">
+                        <td class="py-3 px-4 ">{{ $loop->iteration }}</td>
+                        <td class="py-3 px-4 ">{{ $payment->course->title }}</td>
+                        <td class="py-3 px-4 ">{{ number_format($payment->amount) }} VNĐ</td>
+                        <td class="py-3 px-4 ">{{ $payment->payment_method }}</td>
+                        <td class="py-3 px-4 ">
+                            @php
+                                $enrollment = $enrollments->where('course_id', $payment->course_id)->first();
+                                echo $enrollment ? $enrollment->status : 'Chưa đăng ký';
+                            @endphp
+                        </td>
+                        <td class="py-3 px-4 ">{{ $payment->created_at }}</td>
+                    </tr>
+                @endforeach
+            @endif
         </tbody>
     </table>
-</div>
 @endsection

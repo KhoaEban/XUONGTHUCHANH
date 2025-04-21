@@ -52,7 +52,7 @@ class Enrollment extends Model
     public function getFormattedEnrollmentDate()
     {
         // Chuyển đổi enrolled_at thành Carbon nếu nó không phải là một đối tượng Carbon
-        return $this->enrolled_at ? \Carbon\Carbon::parse($this->enrolled_at)->format('d/m/Y H:i') : null;
+        return $this->enrolled_at ? \Carbon\Carbon::parse($this->enrolled_at)->format('d/m/Y') : null;
     }
 
     protected $dates = [

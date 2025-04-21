@@ -13,9 +13,9 @@
                         onchange="this.form.submit()">
                 </form>
 
-
                 <!-- Form lọc vai trò (tự động submit) -->
-                <form id="roleFilterForm" action="{{ route('admin.user.index') }}" method="GET" class="d-flex align-items-center mb-3">
+                <form id="roleFilterForm" action="{{ route('admin.user.index') }}" method="GET"
+                    class="d-flex align-items-center mb-3">
                     <select name="role" class="d-inline w-auto"
                         style="border: none; border: 1px solid #6C757D; color: #000000; padding: 10px; font-size: 14px;"
                         id="roleSelect">
@@ -50,7 +50,8 @@
                         <td>{{ $user->created_at ? $user->created_at->format('d/m/Y') : 'Chưa đăng nhập' }}</td>
                         <td>
                             <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-sm btn-primary">Sửa</a>
-                            <form action="{{ route('admin.user.delete', $user->id) }}" method="POST" class="d-inline">
+                            <form action="{{ route('admin.user.delete', $user->id) }}" method="POST"
+                                class="d-inline delete-user-form">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
@@ -67,8 +68,19 @@
     </div>
 
     <script>
+        // Tự động submit form lọc vai trò
         document.getElementById("roleSelect").addEventListener("change", function() {
             document.getElementById("roleFilterForm").submit();
+        });
+
+        // Xác nhận trước khi xóa
+        document.querySelectorAll('.delete-user-form').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                if (confirm('Bạn có chắc chắn muốn xóa người dùng này không?')) {
+                    this.submit();
+                }
+            });
         });
     </script>
 @endsection

@@ -10,7 +10,6 @@
                     <th>Người bình luận</th>
                     <th>Bài học</th>
                     <th>Nội dung</th>
-                    <th>Trạng thái</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -20,23 +19,6 @@
                         <td>{{ $comment->user->name }}</td>
                         <td>{{ $comment->lesson->title }}</td>
                         <td>{{ $comment->content }}</td>
-                        <td>
-                            <form action="{{ route('admin.comments.updateStatus', $comment->id) }}" method="POST"
-                                class="d-inline">
-                                @csrf
-                                @method('PUT')
-                                <select name="status" class="form-control form-control-sm d-inline-block w-auto"
-                                    onchange="this.form.submit()">
-                                    <option value="active" {{ $comment->status == 'active' ? 'selected' : '' }}> Hiển thị
-                                    </option>
-                                    <option value="pending" {{ $comment->status == 'pending' ? 'selected' : '' }}>Chờ duyệt
-                                    </option>
-                                    <option value="spam" {{ $comment->status == 'spam' ? 'selected' : '' }}>Spam</option>
-                                    <option value="deleted" {{ $comment->status == 'deleted' ? 'selected' : '' }}>Đã xóa
-                                    </option>
-                                </select>
-                            </form>
-                        </td>
                         <td>
                             <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="POST"
                                 class="d-inline" onsubmit="return confirm('Xóa bình luận này?')">

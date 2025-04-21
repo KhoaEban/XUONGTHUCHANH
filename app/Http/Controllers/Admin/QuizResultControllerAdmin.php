@@ -17,11 +17,12 @@ class QuizResultControllerAdmin extends Controller
         foreach ($results as $result) {
             if ($result->total_questions > 0) {
                 $result->percent = round(($result->score / $result->total_questions) * 100);
+                // Đảm bảo phần trăm không vượt quá 100%
+                $result->percent = min($result->percent, 100);
             } else {
                 $result->percent = 0;
             }
-
-            $result->is_completed = $result->percent === 100; // Kiểm tra hoàn thành 100%
+            $result->is_completed = $result->percent === 100;
         }
 
         return view('admin.quiz_results.index', compact('results'));

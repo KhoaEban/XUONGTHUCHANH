@@ -16,334 +16,12 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 
-    <style>
-        /* Định dạng màu gradient nền */
-        .navbar-custom {
-            background: linear-gradient(to right, #008040, #0099cc);
-            padding: 10px 0;
-        }
-
-        /* Định dạng logo */
-        .navbar-brand img {
-            height: 40px;
-        }
-
-        /* Ô tìm kiếm */
-        .search-box {
-            flex: 1;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 20px 0 0 20px;
-        }
-
-        .search-btn {
-            padding: 8px 12px;
-            font-size: 14px;
-            background-color: #d9dbd9;
-            color: black;
-            border: none;
-            width: 115px;
-            height: 40px;
-            border-radius: 0 20px 20px 0;
-
-        }
-
-        .search-adv {
-            padding: 8px 12px;
-            font-size: 14px;
-            background-color: #d9dbd9;
-            color: black;
-            border: none;
-            height: 40px;
-            border-radius: 20px;
-        }
-
-        .icon {
-            width: 40px;
-            height: 40px;
-            background-color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon i {
-            font-size: 18px;
-            color: #333;
-        }
-
-        /* Navbar bên phải */
-
-        /* Nút đăng nhập */
-        .login-btn {
-            display: flex;
-            align-items: center;
-            background-color: #28a745;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            text-decoration: none;
-        }
-
-        .login-btn i {
-            margin-right: 5px;
-        }
-
-        /* Nút điều hướng slider */
-        .tag-slider-prev,
-        .tag-slider-next {
-            position: absolute;
-            transform: translateY(-200%);
-            width: 40px;
-            height: 40px;
-            background: #ddd;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .tag-slider-prev {
-            left: 170px;
-            /* Điều chỉnh vị trí bên trái */
-        }
-
-        .tag-slider-next {
-            right: 13px;
-            /* Điều chỉnh vị trí bên phải */
-        }
-
-        .tag-slider-prev:hover,
-        .tag-slider-next:hover {
-            background: #bbb;
-
-        }
-
-        .tag-slider {
-            display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 10px;
-            width: 1700px;
-            margin: 0 auto;
-            margin-bottom: 16px;
-        }
-
-        .tag-slider li {
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        .tag-slider a {
-            display: flex;
-            align-items: center;
-            height: 40px;
-            padding: 0 15px;
-            border: 1px solid #d8d8d8;
-            border-radius: 99px;
-            font-weight: 400;
-            font-size: 13px;
-            text-decoration: none;
-            color: #333;
-        }
-
-        .slider-btn {
-            cursor: pointer;
-            display: inline-block;
-        }
-
-        /* Ẩn thanh tìm kiếm trên mobile */
-        @media (max-width: 768px) {
-            .search-box {
-                display: none;
-            }
-
-            /* Căn giữa lại nút slider */
-            .tag-slider-prev,
-            .tag-slider-next {
-                width: 30px;
-                height: 30px;
-                font-size: 12px;
-                transform: translateY(-50%);
-            }
-
-            .tag-slider-prev {
-                left: 10px;
-            }
-
-            .tag-slider-next {
-                right: 10px;
-            }
-
-            /* Hiển thị slider có thể cuộn */
-            .tag-slider {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                -webkit-overflow-scrolling: touch;
-                scroll-behavior: smooth;
-            }
-
-            .tag-slider a {
-                font-size: 12px;
-                padding: 5px 10px;
-            }
-
-            /* Điều chỉnh lại icon */
-            .icon-container {
-                gap: 5px;
-            }
-
-            .icon-container .icon {
-                width: 30px;
-                height: 30px;
-            }
-
-            /* Định dạng lại nút đăng nhập */
-            .login-btn {
-                padding: 5px 10px;
-                font-size: 12px;
-            }
-        }
-
-        /* footer */
-        footer {
-            padding: 40px 10%;
-            color: #1a1a1a;
-            font-family: Arial, sans-serif;
-        }
-
-        .footer-container {
-            display: flex;
-            justify-content: space-between;
-            text-align: center;
-        }
-
-        .footer-section {
-            width: 30%;
-        }
-
-        .footer-logo {
-            max-width: 80px;
-            margin-bottom: 10px;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ccc;
-        }
-
-        .footer-column {
-            width: 30%;
-        }
-
-        .footer-column h4 {
-            font-size: 16px;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .footer-column ul {
-            list-style: none;
-        }
-
-        .footer-column ul li {
-            margin: 5px 0;
-        }
-
-        .footer-column ul li a {
-            text-decoration: none;
-            color: #1a1a1a;
-            transition: 0.3s;
-        }
-
-        .footer-column ul li a:hover {
-            color: #0056b3;
-        }
-
-        .app-links img {
-            width: 120px;
-            margin-top: 10px;
-        }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        .social-icons img {
-            width: 30px;
-            margin-left: 10px;
-        }
-
-        /* Định dạng cho sidebar */
-        .sidebar {
-            height: 100vh;
-            /* Chiều cao 100% của viewport */
-            background-color: #f8f9fa;
-            /* Màu nền cho sidebar */
-            padding: 20px;
-            /* Padding cho sidebar */
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            /* Đổ bóng cho sidebar */
-        }
-
-        /* Định dạng cho các liên kết trong sidebar */
-        .sidebar a {
-            color: #333;
-            /* Màu chữ */
-            text-decoration: none;
-            /* Bỏ gạch chân */
-            padding: 10px 15px;
-            /* Padding cho các liên kết */
-            display: block;
-            /* Hiển thị dưới dạng block */
-            border-radius: 5px;
-            /* Bo góc cho các liên kết */
-            transition: background-color 0.3s;
-            /* Hiệu ứng chuyển màu nền */
-        }
-
-        /* Hiệu ứng hover cho các liên kết */
-        .sidebar a:hover {
-            background-color: #e2e6ea;
-            /* Màu nền khi hover */
-        }
-
-        /* Định dạng cho nội dung chính */
-        .content {
-            flex-grow: 1;
-            /* Chiếm không gian còn lại */
-            padding: 20px;
-            /* Padding cho nội dung chính */
-            background-color: #ffffff;
-            /* Màu nền cho nội dung chính */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            /* Đổ bóng cho nội dung chính */
-            border-radius: 5px;
-            /* Bo góc cho nội dung chính */
-        }
-    </style>
 </head>
 
 <body>
-
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
             {{-- Menu responsive bên trái --}}
@@ -399,8 +77,8 @@
                                     <div
                                         class="dropdown-item {{ $notification->read_at ? 'bg_finished' : 'bg_unfinished' }}">
                                         <p class="mb-1">{{ $notification->data['message'] }}</p>
-                                        <a href="{{ $notification->data['action_url'] }}"
-                                            class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                        {{-- <a href="{{ $notification->data['action_url'] }}"
+                                            class="btn btn-primary btn-sm">Xem chi tiết</a> --}}
                                         @if (!$notification->read_at)
                                             <form
                                                 action="{{ route('user.notifications.mark-as-read', $notification->id) }}"
@@ -478,29 +156,36 @@
         </div>
     </nav>
 
-    <div class="container-fluid">
-        <div class="d-flex">
-            <div class="sidebar">
-                <h6 class="text-lg mt-4">
-                    <img style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%"
-                        src="{{ asset(Auth::user()->avatar) }}" alt="Avatar">
-                    {{ Auth::user()->name }}
-                </h6>
-                <ul class="list-unstyled mt-4">
-                    <li><a href="{{ route('user.profile') }}" class="d-block py-2"><i class="fa fa-user me-2"></i> Hồ sơ</a></li>
-                    <li><a href="{{ route('user.profile.course.show') }}" class="d-block py-2"><i class="fa fa-book me-2"></i> Khóa học</a></li>
-                    <li><a href="{{ route('user.payment.history') }}" class="d-block py-2"><i class="fa fa-history me-2"></i> Lịch sử</a></li>
-                    <li><a href="{{ route('user.profile.edit') }}" class=" d-block py-2"><i class="fa fa-cog me-2"></i>Cài đặt hồ sơ</a></li>
-                    <li><a href="{{ url('/') }}" class="d-block py-2 text-muted">Quay về trang chủ</a></li>
-                </ul>
-            </div>
+    <div class="container-fluid mt-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
+            <aside
+                class="bg-white rounded-lg shadow-sm w-full md:w-64 p-5 flex flex-col space-y-3 text-sm font-normal text-[#111827]">
+                <a class="{{ request()->routeIs('user.profile') ? 'text-[#2563eb] font-semibold' : '' }} hover:underline text-base"
+                    href="{{ route('user.profile') }}">
+                    Thông tin &amp; liên hệ
+                </a>
+                <a class="{{ request()->routeIs('user.payment.history') ? 'text-[#2563eb] font-semibold' : '' }} hover:underline text-base"
+                    href="{{ route('user.payment.history') }}">
+                    Lịch sử
+                </a>
+                <a class="{{ request()->routeIs('user.profile.edit') ? 'text-[#2563eb] font-semibold' : '' }} hover:underline text-base"
+                    href="{{ route('user.profile.edit') }}">
+                    Chỉnh sửa tài khoản
+                </a>
+                <a class="{{ request()->routeIs('user.change.password') ? 'text-[#2563eb] font-semibold' : '' }} hover:underline text-base"
+                    href="{{ route('user.change.password') }}">
+                    Thay đổi mật khẩu
+                </a>
+                <a class="hover:underline text-base text-red-700" href="{{ url('/') }}">
+                    Quay về trang chủ
+                </a>
+            </aside>
 
-            <div class="flex-grow-1 mt-4">
+            <section class="bg-white rounded-lg shadow-sm flex-1 p-3 text-sm font-normal text-[#111827]">
                 @yield('content')
-            </div>
+            </section>
         </div>
     </div>
-
 </body>
 
 </html>
@@ -528,3 +213,327 @@
         });
     </script>
 @endif
+
+<style>
+    /* Định dạng màu gradient nền */
+    .navbar-custom {
+        background: linear-gradient(to right, #008040, #0099cc);
+        padding: 10px 0;
+    }
+
+    /* Định dạng logo */
+    .navbar-brand img {
+        height: 40px;
+    }
+
+    /* Ô tìm kiếm */
+    .search-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 20px 0 0 20px;
+    }
+
+    .search-btn {
+        padding: 8px 12px;
+        font-size: 14px;
+        background-color: #d9dbd9;
+        color: black;
+        border: none;
+        width: 115px;
+        height: 40px;
+        border-radius: 0 20px 20px 0;
+
+    }
+
+    .search-adv {
+        padding: 8px 12px;
+        font-size: 14px;
+        background-color: #d9dbd9;
+        color: black;
+        border: none;
+        height: 40px;
+        border-radius: 20px;
+    }
+
+    .icon {
+        width: 40px;
+        height: 40px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .icon i {
+        font-size: 18px;
+        color: #333;
+    }
+
+    /* Navbar bên phải */
+
+    /* Nút đăng nhập */
+    .login-btn {
+        display: flex;
+        align-items: center;
+        background-color: #28a745;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        text-decoration: none;
+    }
+
+    .login-btn i {
+        margin-right: 5px;
+    }
+
+    /* Nút điều hướng slider */
+    .tag-slider-prev,
+    .tag-slider-next {
+        position: absolute;
+        transform: translateY(-200%);
+        width: 40px;
+        height: 40px;
+        background: #ddd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .tag-slider-prev {
+        left: 170px;
+        /* Điều chỉnh vị trí bên trái */
+    }
+
+    .tag-slider-next {
+        right: 13px;
+        /* Điều chỉnh vị trí bên phải */
+    }
+
+    .tag-slider-prev:hover,
+    .tag-slider-next:hover {
+        background: #bbb;
+
+    }
+
+    .tag-slider {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 10px;
+        width: 1700px;
+        margin: 0 auto;
+        margin-bottom: 16px;
+    }
+
+    .tag-slider li {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .tag-slider a {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        padding: 0 15px;
+        border: 1px solid #d8d8d8;
+        border-radius: 99px;
+        font-weight: 400;
+        font-size: 13px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .slider-btn {
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    /* Ẩn thanh tìm kiếm trên mobile */
+    @media (max-width: 768px) {
+        .search-box {
+            display: none;
+        }
+
+        /* Căn giữa lại nút slider */
+        .tag-slider-prev,
+        .tag-slider-next {
+            width: 30px;
+            height: 30px;
+            font-size: 12px;
+            transform: translateY(-50%);
+        }
+
+        .tag-slider-prev {
+            left: 10px;
+        }
+
+        .tag-slider-next {
+            right: 10px;
+        }
+
+        /* Hiển thị slider có thể cuộn */
+        .tag-slider {
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+
+        .tag-slider a {
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+
+        /* Điều chỉnh lại icon */
+        .icon-container {
+            gap: 5px;
+        }
+
+        .icon-container .icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Định dạng lại nút đăng nhập */
+        .login-btn {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+    }
+
+    /* footer */
+    footer {
+        padding: 40px 10%;
+        color: #1a1a1a;
+        font-family: Arial, sans-serif;
+    }
+
+    .footer-container {
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+    }
+
+    .footer-section {
+        width: 30%;
+    }
+
+    .footer-logo {
+        max-width: 80px;
+        margin-bottom: 10px;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #ccc;
+    }
+
+    .footer-column {
+        width: 30%;
+    }
+
+    .footer-column h4 {
+        font-size: 16px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .footer-column ul {
+        list-style: none;
+    }
+
+    .footer-column ul li {
+        margin: 5px 0;
+    }
+
+    .footer-column ul li a {
+        text-decoration: none;
+        color: #1a1a1a;
+        transition: 0.3s;
+    }
+
+    .footer-column ul li a:hover {
+        color: #0056b3;
+    }
+
+    .app-links img {
+        width: 120px;
+        margin-top: 10px;
+    }
+
+    .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    .social-icons img {
+        width: 30px;
+        margin-left: 10px;
+    }
+
+    /* Định dạng cho sidebar */
+    .sidebar {
+        height: 100vh;
+        /* Chiều cao 100% của viewport */
+        background-color: #f8f9fa;
+        /* Màu nền cho sidebar */
+        padding: 20px;
+        /* Padding cho sidebar */
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        /* Đổ bóng cho sidebar */
+    }
+
+    /* Định dạng cho các liên kết trong sidebar */
+    .sidebar a {
+        color: #333;
+        /* Màu chữ */
+        text-decoration: none;
+        /* Bỏ gạch chân */
+        padding: 10px 15px;
+        /* Padding cho các liên kết */
+        display: block;
+        /* Hiển thị dưới dạng block */
+        border-radius: 5px;
+        /* Bo góc cho các liên kết */
+        transition: background-color 0.3s;
+        /* Hiệu ứng chuyển màu nền */
+    }
+
+    /* Hiệu ứng hover cho các liên kết */
+    .sidebar a:hover {
+        background-color: #e2e6ea;
+        /* Màu nền khi hover */
+    }
+
+    /* Định dạng cho nội dung chính */
+    .content {
+        flex-grow: 1;
+        /* Chiếm không gian còn lại */
+        padding: 20px;
+        /* Padding cho nội dung chính */
+        background-color: #ffffff;
+        /* Màu nền cho nội dung chính */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        /* Đổ bóng cho nội dung chính */
+        border-radius: 5px;
+        /* Bo góc cho nội dung chính */
+    }
+</style>

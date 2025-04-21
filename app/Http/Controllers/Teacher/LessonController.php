@@ -177,15 +177,23 @@ class LessonController extends Controller
             'content' => 'required|string',
         ]);
 
+        $comment = Comment::findOrFail($request->comment_id);
+
+        // Kiểm tra nếu giảng viên đang cố trả lời chính bình luận của mình
+        if ($comment->user_id == Auth::id()) {
+            return redirect()->back()->withErrors(['error' => 'Bạn không thể trả lời chính bình luận của mình!']);
+        }
+
         Comment::create([
             'user_id' => Auth::id(),
             'lesson_id' => $lessonId,
-            'parent_id' => $request->comment_id,
+            'parent_id' => $comment->id, // Gán đúng parent_id để hiển thị đúng cấu trúc trả lời
             'content' => $request->content,
         ]);
 
         return redirect()->back()->with('success', 'Đã trả lời bình luận!');
     }
+
 
     public function updateComment(Request $request, $courseId, $lessonId, $commentId)
     {

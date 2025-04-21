@@ -43,8 +43,6 @@
                     </a>
                     <div class="collapse submenu" id="quizMenu">
                         <a href="{{ route('admin.quizzes.index') }}">Quizzes</a>
-                        <a href="{{ route('admin.questions.index') }}">Câu hỏi</a>
-                        <a href="{{ route('admin.answers.index') }}">Câu trả lời</a>
                     </div>
                 </div>
 

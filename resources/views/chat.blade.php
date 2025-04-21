@@ -1,4 +1,3 @@
-<!-- File: chatbot.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,6 +5,8 @@
     <meta charset="UTF-8">
     <title>Chatbot</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -14,6 +15,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin: 0;
         }
 
         #chat-wrapper {
@@ -39,7 +41,7 @@
 
         #messages {
             flex: 1;
-            padding: 15px;
+            padding: 10px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -60,6 +62,7 @@
             flex-shrink: 0;
             background-size: cover;
             background-position: center;
+            transform: scaleX(-1);
         }
 
         .message-content {
@@ -145,7 +148,12 @@
 
 <body>
     <div id="chat-wrapper">
-        <div class="chat-header">Chatbot</div>
+        <div class="chat-header">
+            <div class="d-flex align-items-center gap-2" style="width: 50px; height: 50px; background-color: #ffffff; border-radius: 50%;">
+                <img src="{{ asset('image/logochat.png') }}" width="50" height="50" class="rounded-circle tranform-scale-2" style="object-fit: cover; border-radius: 50px;" alt="Logo">
+                Chatbot
+            </div>
+        </div>
         <div id="messages">
             @if (Auth::check())
                 <div class="message ai-message">
@@ -176,8 +184,8 @@
         const messageInput = document.getElementById('message-input');
 
         // Lấy avatar của user nếu đã đăng nhập, nếu không thì dùng ảnh mặc định
-        const userAvatar = `{{ Auth::check() && Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://i.ibb.co/4Y74sM7/default-user.png' }}`;
-        const botAvatar = 'https://i.ibb.co/GP7CgWZ/bot-avatar.png';
+        const userAvatar = `{{ Auth::check() && Auth::user()->avatar ? asset(Auth::user()->avatar) : 'https://i.ibb.co/4Y74sM7/default-user.png' }}`;
+        const botAvatar = '{{ asset('image/logochat.png') }}';
 
         function displayMessage(message, isUser = false) {
             const senderClass = isUser ? 'user-message' : 'ai-message';

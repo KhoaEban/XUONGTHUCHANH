@@ -30,4 +30,12 @@ class CourseProgress extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function getProgressPercentage()
+    {
+        $totalLessons = $this->course->lessons()->count();
+        $completedLessons = count($this->completed_lessons ?? []);
+
+        return $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100, 2) : 0;
+    }
 }

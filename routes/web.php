@@ -56,15 +56,6 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/admin/instructors/{instructorId}/courses', [CourseController::class, 'coursesByInstructor'])
-    ->name('admin.instructors.courses');
-
-
-    
-// Gemini Chat
-Route::get('/chat', [GeminiChatController::class, 'index'])->name('chat.index');
-Route::post('/chat/send', [GeminiChatController::class, 'send'])->name('chat.send');
-
 // Admin
 Route::middleware(['check.role:admin'])->group(function () {
     // Trang chủ Admin
@@ -76,7 +67,7 @@ Route::middleware(['check.role:admin'])->group(function () {
         Route::get('/', [AuthController::class, 'index'])->name('admin.user.index');
         Route::get('/{id}/edit', [AuthController::class, 'edit'])->name('admin.user.edit');
         Route::put('/{id}', [AuthController::class, 'update'])->name('admin.user.update');
-        Route::delete('/delete/{id}', [AuthController::class, 'update'])->name('admin.user.delete');
+        Route::delete('/delete/{id}', [AuthController::class, 'deleteUser'])->name('admin.user.delete'); // Sửa 'update' thành 'deleteUser'
     });
 
     // Quản lý khóa học
@@ -271,6 +262,11 @@ Route::prefix('user')->group(function () {
     Route::post('/profile', [ProfileController::class, 'update'])->name('user.profile.update');
     Route::get('/profile/course/show', [ProfileController::class, 'showProfile'])->name('user.profile.course.show');
     Route::get('/profile/course/{id}', [CourseController::class, 'showCourseProfile'])->name('profile.course.detail');
+    Route::get('/profile/course/{id}', [ProfileController::class, 'showCourseProgress'])->name('profile.progress.detail');
+
+    // Thay đổi mật khẩu
+    Route::get('/change-password', [ProfileController::class, 'editPassword'])->name('user.change.password');
+    Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('user.change.password.update');
 
     Route::get('/payment-history', [PaymentController::class, 'userPaymentHistory'])->name('user.payment.history');
 
