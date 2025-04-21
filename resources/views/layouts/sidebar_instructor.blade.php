@@ -162,7 +162,6 @@
         transform: rotate(180deg);
     }
 
-    footer {}
 </style>
 
 <script>

@@ -59,6 +59,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/admin/instructors/{instructorId}/courses', [CourseController::class, 'coursesByInstructor'])
     ->name('admin.instructors.courses');
 
+
+    
 // Gemini Chat
 Route::get('/chat', [GeminiChatController::class, 'index'])->name('chat.index');
 Route::post('/chat/send', [GeminiChatController::class, 'send'])->name('chat.send');

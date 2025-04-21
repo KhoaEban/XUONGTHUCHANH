@@ -1,166 +1,194 @@
+<!-- File: chatbot.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grok Chat</title>
+    <title>Chatbot</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        /* Reset CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f5;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
         }
 
-        #chat-box {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        #chat-wrapper {
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             height: 90vh;
+            background: #fff;
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
+        .chat-header {
+            background-color: #008040;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
         #messages {
-            flex-grow: 1;
+            flex: 1;
             padding: 15px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
+            gap: 10px;
+            background: #f0f2f5;
         }
 
         .message {
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            border-radius: 18px;
-            clear: both;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .message .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 10px;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .message-content {
+            padding: 10px 14px;
+            border-radius: 16px;
+            max-width: 70%;
             word-break: break-word;
+            font-size: 14px;
+            line-height: 1.4;
         }
 
         .ai-message {
-            background-color: #e0f7fa;
-            color: #00838f;
-            align-self: flex-start;
+            flex-direction: row;
+        }
+
+        .ai-message .message-content {
+            background-color: #ecfdf5;
+            color: #1f2a44;
         }
 
         .user-message {
-            background-color: #e8eaf6;
-            color: #1a237e;
-            align-self: flex-end;
+            flex-direction: row-reverse;
         }
 
-        .input-container {
-            padding: 10px;
+        .user-message .avatar {
+            margin-left: 10px;
+            margin-right: 0;
+        }
+
+        .user-message .message-content {
+            background-color: #008040;
+            color: white;
+        }
+
+        .chat-footer {
+            background: #fff;
+            padding: 10px 15px;
+            border-top: 1px solid #e5e7eb;
             display: flex;
-            border-top: 1px solid #eee;
+            align-items: center;
         }
 
         #message-input {
             flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 20px;
-            margin-right: 10px;
-            outline: none;
-        }
-
-        button.send-btn {
-            background-color: #4caf50;
-            color: white;
-            border: none;
             padding: 10px 15px;
             border-radius: 20px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
+            border: none;
+            font-size: 14px;
+            outline: none;
+            background-color: #f9fafb;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
-        button.send-btn:hover {
-            background-color: #45a049;
+        .send-btn {
+            background: none;
+            border: none;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .send-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #008040;
         }
 
         #loading-indicator {
             text-align: center;
-            padding: 10px;
-            color: #777;
-            font-size: 0.9em;
+            color: #6b7280;
+            font-size: 13px;
+            margin: 5px 0;
         }
 
-        /* Scrollbar customization */
-        #messages::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #messages::-webkit-scrollbar-track {
-            background-color: #f1f1f1;
-            border-radius: 4px;
-        }
-
-        #messages::-webkit-scrollbar-thumb {
-            background-color: #ccc;
-            border-radius: 4px;
-        }
-
-        #messages::-webkit-scrollbar-thumb:hover {
-            background-color: #bbb;
-        }
-
-        .footer-buttons {
-            display: none;
-            /* Ẩn footer-buttons theo yêu cầu */
+        @media (max-width: 480px) {
+            #chat-wrapper {
+                height: 100vh;
+                max-width: 100%;
+                border-radius: 0;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div id="chat-box">
+    <div id="chat-wrapper">
+        <div class="chat-header">Chatbot</div>
         <div id="messages">
             @if (Auth::check())
-                <p class="ai-message"><strong>Gemini:</strong> Chào, bạn cần đăng nhập để sử dụng chatbot.</p>
+                <div class="message ai-message">
+                    <div class="avatar" style="background-image: url('https://i.ibb.co/GP7CgWZ/bot-avatar.png');"></div>
+                    <div class="message-content"><strong>Gemini:</strong> Chào {{ Auth::user()->name }}, tôi có thể giúp gì cho bạn?</div>
+                </div>
             @else
-                <p class="ai-message"><strong>Gemini:</strong> Chào {{ Auth::user()->name }}, tôi có thể giúp gì cho bạn?
-                </p>
+                <div class="message ai-message">
+                    <div class="avatar" style="background-image: url('https://i.ibb.co/GP7CgWZ/bot-avatar.png');"></div>
+                    <div class="message-content"><strong>Gemini:</strong> Chào, bạn cần đăng nhập để sử dụng chatbot.</div>
+                </div>
             @endif
         </div>
         <div id="loading-indicator" style="display: none;">Đang chuẩn bị câu trả lời...</div>
-        <div class="input-container">
+        <div class="chat-footer">
             <input type="text" id="message-input" placeholder="Nhập tin nhắn...">
-            <button class="send-btn" onclick="sendMessage()">Gửi</button>
-        </div>
-        <div class="footer-buttons">
-            <div class="left-buttons">
-            </div>
-            <div class="right-section">
-                <span>E-Learning</span>
-                <button>↑</button>
-            </div>
+            <button class="send-btn" onclick="sendMessage()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+            </button>
         </div>
     </div>
+
     <script>
         const messagesDiv = document.getElementById('messages');
         const loadingIndicator = document.getElementById('loading-indicator');
         const messageInput = document.getElementById('message-input');
 
+        // Lấy avatar của user nếu đã đăng nhập, nếu không thì dùng ảnh mặc định
+        const userAvatar = `{{ Auth::check() && Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://i.ibb.co/4Y74sM7/default-user.png' }}`;
+        const botAvatar = 'https://i.ibb.co/GP7CgWZ/bot-avatar.png';
+
         function displayMessage(message, isUser = false) {
             const senderClass = isUser ? 'user-message' : 'ai-message';
             const senderName = isUser ? 'Bạn' : 'Gemini';
+            const avatar = isUser ? userAvatar : botAvatar;
+
             messagesDiv.insertAdjacentHTML('beforeend',
-                `<p class="message ${senderClass}"><strong>${senderName}:</strong> ${message}</p>`
+                `<div class="message ${senderClass}">
+                    <div class="avatar" style="background-image: url('${avatar}')"></div>
+                    <div class="message-content"><strong>${senderName}:</strong> ${message}</div>
+                </div>`
             );
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
@@ -173,13 +201,11 @@
                         response.data.history.forEach(message => {
                             displayMessage(message.message, message.is_user);
                         });
-                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
                     } else if (response.data.error) {
                         displayMessage(response.data.error);
                     }
                 })
-                .catch(error => {
-                    console.error('Lỗi tải lịch sử chat:', error);
+                .catch(() => {
                     displayMessage('Không thể tải lịch sử chat.');
                 });
         }
@@ -196,10 +222,9 @@
                     message: userMessage
                 })
                 .then(response => {
-                    const reply = response.data.reply;
-                    displayMessage(reply, false);
+                    displayMessage(response.data.reply, false);
                 })
-                .catch(error => {
+                .catch(() => {
                     displayMessage('Không thể nhận phản hồi. Vui lòng thử lại.');
                 })
                 .finally(() => {
@@ -208,11 +233,8 @@
         }
 
         document.addEventListener('DOMContentLoaded', loadChatHistory);
-
-        messageInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
+        messageInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendMessage();
         });
 
         messageInput.focus();

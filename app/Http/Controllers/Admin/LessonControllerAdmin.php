@@ -128,7 +128,7 @@ class LessonControllerAdmin extends Controller
 
         // Kiểm tra quyền truy cập
         if (Auth::user()->role !== 'admin' && Auth::id() !== $lesson->instructor_id) {
-            abort(403, 'B��n không có quyền chỉnh sửa bài học này.');
+            abort(403, 'Bạn không có quyền chỉnh sửa bài học này.');
         }
 
         // Cập nhật thông tin bài học

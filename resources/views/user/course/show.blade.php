@@ -6,29 +6,24 @@
         padding: 20px;
         border-radius: 10px;
     }
-
     .video-container iframe {
         width: 100%;
         height: 500px;
         border-radius: 10px;
     }
-
     .video-info h3 {
         margin-top: 10px;
         font-size: 22px;
     }
-
     .video-info p {
         color: #777;
         font-size: 14px;
     }
-
     .tabs {
         display: flex;
         margin-top: 20px;
         border-bottom: 2px solid #ddd;
     }
-
     .tab-button {
         padding: 10px 15px;
         border: none;
@@ -36,22 +31,18 @@
         cursor: pointer;
         font-size: 14px;
     }
-
     .tab-button.active {
         border-bottom: 2px solid blue;
         font-weight: bold;
     }
-
     .tab-content {
         display: none;
         padding: 20px 0;
     }
-
     .tab-content.active {
         display: block;
     }
-
-    /* Sidebar Container */
+    /* Style cho sidebar */
     .sidebar-course .card {
         border: none;
         border-radius: 0;
@@ -59,39 +50,87 @@
         max-height: 500px;
         overflow-y: auto;
     }
-
+    .video-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .video-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .video-item:hover {
+        background: #f5f5f5;
+    }
+    .video-item.active {
+        background: #e6f7ff; /* Xanh dương nhạt dựa trên #0099cc */
+    }
+    .video-item.active::before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: white;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+    .lesson-checkbox {
+        margin-right: 10px;
+    }
+    .lesson-checkbox .fas {
+        color: #008040; /* Xanh lá đậm */
+        font-size: 16px;
+    }
+    .lesson-info {
+        flex: 1;
+    }
+    .lesson-title {
+        font-size: 14px;
+        color: #333;
+        margin: 0;
+    }
+    .lesson-meta {
+        font-size: 12px;
+        color: #777;
+        margin-top: 2px;
+    }
+    .lesson-meta .fas {
+        margin-right: 5px;
+        color: #008040; /* Xanh lá đậm */
+    }
+    .download-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        margin: 10px 20px;
+        border: 1px solid #008040; /* Viền xanh lá đậm */
+        border-radius: 5px;
+        color: #008040; /* Chữ xanh lá đậm */
+        text-decoration: none;
+        font-size: 14px;
+    }
+    .download-button .fas {
+        margin-right: 5px;
+    }
+    .download-button:hover {
+        background: #e6f7ff; /* Xanh dương nhạt khi hover */
+    }
+    /* Style cho phần tiến độ */
     .course-progress {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
         align-items: center;
         padding: 10px 20px;
     }
-
     .course-progress h4 {
         font-size: 18px;
         margin: 0;
+        margin-bottom: 10px;
     }
-
-    .course-progress p {
-        font-size: 14px;
-        margin: 0;
-    }
-
-    .progress-bar-container {
-        width: 350px;
-        height: 10px;
-        background: #ddd;
-        border-radius: 5px;
-        overflow: hidden;
-    }
-
-    .progress-bar {
-        height: 100%;
-        background: #007bff;
-        width: 0;
-        transition: width 0.5s ease;
-    }
-
     .progress-circle {
         position: relative;
         width: 40px;
@@ -99,199 +138,135 @@
         display: flex;
         justify-content: center;
         align-items: center;
-
     }
-
     .progress-ring__circle {
         transition: 0.35s stroke-dasharray;
         transform: rotate(-90deg);
         transform-origin: 50% 50%;
+        stroke: #008040; /* Xanh lá đậm */
     }
-
     .progress-ring__circle-bg {
-        stroke: #e0e0e0;
+        stroke: #e0e0e0; /* Giữ xám nhạt */
     }
-
     .progress-text {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         font-size: 12px;
-        /* Kích thước chữ vừa phải cho 40px */
         font-weight: bold;
         color: #333;
     }
-
-    .progress-title {
-        text-align: center;
+    /* Style cho nút Nhận chứng chỉ trong dropdown */
+    .certificate-button-container {
+        position: relative;
+        display: inline-block;
     }
-
+    .certificate-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        padding: 5px 0;
+        display: none;
+        z-index: 10;
+    }
+    .certificate-button-container:hover .certificate-dropdown {
+        display: block;
+    }
+    .certificate-button {
+        display: flex;
+        align-items: center;
+        padding: 8px 15px;
+        background: #008040; /* Xanh lá đậm */
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: background 0.3s;
+    }
+    .certificate-button:hover {
+        background: #00a86b; /* Xanh lá sáng hơn khi hover */
+    }
+    .certificate-button .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        background: #0099cc; /* Xanh dương nhạt */
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+    .certificate-button .fas {
+        color: white;
+        font-size: 12px;
+    }
+    .certificate-button .fa-chevron-down {
+        margin-left: 8px;
+    }
     .divider {
         border-bottom: 1px dashed #8b8b8b;
         margin: 0;
-        /* Add some margin for spacing */
     }
-
-    /* Card Body */
-    .sidebar-course .card-body {
-        padding: 15px 20px;
-        /* Reduce padding to save space */
-    }
-
-    /* Heading */
-    .sidebar-course h3 {
-        font-size: 20px;
-        /* Slightly smaller heading */
-        margin-bottom: 10px;
-        /* Reduce margin */
-    }
-
-    /* Video List */
-    .video-list {
-        list-style: none;
-        padding: 0 15px;
-        margin: 0;
-        /* Remove default margin */
-    }
-
-    .video-list li {
-        display: flex;
-        align-items: center;
-        padding: 8px;
-        /* Reduce padding for compactness */
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-
-    .video-list li:hover {
-        background: #f1f1f1;
-    }
-
-    .video-list img {
-        width: 50px;
-        /* Smaller thumbnail */
-        height: 30px;
-        /* Reduced height */
-        object-fit: cover;
-        margin-right: 10px;
-        border-radius: 4px;
-    }
-
-    .video-list .d-flex {
-        flex: 1;
-        gap: 5px;
-        /* Reduce spacing between elements */
-    }
-
-    .video-list span {
-        font-size: 14px;
-        /* Smaller order number */
-    }
-
-    .video-list h4 {
-        font-size: 14px;
-        /* Smaller title */
-        margin: 0;
-        line-height: 1.2;
-        /* Tighten line height */
-    }
-
-    .video-list p {
-        margin: 0;
-        font-size: 12px;
-        /* Smaller checkmark */
-    }
-
-    /* Quiz List */
+    /* Style cho danh sách quiz */
     .quiz-list {
         list-style: none;
-        padding-left: 20px;
-        /* Indent slightly */
+        padding: 0 20px 0 50px;
         margin: 0;
         display: none;
-        /* Hidden by default, shown via JS */
     }
-
-    .quiz-list li {
-        padding: 5px 0;
-        /* Reduce padding */
-        font-size: 13px;
-        /* Smaller text */
-    }
-
     .quiz-item {
-        border-bottom: 1px solid #c5c4c4;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        color: #333;
+        border-bottom: 1px solid #eee;
     }
-
+    .quiz-item:last-child {
+        border-bottom: none;
+    }
+    .quiz-item .fas {
+        color: #008040; /* Xanh lá đậm */
+        margin-right: 8px;
+    }
     .quiz-link {
         color: #333;
         text-decoration: none;
+        transition: color 0.3s;
     }
-
     .quiz-link:hover {
-        color: #007bff;
+        color: #0099cc; /* Xanh dương nhạt khi hover */
     }
-
-    .complete-button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        margin-top: 20px;
-        width: 100%;
-    }
-
     .star-rating {
         display: flex;
         direction: rtl;
-        /* Đảo ngược thứ tự sao để sao 5 ở bên trái */
         justify-content: flex-end;
     }
-
     .star-rating input[type="radio"] {
         display: none;
-        /* Ẩn input radio */
     }
-
     .star-rating label.star {
         font-size: 2rem;
-        /* Kích thước sao */
         color: #ccc;
-        /* Màu mặc định của sao (xám) */
         cursor: pointer;
         transition: color 0.2s;
-        /* Hiệu ứng chuyển màu mượt mà */
     }
-
-    /* Khi hover vào sao, tất cả sao từ vị trí đó trở về bên phải sẽ sáng lên */
     .star-rating label.star:hover,
     .star-rating label.star:hover~label.star {
         color: #f39c12;
-        /* Màu vàng khi hover */
     }
-
-    /* Khi chọn sao, tất cả sao từ vị trí đó trở về bên phải sẽ sáng lên */
     .star-rating input[type="radio"]:checked~label.star {
         color: #f39c12;
-        /* Màu vàng khi được chọn */
-    }
-
-    .video-item:active .fa-play {
-        /* khi nhấm sẽ xoay 160 độ */
-        transform: rotate(90deg);
-    }
-
-    .video-item:hover .fa-play {
-        /* khi nhấm sẽ xoay 160 độ */
-        transform: rotate(90deg);
-    }
-
-    .video-item .fa-play {
-        transition: transform 0.3s ease-in-out;
     }
 </style>
+
 @section('content')
     <div class="row">
         @if ($course->lessons->isNotEmpty())
@@ -299,8 +274,8 @@
                 <div class="main-content p-0">
                     <div id="video-container">
                         <iframe id="lesson-video" width="100%" height="500"
-                            src="{{ $course->lessons->first()->video_url ?? '' }}" title="YouTube video player"
-                            frameborder="0"
+                            src="{{ $course->lessons->first()->video_url ? $course->lessons->first()->video_url . '?enablejsapi=1' : '' }}"
+                            title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy">
                         </iframe>
@@ -327,11 +302,10 @@
                             <ul>
                                 @foreach ($course->lessons as $lesson)
                                     <li>
-                                        <a href="{{ route('course.lessons.show', $lesson->id) }}"
-                                            onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}', {{ $lesson->id }})">
+                                        <a href="#" onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}', {{ $lesson->id }})">
                                             {{ $lesson->title }} - ({{ gmdate('H:i:s', $lesson->duration) }})
-                                            @if ($lesson->completed)
-                                                ✅
+                                            @if (in_array($lesson->id, $completedLessons))
+                                                <i class="fas fa-check-square"></i>
                                             @endif
                                         </a>
                                     </li>
@@ -346,7 +320,6 @@
                         </div>
                         <div id="binhluan" class="tab-content">
                             <h4>Bình luận</h4>
-
                             @auth
                                 <form id="comment-form" action="{{ route('comments.store') }}" method="POST">
                                     @csrf
@@ -360,7 +333,6 @@
                             @else
                                 <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để gửi bình luận.</p>
                             @endauth
-
                             <ul class="list-group mt-3" id="comments-list">
                                 @include('user.course.partials.comments', [
                                     'comments' => $comments,
@@ -370,20 +342,15 @@
                         </div>
                         <div id="danhgia" class="tab-content container my-4">
                             <h4>Đánh giá</h4>
-
                             <div class="card">
                                 <div class="card-body p-0">
                                     <div class="row">
-                                        <!-- Left side with average rating -->
                                         <div class="col-md-3 text-center p-4 border-end">
                                             <div class="fs-1 fw-bold mb-2">
-                                                <span
-                                                    class="text-warning me-2">★</span>{{ number_format($averageRating, 1) }}/5
+                                                <span class="text-warning me-2">★</span>{{ number_format($averageRating, 1) }}/5
                                             </div>
                                             <div class="text-muted">{{ $ratingCount }} Đánh giá và nhận xét</div>
                                         </div>
-
-                                        <!-- Right side with rating bars -->
                                         <div class="col-md-9 p-4">
                                             @for ($i = 5; $i >= 1; $i--)
                                                 @php
@@ -393,8 +360,7 @@
                                                 <div class="d-flex align-items-center mb-3">
                                                     <div class="me-3" style="min-width: 100px;">
                                                         @for ($j = 1; $j <= 5; $j++)
-                                                            <span
-                                                                class="{{ $j <= $i ? 'text-warning' : 'text-secondary' }}">★</span>
+                                                            <span class="{{ $j <= $i ? 'text-warning' : 'text-secondary' }}">★</span>
                                                         @endfor
                                                     </div>
                                                     <div class="progress flex-grow-1 me-3" style="height: 8px;">
@@ -413,7 +379,6 @@
                                 @php
                                     $reviewed = $course->reviews->where('user_id', auth()->id())->first();
                                 @endphp
-
                                 @if (!$reviewed)
                                     <form id="rating-form" action="{{ route('ratings.store') }}" method="POST">
                                         @csrf
@@ -422,24 +387,19 @@
                                             <label for="rating" class="form-label">Chọn số sao:</label>
                                             <div class="star-rating mb-2">
                                                 @for ($i = 5; $i >= 1; $i--)
-                                                    <input type="radio" id="star{{ $i }}" name="rating"
-                                                        value="{{ $i }}" required />
+                                                    <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required />
                                                     <label for="star{{ $i }}" class="star">★</label>
                                                 @endfor
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <textarea name="comment" class="form-control" rows="3" placeholder="Chia sẻ cảm nhận của bạn về khóa học..."
-                                                required></textarea>
+                                            <textarea name="comment" class="form-control" rows="3" placeholder="Chia sẻ cảm nhận của bạn về khóa học..." required></textarea>
                                         </div>
-                                        <button type="submit" class="bg-primary text-white py-2 px-4 border-0">Gửi đánh
-                                            giá</button>
+                                        <button type="submit" class="bg-primary text-white py-2 px-4 border-0">Gửi đánh giá</button>
                                     </form>
                                 @else
                                     <p class="text-success mt-3">Bạn đã đánh giá khóa học này.</p>
                                 @endif
-
-                                <!-- Hiển thị các đánh giá -->
                                 @if ($reviews->count())
                                     <div class="mt-4">
                                         @foreach ($reviews as $review)
@@ -447,8 +407,7 @@
                                                 <strong>{{ $review->user->name }}</strong>
                                                 <div class="stars mb-1">
                                                     @for ($i = 1; $i <= 5; $i++)
-                                                        <span
-                                                            style="color: {{ $i <= $review->rating ? '#f39c12' : '#ccc' }}">★</span>
+                                                        <span style="color: {{ $i <= $review->rating ? '#f39c12' : '#ccc' }}">★</span>
                                                     @endfor
                                                 </div>
                                                 <p class="mb-0">{{ $review->comment }}</p>
@@ -470,55 +429,58 @@
                     <div class="card">
                         <div class="course-progress">
                             <h4 class="progress-title mt-2">Tiến độ</h4>
-                            <div class="progress-circle">
+                            <div class="progress-circle certificate-button-container">
                                 <svg class="progress-ring" width="40" height="40">
                                     <circle class="progress-ring__circle-bg" stroke="#e0e0e0" stroke-width="5"
                                         fill="transparent" r="17" cx="20" cy="20" />
-                                    <circle class="progress-ring__circle" stroke="#4CAF50" stroke-width="5"
+                                    <circle class="progress-ring__circle" stroke="#008040" stroke-width="5"
                                         fill="transparent" r="17" cx="20" cy="20"
                                         style="stroke-dasharray: {{ 106 * ($progressPercentage / 100) }}, 106;" />
                                 </svg>
                                 <div class="progress-text">{{ $progressPercentage }}%</div>
+                                <div class="certificate-dropdown" id="certificate-dropdown">
+                                    <!-- Nút chứng chỉ sẽ được thêm động bằng JavaScript -->
+                                </div>
                             </div>
                         </div>
-
-                        @if ($progressPercentage == 100)
-                            <a href="{{ route('certificate.show', $course->id) }}"
-                                class="bg-dark text-white py-2 px-4 border-0 text-center text-decoration-none"
-                                style="width: 170px; margin-left: 370px; margin-top: 5px; margin-bottom: 15px">
-                                Nhận chứng chỉ
-                            </a>
-                        @endif
                         <div class="divider"></div>
-                        <div class="card-body">
-                            <h3><i class="fas fa-book-open ud-icon"></i> Nội dung khóa học</h3>
-                            <ul class="video-list">
-                                @foreach ($course->lessons as $lesson)
-                                    <li onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}', {{ $lesson->id }})"
-                                        class="video-item d-flex align-items-center">
-                                        <i class="fas fa-play ud-icon"></i>
-                                        <div class="lesson-info">
-                                            <div class="d-flex align-items-center">
-                                                <span>{{ $lesson->order_number }}.</span>
-                                                <h4 class="m-0">{{ $lesson->title }}</h4>
-                                                @if ($lesson->completed)
-                                                    <p>✅</p>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <ul class="quiz-list" id="quiz-list-{{ $lesson->id }}" class="quiz-list">
-                                        @foreach ($lesson->quizzes as $quiz)
-                                            <li class="quiz-item">
-                                                <a class="quiz-link text-decoration-none text-dark"
-                                                    href="{{ route('quizzes.show', $quiz->id) }}">
-                                                    {{ $quiz->title }}</a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @endforeach
-                            </ul>
-                        </div>
+                        <ul class="video-list">
+                            @foreach ($course->lessons as $lesson)
+                                <li onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}', {{ $lesson->id }})"
+                                    class="video-item {{ $lesson->id == $course->lessons->first()->id ? 'active' : '' }}"
+                                    data-lesson-id="{{ $lesson->id }}">
+                                    <span class="lesson-checkbox">
+                                        @if (in_array($lesson->id, $completedLessons))
+                                            <i class="fas fa-check-square"></i>
+                                        @else
+                                            <i class="far fa-square"></i>
+                                        @endif
+                                    </span>
+                                    <div class="lesson-info">
+                                        <p class="lesson-title">{{ $lesson->order_number }}. {{ $lesson->title }}</p>
+                                        <p class="lesson-meta">
+                                            <i class="fas fa-file-alt"></i>
+                                            {{ gmdate('i', $lesson->duration) }} phút
+                                        </p>
+                                    </div>
+                                </li>
+                                <ul class="quiz-list" id="quiz-list-{{ $lesson->id }}">
+                                    @foreach ($lesson->quizzes as $quiz)
+                                        <li class="quiz-item">
+                                            <i class="fas fa-question-circle"></i>
+                                            <a class="quiz-link text-decoration-none"
+                                                href="{{ route('quizzes.show', $quiz->id) }}">
+                                                {{ $quiz->title }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endforeach
+                        </ul>
+                        <a href="#" class="download-button">
+                            <i class="fas fa-file-download"></i>
+                            Tải nguồn <i class="fas fa-chevron-down"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -532,56 +494,121 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Khởi tạo biến currentLessonId
+        let player;
         let currentLessonId = {{ $course->lessons->first()->id ?? 0 }};
 
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('lesson-video', {
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.ENDED) {
+                let isCompleted = $(`#quiz-list-${currentLessonId}`).prev('.video-item').find('.lesson-checkbox').find('.fa-check-square').length > 0;
+                if (!isCompleted) {
+                    $.ajax({
+                        url: `/user/courses/{{ $course->id }}/lessons/${currentLessonId}/complete`,
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Hoàn thành!',
+                                text: response.message,
+                                timer: 2000
+                            });
+                            $(`#quiz-list-${currentLessonId}`).prev('.video-item').find('.lesson-checkbox').html('<i class="fas fa-check-square"></i>');
+                            updateCourseProgress('{{ $course->id }}');
+                            refreshLessonList();
+                        },
+                        error: function(xhr) {
+                            console.error('Lỗi khi đánh dấu bài học:', xhr);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: 'Không thể đánh dấu bài học hoàn thành. Vui lòng thử lại.',
+                            });
+                        }
+                    });
+                }
+            }
+        }
+
         function loadLesson(videoUrl, title, lessonId) {
-            // Cập nhật ngay lập tức tiêu đề và video
             document.getElementById("lesson-title").innerText = title;
-            document.getElementById("lesson-video").src = videoUrl;
-
-            // Cập nhật currentLessonId
+            let videoSrc = videoUrl.includes('?') ? videoUrl + '&enablejsapi=1' : videoUrl + '?enablejsapi=1';
+            document.getElementById("lesson-video").src = videoSrc;
             currentLessonId = lessonId;
-
-            // Cập nhật lesson_id trong form bình luận
             document.getElementById("comment-lesson-id").value = lessonId;
-
-            // Ẩn tất cả danh sách quiz trước đó
             document.querySelectorAll(".quiz-list").forEach(el => el.style.display = "none");
-
-            // Hiển thị danh sách quiz của bài học được chọn
             let quizList = document.getElementById(`quiz-list-${lessonId}`);
             if (quizList) {
                 quizList.style.display = "block";
             }
-
-            // Gửi yêu cầu AJAX để lấy thông tin chi tiết của bài học
+            document.querySelectorAll('.video-item').forEach(item => {
+                item.classList.remove('active');
+                if (parseInt(item.getAttribute('data-lesson-id')) === lessonId) {
+                    item.classList.add('active');
+                }
+            });
             $.ajax({
                 url: `/lessons/${lessonId}`,
                 type: "GET",
                 success: function(lesson) {
-                    // Cập nhật các tab
                     $("#gioithieu p").html(lesson.content);
-                    $("#noidung").html(`<ul>
-                        @foreach ($course->lessons as $lessonItem)
-                            <li>
-                                <a href="#" onclick="loadLesson('{{ $lessonItem->video_url }}', '{{ $lessonItem->title }}', {{ $lessonItem->id }})">
-                                    {{ $lessonItem->title }} - ({{ gmdate('H:i:s', $lessonItem->duration) }})
-                                    @if ($lessonItem->completed)
-                                        ✅
-                                    @endif
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>`);
+                    refreshLessonList();
                     $("#tailieu").html(lesson.resources);
                     $("#thongtin").html(lesson.instructor_info);
                     $("#danhgia").html(lesson.comments);
                 },
                 error: function(xhr) {
                     console.error('Lỗi khi tải bài học:', xhr);
-                    alert('Đã có lỗi xảy ra khi tải bài học. Vui lòng thử lại.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Đã có lỗi xảy ra khi tải bài học. Vui lòng thử lại.',
+                    });
+                }
+            });
+        }
+
+        function refreshLessonList() {
+            $.ajax({
+                url: `/user/courses/{{ $course->id }}/progress`,
+                type: 'GET',
+                success: function(data) {
+                    $("#noidung").html(`
+                        <ul>
+                            @foreach ($course->lessons as $lesson)
+                                <li>
+                                    <a href="#" onclick="loadLesson('{{ $lesson->video_url }}', '{{ $lesson->title }}', {{ $lesson->id }})">
+                                        {{ $lesson->title }} - ({{ gmdate('H:i:s', $lesson->duration) }})
+                                        ${data.completedLessons.includes({{ $lesson->id }}) ? '<i class="fas fa-check-square"></i>' : ''}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    `);
+                    document.querySelectorAll('.video-item').forEach(item => {
+                        let lessonId = parseInt(item.getAttribute('data-lesson-id'));
+                        let checkbox = item.querySelector('.lesson-checkbox');
+                        if (data.completedLessons.includes(lessonId)) {
+                            checkbox.innerHTML = '<i class="fas fa-check-square"></i>';
+                        } else {
+                            checkbox.innerHTML = '<i class="far fa-square"></i>';
+                        }
+                    });
+                },
+                error: function(xhr) {
+                    console.error('Lỗi khi làm mới danh sách bài học:', xhr);
                 }
             });
         }
@@ -617,17 +644,14 @@
 
         function openTab(evt, tabName) {
             var i, tabContent, tabButtons;
-
             tabContent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabContent.length; i++) {
                 tabContent[i].style.display = "none";
             }
-
             tabButtons = document.getElementsByClassName("tab-button");
             for (i = 0; i < tabButtons.length; i++) {
                 tabButtons[i].className = tabButtons[i].className.replace(" active", "");
             }
-
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }
@@ -642,28 +666,26 @@
                 })
                 .then(data => {
                     if (data.progressPercentage !== undefined) {
-                        // Cập nhật vòng tròn tiến độ
                         const progressCircle = document.querySelector('.progress-ring__circle');
-                        const circumference = 106; // Chu vi của vòng tròn
+                        const circumference = 106;
                         const offset = circumference * (data.progressPercentage / 100);
                         progressCircle.style.strokeDasharray = `${offset}, ${circumference}`;
                         document.querySelector('.progress-text').innerText = `${data.progressPercentage}%`;
-
-                        // Cập nhật liên kết nhận chứng chỉ nếu hoàn thành 100%
                         if (data.progressPercentage === 100) {
-                            // Kiểm tra xem liên kết đã tồn tại chưa
-                            const existingLink = document.querySelector(
-                                'a[href="{{ route('certificate.show', $course->id) }}"]');
+                            const dropdown = document.getElementById('certificate-dropdown');
+                            const existingLink = dropdown.querySelector('a');
                             if (!existingLink) {
                                 const certificateLink = document.createElement('a');
                                 certificateLink.href = '{{ route('certificate.show', $course->id) }}';
-                                certificateLink.className =
-                                    'bg-dark text-white py-2 px-4 border-0 text-center text-decoration-none';
-                                certificateLink.style.cssText =
-                                    'width: 170px; margin-left: 370px; margin-top: 5px; margin-bottom: 15px';
-                                certificateLink.innerText = 'Nhận chứng chỉ';
-                                const divider = document.querySelector('.divider');
-                                divider.insertAdjacentElement('beforebegin', certificateLink);
+                                certificateLink.className = 'certificate-button';
+                                certificateLink.innerHTML = `
+                                    <span class="icon-wrapper">
+                                        <i class="fas fa-trophy"></i>
+                                    </span>
+                                    Nhận giấy chứng nhận
+                                    <i class="fas fa-chevron-down"></i>
+                                `;
+                                dropdown.appendChild(certificateLink);
                             }
                         }
                     }
