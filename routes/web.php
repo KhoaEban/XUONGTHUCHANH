@@ -276,7 +276,8 @@ Route::prefix('user')->group(function () {
     // Khóa học
     Route::get('/course', [CourseController::class, 'index'])->name('course');
     Route::get('/course/{slug}', [CourseController::class, 'show'])->name('course.show');
-
+    Route::get('/courses/search', [CourseController::class, 'search'])->name('courses.search');
+    
     // Bài học
     Route::get('/lesson', [LessonController::class, 'index'])->name('lessons');
     Route::get('/course/lesson/{slug}', [LessonController::class, 'show'])->name('course.lessons.show');

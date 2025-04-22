@@ -48,9 +48,9 @@ class CourseController extends Controller
         $firstLesson = $course->lessons->first();
         $comments = $firstLesson
             ? $firstLesson->comments()
-                ->with(['user', 'replies.user', 'replies.likes'])
-                ->orderBy('created_at', 'desc')
-                ->get()
+            ->with(['user', 'replies.user', 'replies.likes'])
+            ->orderBy('created_at', 'desc')
+            ->get()
             : collect([]);
 
         $userId = Auth::id();

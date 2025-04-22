@@ -26,7 +26,8 @@
                             <i class="fa fa-chevron-down"></i>
                         </a>
                         <ul class="submenu">
-                            <li><a href="{{ route('instructor.courses.index') }}"><i class="fa fa-bookmark mx-2"></i> Danh sách khóa học</a></li>
+                            <li><a href="{{ route('instructor.courses.index') }}"><i class="fa fa-bookmark mx-2"></i>
+                                    Danh sách khóa học</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -36,14 +37,17 @@
                             <i class="fa fa-chevron-down"></i>
                         </a>
                         <ul class="submenu">
-                            <li><a href="{{ route('instructor.lesson.index') }}"><i class="fa fa-book-open mx-2"></i> Danh sách bài học</a></li>
-                            <li><a href="{{ route('instructor.quizzes.index') }}"><i class="fa fa-question mx-2"></i> Danh sách Quizz</a></li>
+                            <li><a href="{{ route('instructor.lesson.index') }}"><i class="fa fa-book-open mx-2"></i>
+                                    Danh sách bài học</a></li>
+                            <li><a href="{{ route('instructor.quizzes.index') }}"><i class="fa fa-question mx-2"></i>
+                                    Danh sách Quizz</a></li>
                         </ul>
                     </li>
                 </ul>
 
                 <div class="mt-5 px-3 text-center">
-                    <a href="{{ url('/') }}" class="text-danger text-decoration-none"><i class="fas fa-arrow-left me-1"></i> Quay lại trang chủ</a>
+                    <a href="{{ url('/') }}" class="text-danger text-decoration-none"><i
+                            class="fas fa-arrow-left me-1"></i> Quay lại trang chủ</a>
                 </div>
             </div>
         </div>
@@ -59,30 +63,31 @@
             <footer style="background-image: url({{ asset('image/footer-background.png') }});">
                 <div class="footer-container">
                     <div class="footer-section">
-                        <img src="{{ asset('image/logo-trung-tam-giao-duc-setdc.png') }}" alt="Logo 1"
-                            class="footer-logo">
+                        <img src="https://vuainnhanh.com/wp-content/uploads/2023/02/logo-FPT-Polytechnic--678x400.png.avif"
+                            alt="Logo 1" class="footer-logo">
                         <h3>TRUNG TÂM PHÁT TRIỂN GDĐT PHÍA NAM</h3>
                         <p>BỘ GIÁO DỤC VÀ ĐÀO TẠO</p>
                         <p>ĐỐI TÁC NGHIÊN CỨU, ỨNG DỤNG KHCN VÀ CHUYỂN ĐỔI SỐ</p>
                     </div>
 
                     <div class="footer-section">
-                        <img src="{{ asset('image/logo-khong-nen---color.png') }}" height="80" width="160"
-                            alt="Logo 2" class="">
-                        <h3>TẬP ĐOÀN KHOA HỌC CÔNG NGHỆ BÁCH KHOA</h3>
-                        <p>Địa chỉ: Số 3 Công Trường Quốc Tế, Quận 3, TPHCM</p>
+                        <img src="https://vuainnhanh.com/wp-content/uploads/2023/02/logo-fpt-polytechnic-768x261.png"
+                            height="80" width="220" alt="Logo 2" class="">
+                        <h3>TẬP ĐOÀN KHOA HỌC FPY POLYTECHNIC</h3>
+                        <p>Địa chỉ: Tân An, Buôn Ma Thuột, Đường Hà Huy Tập, Trường Cao đẳng FPT Polytechnic</p>
                         <p>Điện thoại: (0287)102 0246 - 090 303 0246</p>
                     </div>
 
                     <div class="footer-section">
-                        <img src="{{ asset('image/logo-stb.png') }}" alt="Logo 3" class="footer-logo">
-                        <h3>CÔNG TY CỔ PHẦN SÁCH VÀ THIẾT BỊ TRƯỜNG HỌC TPHCM</h3>
+                        <img src="https://vuainnhanh.com/wp-content/uploads/2023/02/logo-FPT-Polytechnic--678x400.png.avif"
+                            alt="Logo 3" class="footer-logo">
+                        <h3>CÔNG TY CỔ PHẦN SÁCH VÀ THIẾT BỊ TRƯỜNG HỌC FPY POLYTECHNIC</h3>
                         <p>ĐƠN VỊ CUNG CẤP HỌC LIỆU SỐ BẢN QUYỀN</p>
                     </div>
                 </div>
 
                 <div class="footer-bottom">
-                    <p>Copyright ©2021 - Bản quyền thuộc Công Ty Cổ Phần Tập Đoàn Khoa Học Công Nghệ Bách Khoa</p>
+                    <p>Copyright ©2024 - Bản quyền thuộc Công Ty Cổ Phần Tập Đoàn Trường Cao đẳng FPT Polytechnic</p>
                     <div class="social-icons">
                     </div>
                 </div>
@@ -168,7 +173,6 @@
     .dropdown.active .fa-chevron-down {
         transform: rotate(180deg);
     }
-
 </style>
 
 <script>
